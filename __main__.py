@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 
 from lyskad import User
-from util import get_string
+from util import get_string, encrypt
 
 app = Flask(__name__)
 
@@ -49,7 +49,11 @@ def patch_users_id(user_id: str):
     if user_id not in users:
         return message(get_string('client_error.user_not_found'), 404)
 
-    return message('OK', 200, user=users[user_id].jsonify())
+    data = request.get_json()
+    if password := data.get('password'):
+        users[user_id].change_password(password)
+
+    return message('OK', 200)
 
 
 @app.route('/users/<user_id>', methods=['DELETE'])

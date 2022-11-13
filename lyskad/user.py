@@ -10,3 +10,6 @@ class User:
 
     def jsonify(self) -> dict:
         return {'id': self.id, 'wins': self.wins, 'games': self.games}
+
+    def change_password(self, password):
+        self.password = encrypt(password, self.id)
