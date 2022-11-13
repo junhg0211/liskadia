@@ -2,7 +2,9 @@ from typing import Optional
 
 from flask import Flask, jsonify, request
 
-from lyskad import User, Game
+from lyskad import User, Game, Participant
+from lyskad.game import State
+from lyskad.participant import get_participant_ids, leave, get_user_games
 from util import get_string
 
 app = Flask(__name__)
@@ -107,6 +109,7 @@ def post_games_new():
 
     game = Game.new(user.id, direction)
     games[game.id] = game
+    participants.append(Participant(user.id, game.id))
     return message('OK', 200, game=game.jsonify())
 
 
@@ -114,7 +117,71 @@ def post_games_new():
 def get_games_id(game_id: int):
     if game_id not in games:
         return message(get_string('client_error.game_not_found'), 404)
-    return message('OK', 200, game=games[game_id].jsonify())
+    ids = get_participant_ids(game_id, participants)
+    return message('OK', 200, game=games[game_id].jsonify(), participants=ids)
+
+
+participants: list[Participant] = list()
+
+
+@app.route('/games/<int:game_id>/join', methods=['POST'])
+def post_games_id_join(game_id: int):
+    if (user := login(request)) is None:
+        return message(get_string('client_error.unauthorized'), 401)
+
+    if game_id not in games:
+        return message(get_string('client_error.game_not_found'), 404)
+
+    participants.append(Participant(user.id, game_id))
+    return message('OK', 200)
+
+
+@app.route('/games/<int:game_id>/leave', methods=['POST'])
+def post_games_id_leave(game_id: int):
+    if (user := login(request)) is None:
+        return message(get_string('client_error.unauthorized'), 401)
+
+    if game_id not in games:
+        return message(get_string('client_error.game_not_found'), 404)
+
+    ids = get_participant_ids(game_id, participants)
+    if user.id not in ids:
+        return message(get_string('client_error.not_joined'), 404)
+
+    leave(user.id, game_id, participants)
+    return message('OK', 200)
+
+
+@app.route('/games/<int:game_id>/start', methods=['POST'])
+def post_games_id_start(game_id: int):
+    if (user := login(request)) is None:
+        return message(get_string('client_error.unauthorized'), 401)
+
+    if game_id not in games:
+        return message(get_string('client_error.game_not_found'), 404)
+
+    game = games.get(game_id)
+    if game.created_by != user.id:
+        return message(get_string('client_error.not_owner'), 403)
+
+    if game.state != State.IDLE:
+        return message(get_string('client_error.game_not_idle'), 403)
+
+    ids = get_participant_ids(game.id, participants)
+    if len(ids) < 2:
+        return message(get_string('client_error.not_enough_player'), 403)
+
+    game.state = State.PLAYING
+    return message('OK', 200)
+
+
+@app.route('/users/<user_id>/games', methods=['GET'])
+def get_users_id_games(user_id: str):
+    if user_id not in users:
+        return message(get_string('client_error.user_not_found'), 404)
+
+    ids = get_user_games(user_id, participants)
+    return message('OK', 200, games=ids)
 
 
 if __name__ == '__main__':

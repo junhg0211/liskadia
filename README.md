@@ -59,3 +59,25 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 #### GET `/games/{game.id}`
 게임 정보 불러오기
+
+### Participant
+
+| FIELD   | TYPE    | DESCRIPTION |
+|---------|---------|-------------|
+| user_id | user.id | 참가자 id      |
+| game_id | game.id | 게임 id       |
+
+#### POST `/games/{game.id}/join`
+게임에 참가
+* 로그인 정보 필요
+
+#### POST `/games/{game.id}/leave`
+게임에서 퇴장
+* 로그인 정보 필요
+
+#### POST `/games/{game.id}/start`
+게임 시작하기
+* 로그인 정보 필요
+
+#### GET `/users/{user.id}/games`
+유저가 플레이어로 등록되어있는 게임 목록 불러오기
