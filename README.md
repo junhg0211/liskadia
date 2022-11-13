@@ -7,6 +7,12 @@
 API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc59575472843dd99b6ae900dc01a9c)에서 진행하고,
 이 문서에는 코드로 구현된 API만 나열한다.
 
+### 로그인 토큰
+
+로그인 정보는 `id`와 `token` 값이다.
+이때 `id`는 로그인하려는 계정의 아이디, `token`은 로그인하려는 계정에 대한 토큰이다.
+`token`은 `util.encrypt`와 같이 생성된다.
+
 ### User
 
 | FIELD      | TYPE   | DESCRIPTION |
@@ -32,6 +38,7 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 #### DELETE `/users/{user.id}`
 유저 삭제하기
+* 로그인 정보 필요
 
 ### Game
 
@@ -41,12 +48,14 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 | direction  | boolean  | 네마 순환의 방향   |
 | state      | int      | 게임 진행 상태    |
 | created_at | datetime | 게임 생성 시각    |
+| created_by | user.id  | 게임을 생성한 유저  |
 
 #### GET `/games`
 게임 목록 불러오기
 
 #### POST `/games/new`
 새로운 게임 생성
+* 로그인 정보 필요
 
 #### GET `/games/{game.id}`
 게임 정보 불러오기

@@ -1,3 +1,5 @@
+from typing import Optional
+
 from flask import Flask, jsonify, request
 
 from lyskad import User, Game
@@ -12,6 +14,26 @@ def message(message_, code: int, **kwargs):
 
 
 users: dict[str, User] = dict()
+
+
+def authorize(id_: str, token: str) -> Optional[User]:
+    user = users.get(id_)
+    if user is None:
+        return
+    if user.password_token != token:
+        return
+    return user
+
+
+def login(request_) -> Optional[User]:
+    data = request_.get_json()
+    user_id = data.get('id')
+    token = data.get('token')
+    if (user := authorize(user_id, token)) is None:
+        return
+    if user.id != user_id:
+        return
+    return user
 
 
 @app.route('/users', methods=['GET'])
@@ -61,6 +83,9 @@ def delete_users_id(user_id: str):
     if user_id not in users:
         return message(get_string('client_error.user_not_found'), 404)
 
+    if login(request) is None:
+        return message(get_string('client_error.unauthorized'), 401)
+
     del users[user_id]
     return message('OK', 200)
 
@@ -75,7 +100,12 @@ def get_games():
 
 @app.route('/games/new', methods=['POST'])
 def post_games_new():
-    game = Game.new()
+    if (user := login(request)) is None:
+        return message(get_string('client_error.unauthorized'), 401)
+
+    direction = request.get_json().get('direction')
+
+    game = Game.new(user.id, direction)
     games[game.id] = game
     return message('OK', 200, game=game.jsonify())
 
