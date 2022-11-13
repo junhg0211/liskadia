@@ -206,7 +206,7 @@ def post_games_id_put(game_id: int, nema_position: int):
         return message(get_string('client_error.not_joined'), 403)
 
     if not is_valid_position(nema_position):
-        return message(get_string('client_error.invalid_opsition'), 403)
+        return message(get_string('client_error.invalid_position'), 403)
 
     if game.state != GameState.PLAYING:
         return message(get_string('client_error.game_not_playing'), 403)
