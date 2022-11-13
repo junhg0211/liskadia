@@ -3,7 +3,7 @@ from typing import Optional
 from flask import Flask, jsonify, request
 
 from lyskad import User, Game, Participant, Nema
-from lyskad.game import State
+from lyskad.game import GameState
 from lyskad.nema import is_valid_position, get_nemas
 from lyskad.participant import get_participant_ids, leave, get_user_games
 from util import get_string
@@ -134,7 +134,7 @@ def post_games_id_join(game_id: int):
         return message(get_string('client_error.game_not_found'), 404)
 
     game = games.get(game_id)
-    if game.state != State.IDLE:
+    if game.state != GameState.IDLE:
         return message(get_string('client_error.game_not_idle'), 404)
 
     participants.append(Participant(user.id, game_id))
@@ -169,14 +169,14 @@ def post_games_id_start(game_id: int):
     if game.created_by != user.id:
         return message(get_string('client_error.not_owner'), 403)
 
-    if game.state != State.IDLE:
+    if game.state != GameState.IDLE:
         return message(get_string('client_error.game_not_idle'), 403)
 
     ids = get_participant_ids(game.id, participants)
     if len(ids) < 2:
         return message(get_string('client_error.not_enough_player'), 403)
 
-    game.state = State.PLAYING
+    game.state = GameState.PLAYING
     return message('OK', 200)
 
 
@@ -208,7 +208,7 @@ def post_games_id_put(game_id: int, nema_position: int):
     if not is_valid_position(nema_position):
         return message(get_string('client_error.invalid_opsition'), 403)
 
-    if game.state != State.PLAYING:
+    if game.state != GameState.PLAYING:
         return message(get_string('client_error.game_not_playing'), 403)
 
     nema = Nema(user.id, game.id, nema_position)
