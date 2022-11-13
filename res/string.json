@@ -2,6 +2,7 @@
   "client_error": {
     "user_not_found": "유저 정보를 찾을 수 없습니다.",
     "register_malformed": "id 혹은 password 정보가 없습니다.",
-    "duplicated_id": "동일한 id의 유저가 있습니다."
+    "duplicated_id": "동일한 id의 유저가 있습니다.",
+    "game_not_found": "게임 정보를 찾을 수 없습니다."
   }
 }

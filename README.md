@@ -32,3 +32,21 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 #### DELETE `/users/{user.id}`
 유저 삭제하기
+
+### Game
+
+| FIELD      | TYPE     | DESCRIPTION |
+|------------|----------|-------------|
+| id         | int      | 게임 아이디      |
+| direction  | boolean  | 네마 순환의 방향   |
+| state      | int      | 게임 진행 상태    |
+| created_at | datetime | 게임 생성 시각    |
+
+#### GET `/games`
+게임 목록 불러오기
+
+#### POST `/games/new`
+새로운 게임 생성
+
+#### GET `/games/{game.id}`
+게임 정보 불러오기

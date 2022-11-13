@@ -1,7 +1,7 @@
 from flask import Flask, jsonify, request
 
-from lyskad import User
-from util import get_string, encrypt
+from lyskad import User, Game
+from util import get_string
 
 app = Flask(__name__)
 
@@ -63,6 +63,28 @@ def delete_users_id(user_id: str):
 
     del users[user_id]
     return message('OK', 200)
+
+
+games: dict[int, Game] = dict()
+
+
+@app.route('/games', methods=['GET'])
+def get_games():
+    return message('OK', 200, games=list(map(lambda x: x.jsonify(), games.values())))
+
+
+@app.route('/games/new', methods=['POST'])
+def post_games_new():
+    game = Game.new()
+    games[game.id] = game
+    return message('OK', 200, game=game.jsonify())
+
+
+@app.route('/games/<int:game_id>', methods=['GET'])
+def get_games_id(game_id: int):
+    if game_id not in games:
+        return message(get_string('client_error.game_not_found'), 404)
+    return message('OK', 200, game=games[game_id].jsonify())
 
 
 if __name__ == '__main__':
