@@ -81,3 +81,25 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 #### GET `/users/{user.id}/games`
 유저가 플레이어로 등록되어있는 게임 목록 불러오기
+
+### Nema
+
+| FIELD      | TYPE     | DESCRIPTION |
+|------------|----------|-------------|
+| user_id    | user.id  | 참가자 id      |
+| game_id    | game.id  | 게임 id       |
+| position   | int      | 네마의 위치      |
+| created_at | datetime | 네마가 위치된 시각  |
+
+휼리엔에서 가장 왼쪽 위에 보이는 네마의 좌표를 (0, 0)이라고 하고, 첫 번째 수를 x값, 두 번째 수를 y값이라고 한다.
+오른쪽으로 갈 수록 x값이 1씩 증가하고, 아래로 갈수록 y의 값이 1씩 증가한다.
+따라서 가로가 10, 세로가 10인 휼리엔에서 가장 오른쪽 아래에 있는 네마의 좌표는 (9, 9)이다.
+
+너비(가로)가 w인 휼리엔에서 `nema.position`의 값이 (x, y)좌표를 나타낼 때, `nema.position = w*x + y`이다.
+
+#### POST `/games/{game.id}/nema/{nema.position}`
+게임에 네마 놓기
+* 로그인 정보 필요
+
+#### GET `/games/{game.id}/nema`
+게임의 네마 정보 불러오기

@@ -7,6 +7,9 @@
     "unauthorized": "로그인 정보를 찾을 수 없습니다.",
     "not_owner": "게임을 시작한 사람만 이 작업을 수행할 수 있습니다.",
     "game_not_idle": "게임이 시작하지 않은 상태에서만 이 게임을 시작할 수 있습니다.",
-    "not_enough_player": "게임을 시작하기 위한 플레이어 수가 부족합니다."
+    "not_enough_player": "게임을 시작하기 위한 플레이어 수가 부족합니다.",
+    "not_joined": "게임에 참여하고 있지 않습니다.",
+    "invalid_position": "허용되지 않는 위치입니다.",
+    "game_not_playing": "게임이 진행중이 아닙니다."
   }
 }

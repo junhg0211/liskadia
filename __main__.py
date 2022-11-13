@@ -2,8 +2,9 @@ from typing import Optional
 
 from flask import Flask, jsonify, request
 
-from lyskad import User, Game, Participant
+from lyskad import User, Game, Participant, Nema
 from lyskad.game import State
+from lyskad.nema import is_valid_position, get_nemas
 from lyskad.participant import get_participant_ids, leave, get_user_games
 from util import get_string
 
@@ -132,6 +133,10 @@ def post_games_id_join(game_id: int):
     if game_id not in games:
         return message(get_string('client_error.game_not_found'), 404)
 
+    game = games.get(game_id)
+    if game.state != State.IDLE:
+        return message(get_string('client_error.game_not_idle'), 404)
+
     participants.append(Participant(user.id, game_id))
     return message('OK', 200)
 
@@ -182,6 +187,42 @@ def get_users_id_games(user_id: str):
 
     ids = get_user_games(user_id, participants)
     return message('OK', 200, games=ids)
+
+
+nemas: list[Nema] = list()
+
+
+@app.route('/games/<int:game_id>/nema/<int:nema_position>', methods=['POST'])
+def post_games_id_put(game_id: int, nema_position: int):
+    if (user := login(request)) is None:
+        return message(get_string('client_error.unauthorized'), 401)
+
+    if game_id not in games:
+        return message(get_string('client_error.game_not_found'), 404)
+
+    game = games.get(game_id)
+    ids = get_participant_ids(game.id, participants)
+    if user.id not in ids:
+        return message(get_string('client_error.not_joined'), 403)
+
+    if not is_valid_position(nema_position):
+        return message(get_string('client_error.invalid_opsition'), 403)
+
+    if game.state != State.PLAYING:
+        return message(get_string('client_error.game_not_playing'), 403)
+
+    nema = Nema(user.id, game.id, nema_position)
+    nemas.append(nema)
+    return message('OK', 200, nema=nema.jsonify())
+
+
+@app.route('/games/<int:game_id>/nema', methods=['GET'])
+def get_games_id_nema(game_id: int):
+    if game_id not in games:
+        return message(get_string('client_error.game_not_found'), 404)
+
+    ingame_nemas = get_nemas(game_id, nemas)
+    return message('OK', 200, nemas=list(map(lambda x: x.jsonify(), ingame_nemas)))
 
 
 if __name__ == '__main__':
