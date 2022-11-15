@@ -3,11 +3,11 @@ from typing import Optional
 from flask import Flask, jsonify, request
 
 from lyskad import User, Game, Participant, Nema
-from lyskad.game import GameState
+from lyskad.game import GameState, HjulienDirection
 from lyskad.nema import is_valid_position, get_nemas
 from lyskad.participant import get_participant_ids, leave, get_user_games
 from util import get_string
-from util.database import users
+from util.database import users, games
 
 app = Flask(__name__)
 
@@ -104,12 +104,19 @@ def delete_users_id(user_id: str):
     return message('OK', 200)
 
 
-games: dict[int, Game] = dict()
-
-
 @app.route('/games', methods=['GET'])
 def get_games():
-    return message('OK', 200, games=list(map(lambda x: x.jsonify(), games.values())))
+    if request.content_type is None:
+        data = dict()
+    else:
+        data = request.get_json()
+
+    limit = data.get('limit')
+
+    return message(
+        'OK', 200,
+        games=list(map(lambda x: x.jsonify(), games.get_all(limit)))
+    )
 
 
 @app.route('/games/new', methods=['POST'])
@@ -119,18 +126,18 @@ def post_games_new():
 
     direction = request.get_json().get('direction')
 
-    game = Game.new(user.id, direction)
-    games[game.id] = game
+    game_id = games.new(user.id, direction)
+    game = games.get(game_id)
     participants.append(Participant(user.id, game.id))
     return message('OK', 200, game=game.jsonify())
 
 
 @app.route('/games/<int:game_id>', methods=['GET'])
 def get_games_id(game_id: int):
-    if game_id not in games:
+    if not games.exists(game_id):
         return message(get_string('client_error.game_not_found'), 404)
     ids = get_participant_ids(game_id, participants)
-    return message('OK', 200, game=games[game_id].jsonify(), participants=ids)
+    return message('OK', 200, game=games.get(game_id).jsonify(), participants=ids)
 
 
 participants: list[Participant] = list()
@@ -141,10 +148,11 @@ def post_games_id_join(game_id: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    if game_id not in games:
+    try:
+        game = games.get(game_id)
+    except ValueError:
         return message(get_string('client_error.game_not_found'), 404)
 
-    game = games.get(game_id)
     if game.state != GameState.IDLE:
         return message(get_string('client_error.game_not_idle'), 404)
 
@@ -157,7 +165,7 @@ def post_games_id_leave(game_id: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    if game_id not in games:
+    if not games.exists(game_id):
         return message(get_string('client_error.game_not_found'), 404)
 
     ids = get_participant_ids(game_id, participants)
@@ -173,10 +181,11 @@ def post_games_id_start(game_id: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    if game_id not in games:
+    try:
+        game = games.get(game_id)
+    except ValueError:
         return message(get_string('client_error.game_not_found'), 404)
 
-    game = games.get(game_id)
     if game.created_by != user.id:
         return message(get_string('client_error.not_owner'), 403)
 
@@ -208,10 +217,11 @@ def post_games_id_put(game_id: int, nema_position: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    if game_id not in games:
+    try:
+        game = games.get(game_id)
+    except ValueError:
         return message(get_string('client_error.game_not_found'), 404)
 
-    game = games.get(game_id)
     ids = get_participant_ids(game.id, participants)
     if user.id not in ids:
         return message(get_string('client_error.not_joined'), 403)
@@ -229,7 +239,7 @@ def post_games_id_put(game_id: int, nema_position: int):
 
 @app.route('/games/<int:game_id>/nema', methods=['GET'])
 def get_games_id_nema(game_id: int):
-    if game_id not in games:
+    if not games.exists(game_id):
         return message(get_string('client_error.game_not_found'), 404)
 
     ingame_nemas = get_nemas(game_id, nemas)

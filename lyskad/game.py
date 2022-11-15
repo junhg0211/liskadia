@@ -16,7 +16,16 @@ class HjulienDirection:
 
 
 class Game:
-    next_id = 0
+    @classmethod
+    def get(cls, data: dict) -> 'Game':
+        game_id = data['id']
+        created_by = data['created_by']
+        direction = data['direction']
+
+        result = Game(game_id, created_by, direction)
+        result.state = data['state']
+        result.created_at = data['created_at']
+        return result
 
     def __init__(self, id_: int, created_by: str, direction: bool = HjulienDirection.DEFAULT):
         self.id = id_
@@ -34,11 +43,3 @@ class Game:
             'state': self.state,
             'created_at': self.created_at,
         }
-
-    @classmethod
-    def new(cls, created_by, direction: Optional[bool] = None):
-        if direction is None:
-            direction = HjulienDirection.DEFAULT
-        result = cls(cls.next_id, created_by, direction)
-        cls.next_id += 1
-        return result
