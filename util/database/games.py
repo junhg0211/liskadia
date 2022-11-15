@@ -54,3 +54,9 @@ def exists(game_id: int) -> bool:
         return False
     else:
         return True
+
+
+def set_state(game_id: int, state: int):
+    with database.cursor() as cursor:
+        cursor.execute('UPDATE game SET state = %s WHERE id = %s', (state, game_id))
+        database.commit()

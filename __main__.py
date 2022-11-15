@@ -2,12 +2,11 @@ from typing import Optional
 
 from flask import Flask, jsonify, request
 
-from lyskad import User, Game, Participant, Nema
-from lyskad.game import GameState, HjulienDirection
+from lyskad import User, Nema
+from lyskad.game import GameState
 from lyskad.nema import is_valid_position, get_nemas
-from lyskad.participant import get_participant_ids, leave, get_user_games
 from util import get_string
-from util.database import users, games
+from util.database import users, games, participants
 
 app = Flask(__name__)
 
@@ -128,7 +127,7 @@ def post_games_new():
 
     game_id = games.new(user.id, direction)
     game = games.get(game_id)
-    participants.append(Participant(user.id, game.id))
+    participants.new(user.id, game.id)
     return message('OK', 200, game=game.jsonify())
 
 
@@ -136,11 +135,8 @@ def post_games_new():
 def get_games_id(game_id: int):
     if not games.exists(game_id):
         return message(get_string('client_error.game_not_found'), 404)
-    ids = get_participant_ids(game_id, participants)
-    return message('OK', 200, game=games.get(game_id).jsonify(), participants=ids)
-
-
-participants: list[Participant] = list()
+    user_ids = participants.get_ids(game_id)
+    return message('OK', 200, game=games.get(game_id).jsonify(), participants=user_ids)
 
 
 @app.route('/games/<int:game_id>/join', methods=['POST'])
@@ -156,7 +152,10 @@ def post_games_id_join(game_id: int):
     if game.state != GameState.IDLE:
         return message(get_string('client_error.game_not_idle'), 404)
 
-    participants.append(Participant(user.id, game_id))
+    if user.id in participants.get_ids(game.id):
+        return message(get_string('client_error.already_in'), 403)
+
+    participants.new(user.id, game_id)
     return message('OK', 200)
 
 
@@ -168,11 +167,11 @@ def post_games_id_leave(game_id: int):
     if not games.exists(game_id):
         return message(get_string('client_error.game_not_found'), 404)
 
-    ids = get_participant_ids(game_id, participants)
+    ids = participants.get_ids(game_id)
     if user.id not in ids:
         return message(get_string('client_error.not_joined'), 404)
 
-    leave(user.id, game_id, participants)
+    participants.leave(user.id, game_id)
     return message('OK', 200)
 
 
@@ -192,11 +191,11 @@ def post_games_id_start(game_id: int):
     if game.state != GameState.IDLE:
         return message(get_string('client_error.game_not_idle'), 403)
 
-    ids = get_participant_ids(game.id, participants)
+    ids = participants.get_ids(game.id)
     if len(ids) < 2:
         return message(get_string('client_error.not_enough_player'), 403)
 
-    game.state = GameState.PLAYING
+    games.set_state(game.id, GameState.PLAYING)
     return message('OK', 200)
 
 
@@ -205,7 +204,7 @@ def get_users_id_games(user_id: str):
     if not users.exists(user_id):
         return message(get_string('client_error.user_not_found'), 404)
 
-    ids = get_user_games(user_id, participants)
+    ids = participants.get_game_ids(user_id)
     return message('OK', 200, games=ids)
 
 
@@ -222,7 +221,7 @@ def post_games_id_put(game_id: int, nema_position: int):
     except ValueError:
         return message(get_string('client_error.game_not_found'), 404)
 
-    ids = get_participant_ids(game.id, participants)
+    ids = participants.get_ids(game.id)
     if user.id not in ids:
         return message(get_string('client_error.not_joined'), 403)
 

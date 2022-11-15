@@ -1,3 +1,3 @@
 from .database import database
 
-from . import users, games
+from . import users, games, participants
