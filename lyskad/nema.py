@@ -2,6 +2,16 @@ from datetime import datetime
 
 
 class Nema:
+    @classmethod
+    def get(cls, data: dict) -> 'Nema':
+        user_id = data['user_id']
+        game_id = data['game_id']
+        position = data['position']
+
+        result = Nema(user_id, game_id, position)
+        result.created_at = data['created_at']
+        return result
+
     def __init__(self, user_id: str, game_id: int, position: int):
         self.user_id = user_id
         self.game_id = game_id
@@ -28,7 +38,3 @@ def get_position_value(x: int, y: int, w: int = 10):
 
 def is_valid_position(position: int, width: int = 10, height: int = 10):
     return 0 <= position < width * height
-
-
-def get_nemas(game_id: int, nemas: list[Nema]) -> list[Nema]:
-    return list(filter(lambda x: x.game_id == game_id, nemas))

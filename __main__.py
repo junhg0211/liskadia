@@ -4,9 +4,9 @@ from flask import Flask, jsonify, request
 
 from lyskad import User, Nema
 from lyskad.game import GameState
-from lyskad.nema import is_valid_position, get_nemas
+from lyskad.nema import is_valid_position
 from util import get_string
-from util.database import users, games, participants
+from util.database import users, games, participants, nemas
 
 app = Flask(__name__)
 
@@ -17,6 +17,8 @@ def message(message_, code: int, **kwargs):
 
 
 def login(request_) -> Optional[User]:
+    if request_.content_type != 'application/json':
+        return
     data = request_.get_json()
     user_id = data.get('id')
     password = data.get('password')
@@ -208,9 +210,6 @@ def get_users_id_games(user_id: str):
     return message('OK', 200, games=ids)
 
 
-nemas: list[Nema] = list()
-
-
 @app.route('/games/<int:game_id>/nema/<int:nema_position>', methods=['POST'])
 def post_games_id_put(game_id: int, nema_position: int):
     if (user := login(request)) is None:
@@ -231,8 +230,11 @@ def post_games_id_put(game_id: int, nema_position: int):
     if game.state != GameState.PLAYING:
         return message(get_string('client_error.game_not_playing'), 403)
 
+    if nemas.get(game.id, nema_position) is not None:
+        return message(get_string('client_error.duplicated'), 403)
+
     nema = Nema(user.id, game.id, nema_position)
-    nemas.append(nema)
+    nemas.new(nema)
     return message('OK', 200, nema=nema.jsonify())
 
 
@@ -241,7 +243,7 @@ def get_games_id_nema(game_id: int):
     if not games.exists(game_id):
         return message(get_string('client_error.game_not_found'), 404)
 
-    ingame_nemas = get_nemas(game_id, nemas)
+    ingame_nemas = nemas.get_nemas(game_id)
     return message('OK', 200, nemas=list(map(lambda x: x.jsonify(), ingame_nemas)))
 
 

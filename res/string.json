@@ -12,6 +12,7 @@
     "invalid_position": "허용되지 않는 위치입니다.",
     "game_not_playing": "게임이 진행중이 아닙니다.",
     "forbidden": "금지된 동작입니다.",
-    "already_in": "이미 게임에 참가하고 있습니다."
+    "already_in": "이미 게임에 참가하고 있습니다.",
+    "duplicated": "해당 자리에 이미 네마가 존재합니다."
   }
 }
