@@ -2,6 +2,8 @@ from json import load
 
 with open('res/string.json', 'r') as file:
     _string = load(file)
+with open('res/secret.json', 'r') as file:
+    _secret = load(file)
 
 
 def parse(dictionary: dict, directory: str):
@@ -13,3 +15,7 @@ def parse(dictionary: dict, directory: str):
 
 def get_string(directory: str):
     return parse(_string, directory)
+
+
+def get_secret(directory: str):
+    return parse(_secret, directory)

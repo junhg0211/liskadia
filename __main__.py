@@ -1,12 +1,14 @@
 from typing import Optional
 
 from flask import Flask, jsonify, request
+from pymysql import connect
 
 from lyskad import User, Game, Participant, Nema
 from lyskad.game import GameState
 from lyskad.nema import is_valid_position, get_nemas
 from lyskad.participant import get_participant_ids, leave, get_user_games
 from util import get_string
+from util.const import get_secret
 
 app = Flask(__name__)
 
@@ -15,6 +17,13 @@ def message(message_, code: int, **kwargs):
     kwargs.update({'message': message_, 'code': code})
     return jsonify(kwargs), code
 
+
+database = connect(
+    host=get_secret('database.host'),
+    user=get_secret('database.user'),
+    password=get_secret('database.password'),
+    database=get_secret('database.database'),
+)
 
 users: dict[str, User] = dict()
 
