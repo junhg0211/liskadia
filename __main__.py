@@ -1,14 +1,13 @@
 from typing import Optional
 
 from flask import Flask, jsonify, request
-from pymysql import connect
 
 from lyskad import User, Game, Participant, Nema
 from lyskad.game import GameState
 from lyskad.nema import is_valid_position, get_nemas
 from lyskad.participant import get_participant_ids, leave, get_user_games
 from util import get_string
-from util.const import get_secret
+from util.database import users
 
 app = Flask(__name__)
 
@@ -18,30 +17,15 @@ def message(message_, code: int, **kwargs):
     return jsonify(kwargs), code
 
 
-database = connect(
-    host=get_secret('database.host'),
-    user=get_secret('database.user'),
-    password=get_secret('database.password'),
-    database=get_secret('database.database'),
-)
-
-users: dict[str, User] = dict()
-
-
-def authorize(id_: str, token: str) -> Optional[User]:
-    user = users.get(id_)
-    if user is None:
-        return
-    if user.password_token != token:
-        return
-    return user
-
-
 def login(request_) -> Optional[User]:
     data = request_.get_json()
     user_id = data.get('id')
-    token = data.get('token')
-    if (user := authorize(user_id, token)) is None:
+    password = data.get('password')
+    if user_id is None:
+        return
+    if password is None:
+        return
+    if (user := users.login(user_id, password)) is None:
         return
     if user.id != user_id:
         return
@@ -50,7 +34,17 @@ def login(request_) -> Optional[User]:
 
 @app.route('/users', methods=['GET'])
 def get_users():
-    return message('OK', 200, users=list(map(lambda x: x.jsonify(), users.values())))
+    if request.content_type is None:
+        data = dict()
+    else:
+        data = request.get_json()
+
+    limit = data.get('limit')
+
+    return message(
+        'OK', 200,
+        users=list(map(lambda x: x.jsonify(), users.get_all(limit)))
+    )
 
 
 @app.route('/users/new', methods=['POST'])
@@ -61,18 +55,16 @@ def post_users_new():
 
     if id_ is None or password is None:
         return message(get_string('client_error.register_malformed'), 400)
-    if id_ in users:
+    if users.exists(id_):
         return message(get_string('client_error.duplicated_id'), 409)
 
-    user = User(id_, password)
-    users[id_] = user
-
+    user = users.new(id_, password)
     return message('OK', 200, user=user.jsonify())
 
 
 @app.route('/users/<user_id>', methods=['GET'])
 def get_users_id(user_id: str):
-    if user_id not in users:
+    if not users.exists(user_id):
         return message(get_string('client_error.user_not_found'), 404)
 
     return message('OK', 200, user=users.get(user_id).jsonify())
@@ -80,25 +72,35 @@ def get_users_id(user_id: str):
 
 @app.route('/users/<user_id>', methods=['PATCH'])
 def patch_users_id(user_id: str):
-    if user_id not in users:
+    try:
+        user = users.get(user_id)
+    except ValueError:
         return message(get_string('client_error.user_not_found'), 404)
 
+    if login(request) is None:
+        return message(get_string('client_error.unauthorized'), 401)
+
     data = request.get_json()
-    if password := data.get('password'):
-        users[user_id].change_password(password)
+    if password := data.get('password_to_be'):
+        users.change_password(user, password)
 
     return message('OK', 200)
 
 
 @app.route('/users/<user_id>', methods=['DELETE'])
 def delete_users_id(user_id: str):
-    if user_id not in users:
+    try:
+        user = users.get(user_id)
+    except ValueError:
         return message(get_string('client_error.user_not_found'), 404)
 
-    if login(request) is None:
+    if (user_login := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    del users[user_id]
+    if user.id != user_login.id:
+        return message(get_string('client_error.forbidden'), 403)
+
+    users.delete_user(user_id)
     return message('OK', 200)
 
 
@@ -191,7 +193,7 @@ def post_games_id_start(game_id: int):
 
 @app.route('/users/<user_id>/games', methods=['GET'])
 def get_users_id_games(user_id: str):
-    if user_id not in users:
+    if not users.exists(user_id):
         return message(get_string('client_error.user_not_found'), 404)
 
     ids = get_user_games(user_id, participants)
