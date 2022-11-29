@@ -42,13 +42,14 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 ### Game
 
-| FIELD      | TYPE     | DESCRIPTION |
-|------------|----------|-------------|
-| id         | int      | 게임 아이디      |
-| direction  | boolean  | 네마 순환의 방향   |
-| state      | int      | 게임 진행 상태    |
-| created_at | datetime | 게임 생성 시각    |
-| created_by | user.id  | 게임을 생성한 유저  |
+| FIELD      | TYPE     | DESCRIPTION     |
+|------------|----------|-----------------|
+| id         | int      | 게임 아이디          |
+| direction  | boolean  | 네마 순환의 방향       |
+| state      | int      | 게임 진행 상태        |
+| max_score  | int      | 게임 종료에 필요한 점수 수 |
+| created_at | datetime | 게임 생성 시각        |
+| created_by | user.id  | 게임을 생성한 유저      |
 
 #### GET `/games`
 게임 목록 불러오기

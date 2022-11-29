@@ -2,7 +2,7 @@ from typing import Optional
 
 from flask import Flask, jsonify, request
 
-from lyskad import User, Nema
+from lyskad import User, Nema, calculate_score
 from lyskad.game import GameState
 from lyskad.nema import is_valid_position
 from util import get_string
@@ -235,6 +235,11 @@ def post_games_id_put(game_id: int, nema_position: int):
 
     nema = Nema(user.id, game.id, nema_position)
     nemas.new(nema)
+
+    scores = calculate_score(game, nemas.get_nemas(game.id))
+    if min(scores.values()) >= game.max_score:
+        game.state = GameState.END
+
     return message('OK', 200, nema=nema.jsonify())
 
 
