@@ -1,0 +1,9 @@
+.game-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.game-metadata {
+    flex: 1;
+    margin-left: 20px;
+}

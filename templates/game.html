@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
+    <script src="{{ url_for('static', filename='js/hjulien.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+    <div class="game-container">
+        <canvas id="hjulien"></canvas>
+        <div class="game-metadata">
+            <h2>#<span id="game-metadata__id">{{ game.id }}</span></h2>
+            <p>--- <span id="game-metadata__author">{{ game.created_by }}</span></p>
+            <ul>
+                {% for user_id in participants %}
+                    <li>{{ user_id }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+{% endblock %}

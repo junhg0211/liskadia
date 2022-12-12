@@ -1,7 +1,7 @@
 from random import randint
 from typing import Optional
 
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 
 from lyskad import User, Nema, calculate_score
 from lyskad.game import GameState
@@ -257,5 +257,16 @@ def get_games_id_nema(game_id: int):
     return message('OK', 200, nemas=list(map(lambda x: x.jsonify(), ingame_nemas)))
 
 
+@app.route('/game/<int:game_id>', methods=['GET'])
+def game_id_(game_id: int):
+    try:
+        game = games.get(game_id)
+    except ValueError as e:
+        return str(e), 404
+
+    user_ids = sorted(participants.get_ids(game.id))
+    return render_template('game.html', game=game, participants=user_ids, print=print)
+
+
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
