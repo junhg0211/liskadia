@@ -12,9 +12,35 @@ let floatX, floatY;
 let nemas = [];
 let colors = {};
 
+let nemaUpdate = true;
+
+let GAME_ID;
+
+function updateNemas() {
+    if (!nemaUpdate)
+        return;
+
+    nemas.length = 0;
+
+    fetch(`/games/${GAME_ID}/nemas`)
+        .then(res => res.json())
+        .then(data => data['nemas'])
+        .then(nemas_ => nemas_.forEach(nema => {
+            let position = nema['position'];
+            let [x, y] = [Math.floor(position / 10), position % 10];
+            let id = nema['user_id'];
+
+            nemas.push([x, y, id]);
+        }));
+
+    nemaUpdate = false;
+}
+
 function tick() {
     floatX = Math.round((mouseX/unit - 3.5) / 2);
     floatY = Math.round((mouseY/unit - 3.5) / 2);
+
+    updateNemas();
 }
 
 function nemaRect(xi, yi) {
@@ -117,6 +143,8 @@ function drawBackground() {
 function loadHjulien() {
     hjulien = document.querySelector("#hjulien");
     hjulienCtx = hjulien.getContext("2d");
+
+    GAME_ID = parseInt(document.querySelector("#game-metadata__id").textContent);
 
     hjulien.width = 800;
     hjulien.height = 800;
