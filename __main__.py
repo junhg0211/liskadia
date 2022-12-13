@@ -210,7 +210,7 @@ def get_users_id_games(user_id: str):
     return message('OK', 200, games=ids)
 
 
-@app.route('/games/<int:game_id>/nema/<int:nema_position>', methods=['POST'])
+@app.route('/games/<int:game_id>/nemas/<int:nema_position>', methods=['POST'])
 def post_games_id_put(game_id: int, nema_position: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
@@ -243,7 +243,7 @@ def post_games_id_put(game_id: int, nema_position: int):
     return message('OK', 200, nema=nema.jsonify())
 
 
-@app.route('/games/<int:game_id>/nema', methods=['GET'])
+@app.route('/games/<int:game_id>/nemas', methods=['GET'])
 def get_games_id_nema(game_id: int):
     if not games.exists(game_id):
         return message(get_string('client_error.game_not_found'), 404)

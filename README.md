@@ -98,9 +98,9 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 너비(가로)가 w인 휼리엔에서 `nema.position`의 값이 (x, y)좌표를 나타낼 때, `nema.position = w*x + y`이다.
 
-#### POST `/games/{game.id}/nema/{nema.position}`
+#### POST `/games/{game.id}/nemas/{nema.position}`
 게임에 네마 놓기
 * 로그인 정보 필요
 
-#### GET `/games/{game.id}/nema`
+#### GET `/games/{game.id}/nemas`
 게임의 네마 정보 불러오기
