@@ -13,6 +13,7 @@ let nemas = [];
 let colors = {};
 
 let nemaUpdate = true;
+let colorUpdate = true;
 
 let GAME_ID;
 
@@ -36,11 +37,31 @@ function updateNemas() {
     nemaUpdate = false;
 }
 
+function updateColors() {
+    if (!colorUpdate)
+        return;
+
+    fetch(`/games/${GAME_ID}`)
+        .then(res => res.json())
+        .then(data => data['participants'])
+        .then(participants => participants.forEach(user => {
+            let color = user['color'];
+            let r, g, b;
+            [g, b] = [Math.floor(color / 0x100), color % 0x100];
+            [r, g] = [Math.floor(g / 0x100), g % 0x100];
+
+            colors[user['id']] = `rgb(${r}, ${g}, ${b})`;
+        }));
+
+    colorUpdate = false;
+}
+
 function tick() {
     floatX = Math.round((mouseX/unit - 3.5) / 2);
     floatY = Math.round((mouseY/unit - 3.5) / 2);
 
     updateNemas();
+    updateColors();
 }
 
 function nemaRect(xi, yi) {

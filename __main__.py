@@ -143,7 +143,9 @@ def get_games_id(game_id: int):
     if not games.exists(game_id):
         return message(get_string('client_error.game_not_found'), 404)
     user_ids = participants.get_ids(game_id)
-    return message('OK', 200, game=games.get(game_id).jsonify(), participants=user_ids)
+    return message(
+        'OK', 200, game=games.get(game_id).jsonify(),
+        participants=[users.get(user_id).jsonify() for user_id in user_ids])
 
 
 @app.route('/games/<int:game_id>/join', methods=['POST'])
