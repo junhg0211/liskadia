@@ -15,12 +15,15 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 ### User
 
-| FIELD      | TYPE   | DESCRIPTION |
-|------------|--------|-------------|
-| id         | string | 유저 아이디      |
-| _password_ | string | 비밀번호        |
-| wins       | int    | 게임을 이긴 횟수   |
-| games      | int    | 게임을 플레이한 횟수 |
+| FIELD      | TYPE   | DESCRIPTION    |
+|------------|--------|----------------|
+| id         | string | 유저 아이디         |
+| _password_ | string | 비밀번호           |
+| wins       | int    | 게임을 이긴 횟수      |
+| games      | int    | 게임을 플레이한 횟수    |
+| color      | int    | 주로 사용하는 네마의 색상 |
+
+`user.color` 값은 6자리 HTML 16진수 색상 코드를 그대로 10진수로 변환한 것을 사용한다.
 
 #### GET `/users`
 모든 유저 정보 불러오기
@@ -28,6 +31,7 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 #### POST `/users/new`
 새로운 계정 생성
 * `id`, `password` 정보가 전달되어야 함
+* `color` 정보를 전달할 수 있음
 
 #### GET `/users/{user.id}`
 유저 정보 불러오기

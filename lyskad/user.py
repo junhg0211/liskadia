@@ -9,6 +9,7 @@ class User:
         result.games = data['games']
         result.password_token = data['password']
         result.joined_at = data['joined_at']
+        result.color = data['color']
         return result
 
     def __init__(self, id_: str, token: str):
@@ -17,11 +18,13 @@ class User:
         self.wins = 0
         self.games = 0
         self.joined_at = datetime.now()
+        self.color = 0
 
     def jsonify(self) -> dict:
         return {
             'id': self.id,
             'wins': self.wins,
             'games': self.games,
-            'joined_at': self.joined_at
+            'joined_at': self.joined_at,
+            'color': self.color
         }

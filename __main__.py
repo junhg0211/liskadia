@@ -1,3 +1,4 @@
+from random import randint
 from typing import Optional
 
 from flask import Flask, jsonify, request
@@ -53,13 +54,17 @@ def post_users_new():
     data = request.get_json()
     id_ = data.get('id')
     password = data.get('password')
+    color = data.get('color')
+
+    if color is None:
+        color = randint(0, 0xFFFFFF)
 
     if id_ is None or password is None:
         return message(get_string('client_error.register_malformed'), 400)
     if users.exists(id_):
         return message(get_string('client_error.duplicated_id'), 409)
 
-    user = users.new(id_, password)
+    user = users.new(id_, password, color)
     return message('OK', 200, user=user.jsonify())
 
 
