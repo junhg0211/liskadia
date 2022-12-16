@@ -1,3 +1,3 @@
-from .database import database
+from .database import get_connection
 
 from . import users, games, participants

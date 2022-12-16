@@ -7,7 +7,7 @@ from lyskad import User, Nema, calculate_score
 from lyskad.game import GameState
 from lyskad.nema import is_valid_position
 from util import get_string
-from util.database import users, games, participants, nemas
+from util.database import users, games, participants, nemas, get_connection
 
 app = Flask(__name__)
 
@@ -27,8 +27,9 @@ def login(request_) -> Optional[User]:
         return
     if password is None:
         return
-    if (user := users.login(user_id, password)) is None:
-        return
+    with get_connection() as database:
+        if (user := users.login(user_id, password, database)) is None:
+            return
     if user.id != user_id:
         return
     return user
@@ -43,10 +44,8 @@ def get_users():
 
     limit = data.get('limit')
 
-    return message(
-        'OK', 200,
-        users=list(map(lambda x: x.jsonify(), users.get_all(limit)))
-    )
+    with get_connection() as database:
+        return message('OK', 200, users=list(map(lambda x: x.jsonify(), users.get_all(database, limit))))
 
 
 @app.route('/users/new', methods=['POST'])
@@ -61,52 +60,56 @@ def post_users_new():
 
     if id_ is None or password is None:
         return message(get_string('client_error.register_malformed'), 400)
-    if users.exists(id_):
-        return message(get_string('client_error.duplicated_id'), 409)
+    with get_connection() as database:
+        if users.exists(id_, database):
+            return message(get_string('client_error.duplicated_id'), 409)
 
-    user = users.new(id_, password, color)
+        user = users.new(id_, password, color, database)
     return message('OK', 200, user=user.jsonify())
 
 
 @app.route('/users/<user_id>', methods=['GET'])
 def get_users_id(user_id: str):
-    if not users.exists(user_id):
-        return message(get_string('client_error.user_not_found'), 404)
+    with get_connection() as database:
+        if not users.exists(user_id, database):
+            return message(get_string('client_error.user_not_found'), 404)
 
-    return message('OK', 200, user=users.get(user_id).jsonify())
+        return message('OK', 200, user=users.get(user_id, database).jsonify())
 
 
 @app.route('/users/<user_id>', methods=['PATCH'])
 def patch_users_id(user_id: str):
-    try:
-        user = users.get(user_id)
-    except ValueError:
-        return message(get_string('client_error.user_not_found'), 404)
+    with get_connection() as database:
+        try:
+            user = users.get(user_id, database)
+        except ValueError:
+            return message(get_string('client_error.user_not_found'), 404)
 
-    if login(request) is None:
-        return message(get_string('client_error.unauthorized'), 401)
+        if login(request) is None:
+            return message(get_string('client_error.unauthorized'), 401)
 
-    data = request.get_json()
-    if password := data.get('password_to_be'):
-        users.change_password(user, password)
+        data = request.get_json()
+        if password := data.get('password_to_be'):
+            users.change_password(user, password, database)
 
     return message('OK', 200)
 
 
 @app.route('/users/<user_id>', methods=['DELETE'])
 def delete_users_id(user_id: str):
-    try:
-        user = users.get(user_id)
-    except ValueError:
-        return message(get_string('client_error.user_not_found'), 404)
+    with get_connection() as database:
+        try:
+            user = users.get(user_id, database)
+        except ValueError:
+            return message(get_string('client_error.user_not_found'), 404)
 
-    if (user_login := login(request)) is None:
-        return message(get_string('client_error.unauthorized'), 401)
+        if (user_login := login(request)) is None:
+            return message(get_string('client_error.unauthorized'), 401)
 
-    if user.id != user_login.id:
-        return message(get_string('client_error.forbidden'), 403)
+        if user.id != user_login.id:
+            return message(get_string('client_error.forbidden'), 403)
 
-    users.delete_user(user_id)
+        users.delete_user(user_id, database)
     return message('OK', 200)
 
 
@@ -119,10 +122,8 @@ def get_games():
 
     limit = data.get('limit')
 
-    return message(
-        'OK', 200,
-        games=list(map(lambda x: x.jsonify(), games.get_all(limit)))
-    )
+    with get_connection() as database:
+        return message('OK', 200, games=list(map(lambda x: x.jsonify(), games.get_all(database, limit))))
 
 
 @app.route('/games/new', methods=['POST'])
@@ -132,20 +133,22 @@ def post_games_new():
 
     direction = request.get_json().get('direction')
 
-    game_id = games.new(user.id, direction)
-    game = games.get(game_id)
-    participants.new(user.id, game.id)
+    with get_connection() as database:
+        game_id = games.new(user.id, direction, database)
+        game = games.get(game_id, database)
+        participants.new(user.id, game.id, database)
     return message('OK', 200, game=game.jsonify())
 
 
 @app.route('/games/<int:game_id>', methods=['GET'])
 def get_games_id(game_id: int):
-    if not games.exists(game_id):
-        return message(get_string('client_error.game_not_found'), 404)
-    user_ids = participants.get_ids(game_id)
-    return message(
-        'OK', 200, game=games.get(game_id).jsonify(),
-        participants=[users.get(user_id).jsonify() for user_id in user_ids])
+    with get_connection() as database:
+        if not games.exists(game_id, database):
+            return message(get_string('client_error.game_not_found'), 404)
+        user_ids = participants.get_ids(game_id, database)
+        return message(
+            'OK', 200, game=games.get(game_id, database).jsonify(),
+            participants=[users.get(user_id, database).jsonify() for user_id in user_ids])
 
 
 @app.route('/games/<int:game_id>/join', methods=['POST'])
@@ -153,18 +156,19 @@ def post_games_id_join(game_id: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    try:
-        game = games.get(game_id)
-    except ValueError:
-        return message(get_string('client_error.game_not_found'), 404)
+    with get_connection() as database:
+        try:
+            game = games.get(game_id, database)
+        except ValueError:
+            return message(get_string('client_error.game_not_found'), 404)
 
-    if game.state != GameState.IDLE:
-        return message(get_string('client_error.game_not_idle'), 404)
+        if game.state != GameState.IDLE:
+            return message(get_string('client_error.game_not_idle'), 404)
 
-    if user.id in participants.get_ids(game.id):
-        return message(get_string('client_error.already_in'), 403)
+        if user.id in participants.get_ids(game.id, database):
+            return message(get_string('client_error.already_in'), 403)
 
-    participants.new(user.id, game_id)
+        participants.new(user.id, game_id, database)
     return message('OK', 200)
 
 
@@ -173,14 +177,15 @@ def post_games_id_leave(game_id: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    if not games.exists(game_id):
-        return message(get_string('client_error.game_not_found'), 404)
+    with get_connection() as database:
+        if not games.exists(game_id, database):
+            return message(get_string('client_error.game_not_found'), 404)
 
-    ids = participants.get_ids(game_id)
-    if user.id not in ids:
-        return message(get_string('client_error.not_joined'), 404)
+        ids = participants.get_ids(game_id, database)
+        if user.id not in ids:
+            return message(get_string('client_error.not_joined'), 404)
 
-    participants.leave(user.id, game_id)
+        participants.leave(user.id, game_id, database)
     return message('OK', 200)
 
 
@@ -189,31 +194,33 @@ def post_games_id_start(game_id: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    try:
-        game = games.get(game_id)
-    except ValueError:
-        return message(get_string('client_error.game_not_found'), 404)
+    with get_connection() as database:
+        try:
+            game = games.get(game_id, database)
+        except ValueError:
+            return message(get_string('client_error.game_not_found'), 404)
 
-    if game.created_by != user.id:
-        return message(get_string('client_error.not_owner'), 403)
+        if game.created_by != user.id:
+            return message(get_string('client_error.not_owner'), 403)
 
-    if game.state != GameState.IDLE:
-        return message(get_string('client_error.game_not_idle'), 403)
+        if game.state != GameState.IDLE:
+            return message(get_string('client_error.game_not_idle'), 403)
 
-    ids = participants.get_ids(game.id)
-    if len(ids) < 2:
-        return message(get_string('client_error.not_enough_player'), 403)
+        ids = participants.get_ids(game.id, database)
+        if len(ids) < 2:
+            return message(get_string('client_error.not_enough_player'), 403)
 
-    games.set_state(game.id, GameState.PLAYING)
+        games.set_state(game.id, GameState.PLAYING, database)
     return message('OK', 200)
 
 
 @app.route('/users/<user_id>/games', methods=['GET'])
 def get_users_id_games(user_id: str):
-    if not users.exists(user_id):
-        return message(get_string('client_error.user_not_found'), 404)
+    with get_connection() as database:
+        if not users.exists(user_id, database):
+            return message(get_string('client_error.user_not_found'), 404)
 
-    ids = participants.get_game_ids(user_id)
+        ids = participants.get_game_ids(user_id, database)
     return message('OK', 200, games=ids)
 
 
@@ -222,28 +229,29 @@ def post_games_id_put(game_id: int, nema_position: int):
     if (user := login(request)) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    try:
-        game = games.get(game_id)
-    except ValueError:
-        return message(get_string('client_error.game_not_found'), 404)
+    with get_connection() as database:
+        try:
+            game = games.get(game_id, database)
+        except ValueError:
+            return message(get_string('client_error.game_not_found'), 404)
 
-    ids = participants.get_ids(game.id)
-    if user.id not in ids:
-        return message(get_string('client_error.not_joined'), 403)
+        ids = participants.get_ids(game.id, database)
+        if user.id not in ids:
+            return message(get_string('client_error.not_joined'), 403)
 
-    if not is_valid_position(nema_position):
-        return message(get_string('client_error.invalid_position'), 403)
+        if not is_valid_position(nema_position):
+            return message(get_string('client_error.invalid_position'), 403)
 
-    if game.state != GameState.PLAYING:
-        return message(get_string('client_error.game_not_playing'), 403)
+        if game.state != GameState.PLAYING:
+            return message(get_string('client_error.game_not_playing'), 403)
 
-    if nemas.get(game.id, nema_position) is not None:
-        return message(get_string('client_error.duplicated'), 403)
+        if nemas.get(game.id, nema_position, database) is not None:
+            return message(get_string('client_error.duplicated'), 403)
 
-    nema = Nema(user.id, game.id, nema_position)
-    nemas.new(nema)
+        nema = Nema(user.id, game.id, nema_position)
+        nemas.new(nema, database)
 
-    scores = tuple(calculate_score(game, nemas.get_nemas(game.id)).values())
+        scores = tuple(calculate_score(game, nemas.get_nemas(game.id, database)).values())
     if len(scores) > 0 and min(scores) >= game.max_score:
         game.state = GameState.END
 
@@ -252,21 +260,23 @@ def post_games_id_put(game_id: int, nema_position: int):
 
 @app.route('/games/<int:game_id>/nemas', methods=['GET'])
 def get_games_id_nema(game_id: int):
-    if not games.exists(game_id):
-        return message(get_string('client_error.game_not_found'), 404)
+    with get_connection() as database:
+        if not games.exists(game_id, database):
+            return message(get_string('client_error.game_not_found'), 404)
 
-    ingame_nemas = nemas.get_nemas(game_id)
+        ingame_nemas = nemas.get_nemas(game_id, database)
     return message('OK', 200, nemas=list(map(lambda x: x.jsonify(), ingame_nemas)))
 
 
 @app.route('/game/<int:game_id>', methods=['GET'])
 def game_id_(game_id: int):
-    try:
-        game = games.get(game_id)
-    except ValueError as e:
-        return str(e), 404
+    with get_connection() as database:
+        try:
+            game = games.get(game_id, database)
+        except ValueError as e:
+            return str(e), 404
 
-    user_ids = sorted(participants.get_ids(game.id))
+        user_ids = sorted(participants.get_ids(game.id, database))
     return render_template('game.html', game=game, participants=user_ids, print=print)
 
 

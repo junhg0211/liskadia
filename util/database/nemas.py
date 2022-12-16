@@ -1,12 +1,12 @@
 from typing import Optional
 
+from pymysql import Connection
 from pymysql.cursors import DictCursor
 
 from lyskad import Nema
-from util.database import database
 
 
-def new(nema: Nema):
+def new(nema: Nema, database: Connection):
     with database.cursor() as cursor:
         cursor.execute(
             'INSERT INTO nema VALUES (%s, %s, %s, %s)',
@@ -15,7 +15,7 @@ def new(nema: Nema):
         database.commit()
 
 
-def get_nemas(game_id: int) -> list[Nema]:
+def get_nemas(game_id: int, database: Connection) -> list[Nema]:
     result = list()
     with database.cursor(DictCursor) as cursor:
         cursor.execute('SELECT * FROM nema WHERE game_id = %s', game_id)
@@ -24,7 +24,7 @@ def get_nemas(game_id: int) -> list[Nema]:
     return result
 
 
-def get(game_id: int, position: int) -> Optional[Nema]:
+def get(game_id: int, position: int, database: Connection) -> Optional[Nema]:
     with database.cursor(DictCursor) as cursor:
         cursor.execute('SELECT * FROM nema WHERE game_id = %s AND position = %s', (game_id, position))
         data = cursor.fetchone()

@@ -1,13 +1,13 @@
-from util.database import database
+from pymysql import Connection
 
 
-def new(user_id: str, game_id: int):
+def new(user_id: str, game_id: int, database: Connection):
     with database.cursor() as cursor:
         cursor.execute("INSERT INTO participant VALUES (%s, %s)", (user_id, game_id))
         database.commit()
 
 
-def get_ids(game_id: int) -> list[str]:
+def get_ids(game_id: int, database: Connection) -> list[str]:
     ids = list()
     with database.cursor() as cursor:
         cursor.execute('SELECT user_id FROM participant WHERE game_id = %s', game_id)
@@ -16,13 +16,13 @@ def get_ids(game_id: int) -> list[str]:
     return ids
 
 
-def leave(user_id: str, game_id: int):
+def leave(user_id: str, game_id: int, database: Connection):
     with database.cursor() as cursor:
         cursor.execute('DELETE FROM participant WHERE user_id = %s AND game_id = %s', (user_id, game_id))
         database.commit()
 
 
-def get_game_ids(user_id: str) -> list[int]:
+def get_game_ids(user_id: str, database: Connection) -> list[int]:
     ids = list()
     with database.cursor() as cursor:
         cursor.execute('SELECT game_id FROM participant WHERE user_id = %s', user_id)

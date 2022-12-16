@@ -1,13 +1,13 @@
 from typing import Optional
 
+from pymysql import Connection
 from pymysql.cursors import DictCursor
 
 from lyskad import User
 from util import encrypt
-from util.database import database
 
 
-def get(user_id: str) -> User:
+def get(user_id: str, database: Connection) -> User:
     with database.cursor(DictCursor) as cursor:
         cursor.execute('SELECT * FROM user WHERE id = %s', user_id)
         data = cursor.fetchone()
@@ -19,7 +19,7 @@ def get(user_id: str) -> User:
 GET_ALL_DEFAULT_LIMIT = 50
 
 
-def get_all(limit: Optional[int] = None) -> list[User]:
+def get_all(database: Connection, limit: Optional[int] = None) -> list[User]:
     if limit is None:
         limit = GET_ALL_DEFAULT_LIMIT
 
@@ -31,7 +31,7 @@ def get_all(limit: Optional[int] = None) -> list[User]:
     return result
 
 
-def new(user_id: str, password: str, color: int) -> User:
+def new(user_id: str, password: str, color: int, database: Connection) -> User:
     user = User(user_id, encrypt(password, user_id))
     with database.cursor() as cursor:
         cursor.execute(
@@ -41,7 +41,7 @@ def new(user_id: str, password: str, color: int) -> User:
     return user
 
 
-def change_password(user: User, raw_password: str) -> User:
+def change_password(user: User, raw_password: str, database: Connection) -> User:
     user.password_token = encrypt(raw_password, user.id)
     with database.cursor() as cursor:
         cursor.execute('UPDATE user SET password = %s WHERE id = %s', (user.password_token, user.id))
@@ -49,22 +49,22 @@ def change_password(user: User, raw_password: str) -> User:
     return user
 
 
-def delete_user(user_id: str):
+def delete_user(user_id: str, database: Connection):
     with database.cursor() as cursor:
         cursor.execute('DELETE FROM user WHERE id = %s', user_id)
         database.commit()
 
 
-def exists(user_id: str):
+def exists(user_id: str, database: Connection):
     try:
-        get(user_id)
+        get(user_id, database)
     except ValueError:
         return False
     else:
         return True
 
 
-def login(user_id: str, password: str) -> User:
-    user = get(user_id)
+def login(user_id: str, password: str, database: Connection) -> User:
+    user = get(user_id, database)
     if user.password_token == encrypt(password, user_id):
         return user

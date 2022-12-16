@@ -1,14 +1,14 @@
 from datetime import datetime
 from typing import Optional
 
+from pymysql import Connection
 from pymysql.cursors import DictCursor
 
 from lyskad import Game
 from lyskad.game import HjulienDirection
-from util.database import database
 
 
-def get(game_id: int) -> Game:
+def get(game_id: int, database: Connection) -> Game:
     with database.cursor(DictCursor) as cursor:
         cursor.execute('SELECT * FROM game WHERE id = %s', game_id)
         data = cursor.fetchone()
@@ -20,7 +20,7 @@ def get(game_id: int) -> Game:
 GET_ALL_DEFAULT_LIMIT = 50
 
 
-def get_all(limit: Optional[int] = None) -> list[Game]:
+def get_all(database: Connection, limit: Optional[int] = None) -> list[Game]:
     if limit is None:
         limit = GET_ALL_DEFAULT_LIMIT
 
@@ -32,7 +32,7 @@ def get_all(limit: Optional[int] = None) -> list[Game]:
     return result
 
 
-def new(created_by: str, direction: Optional[bool]) -> int:
+def new(created_by: str, direction: Optional[bool], database: Connection) -> int:
     if direction is None:
         direction = HjulienDirection.DEFAULT
 
@@ -47,16 +47,16 @@ def new(created_by: str, direction: Optional[bool]) -> int:
     return game_id
 
 
-def exists(game_id: int) -> bool:
+def exists(game_id: int, database: Connection) -> bool:
     try:
-        get(game_id)
+        get(game_id, database)
     except ValueError:
         return False
     else:
         return True
 
 
-def set_state(game_id: int, state: int):
+def set_state(game_id: int, state: int, database: Connection):
     with database.cursor() as cursor:
         cursor.execute('UPDATE game SET state = %s WHERE id = %s', (state, game_id))
         database.commit()
