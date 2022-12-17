@@ -31,20 +31,20 @@ def get_all(database: Connection, limit: Optional[int] = None) -> list[User]:
     return result
 
 
-def new(user_id: str, password: str, color: int, database: Connection) -> User:
-    user = User(user_id, encrypt(password, user_id))
+def new(user_id: str, token: str, color: int, database: Connection) -> User:
+    user = User(user_id, encrypt(token, user_id))
     with database.cursor() as cursor:
         cursor.execute(
             'INSERT INTO user (id, password, joined_at, color) VALUES (%s, %s, %s, %s)',
-            (user_id, user.password_token, user.joined_at, color))
+            (user_id, user.encrypted_token, user.joined_at, color))
         database.commit()
     return user
 
 
-def change_password(user: User, raw_password: str, database: Connection) -> User:
-    user.password_token = encrypt(raw_password, user.id)
+def change_password(user: User, token: str, database: Connection) -> User:
+    user.encrypted_token = encrypt(token, user.id)
     with database.cursor() as cursor:
-        cursor.execute('UPDATE user SET password = %s WHERE id = %s', (user.password_token, user.id))
+        cursor.execute('UPDATE user SET password = %s WHERE id = %s', (user.encrypted_token, user.id))
         database.commit()
     return user
 
@@ -66,5 +66,5 @@ def exists(user_id: str, database: Connection):
 
 def login(user_id: str, password: str, database: Connection) -> User:
     user = get(user_id, database)
-    if user.password_token == encrypt(password, user_id):
+    if user.encrypted_token == encrypt(password, user_id):
         return user

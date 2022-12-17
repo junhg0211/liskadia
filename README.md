@@ -13,6 +13,13 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 이때 `id`는 로그인하려는 계정의 아이디, `token`은 로그인하려는 계정에 대한 토큰이다.
 `token`은 `util.encrypt`와 같이 생성된다.
 
+로그인을 한 후에 사용할 수 있는 기능에는 *표시를 해 두었다.
+
+클라이언트는 encrypt 방식으로 한 번 암호화하여 서버에 token을 전달하고,
+서버에서는 해당 token을 한 번 더 같은 방식으로 암호화하여 데이터베이스에 저장한다.
+데이터베이스에 저장된 token은 클라이언트에서 보낸 token을 encrypt 방식으로 암호화하여 일치하는지 여부로
+로그인 인증을 수행한다.
+
 ### User
 
 | FIELD      | TYPE   | DESCRIPTION    |
@@ -30,19 +37,22 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 #### POST `/users/new`
 새로운 계정 생성
-* `id`, `password` 정보가 전달되어야 함
+* `id`, `token` 정보가 전달되어야 함
 * `color` 정보를 전달할 수 있음
+
+### POST `/login`
+세션 로그인
+* `id`, `token` 정보가 전달되어야 함
 
 #### GET `/users/{user.id}`
 유저 정보 불러오기
 
-#### PATCH `/users/{user.id}`
+#### PATCH `/users/{user.id}`*
 유저 정보 변경하기
-* `password` 변경할 수 있음
+* `token` 변경할 수 있음
 
-#### DELETE `/users/{user.id}`
-유저 삭제하기
-* 로그인 정보 필요
+#### DELETE `/users/{user.id}`*
+~~유저 삭제하기~~
 
 ### Game
 
@@ -58,9 +68,8 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 #### GET `/games`
 게임 목록 불러오기
 
-#### POST `/games/new`
+#### POST `/games/new`*
 새로운 게임 생성
-* 로그인 정보 필요
 
 #### GET `/games/{game.id}`
 게임 정보 불러오기
@@ -72,17 +81,14 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 | user_id | user.id | 참가자 id      |
 | game_id | game.id | 게임 id       |
 
-#### POST `/games/{game.id}/join`
+#### POST `/games/{game.id}/join`*
 게임에 참가
-* 로그인 정보 필요
 
-#### POST `/games/{game.id}/leave`
+#### POST `/games/{game.id}/leave`*
 게임에서 퇴장
-* 로그인 정보 필요
 
-#### POST `/games/{game.id}/start`
+#### POST `/games/{game.id}/start`*
 게임 시작하기
-* 로그인 정보 필요
 
 #### GET `/users/{user.id}/games`
 유저가 플레이어로 등록되어있는 게임 목록 불러오기
@@ -102,9 +108,8 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 
 너비(가로)가 w인 휼리엔에서 `nema.position`의 값이 (x, y)좌표를 나타낼 때, `nema.position = w*x + y`이다.
 
-#### POST `/games/{game.id}/nemas/{nema.position}`
+#### POST `/games/{game.id}/nemas/{nema.position}`*
 게임에 네마 놓기
-* 로그인 정보 필요
 
 #### GET `/games/{game.id}/nemas`
 게임의 네마 정보 불러오기
