@@ -10,6 +10,9 @@
 
     {% endblock %}
     <title>Liskadia</title>
+    <script>
+        const LOGIN_ID = '{{ login_id }}' === 'None' ? null : '{{ login_id }}';
+    </script>
 </head>
 <body>
     <nav>

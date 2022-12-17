@@ -60,6 +60,9 @@ function sendNema(e) {
     if (!(0 <= floatX && floatX <= 9 && 0 <= floatY && floatY <= 9))
         return;
 
+    if (LOGIN_ID === null)
+        return;
+
     let nemaPosition = floatY * 10 + floatX;
     fetch(`/games/${GAME_ID}/nemas/${nemaPosition}`, {method: 'POST'})
       .then(res => res.json())
@@ -91,6 +94,9 @@ function nemaRect(xi, yi) {
 }
 
 function drawHighlightNema() {
+    if (!(0 <= floatX && floatX < 10 && 0 <= floatY && floatY < 10))
+        return;
+
     let [x, y, width, height] = nemaRect(floatX, floatY);
 
     hjulienCtx.strokeStyle = "#f7f7f9";
@@ -123,11 +129,9 @@ function drawNemas() {
 function render() {
     drawBackground();
 
-    if (0 <= floatX && floatX < 10 && 0 <= floatY && floatY < 10) {
-        drawHighlightNema();
-    }
-
     drawNemas();
+
+    drawHighlightNema();
 }
 
 function drawBackground() {
