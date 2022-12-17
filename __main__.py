@@ -44,7 +44,11 @@ def get_users():
 
 @app.route('/users/new', methods=['POST'])
 def post_users_new():
-    data = request.get_json()
+    if request.content_type == 'application/json':
+        data = request.get_json()
+    else:
+        data = dict(parse_qsl(request.get_data(as_text=True), strict_parsing=True))
+
     id_ = data.get('id')
     password = data.get('password')
     color = data.get('color')
@@ -88,11 +92,6 @@ def post_login():
 
     session['id'] = user_id
     return message('OK', 200)
-
-
-@app.route('/login', methods=['GET'])
-def get_login():
-    return render_template('login.html')
 
 
 @app.route('/users/<user_id>', methods=['PATCH'])
@@ -297,6 +296,16 @@ def get_games_id_nema(game_id: int):
 @app.route('/', methods=['GET'])
 def get_index():
     return redirect('/game')
+
+
+@app.route('/register', methods=['GET'])
+def get_register():
+    return render_template('register.html')
+
+
+@app.route('/login', methods=['GET'])
+def get_login():
+    return render_template('login.html')
 
 
 @app.route('/game', methods=['GET'])

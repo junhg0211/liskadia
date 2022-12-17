@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script>
+        let passwordField;
+        let passwordAgainField;
+        let submitButton;
+
+        document.addEventListener('DOMContentLoaded', () => {
+          passwordField = document.querySelector('#password');
+          passwordAgainField = document.querySelector('#password-again');
+          submitButton = document.querySelector('#submit');
+
+          const color = document.querySelector('#color');
+
+          color.value = '#' + Math.floor(Math.random() * 0x1000000).toString(16).padStart(6, '0');
+        });
+
+        function checkPassword() {
+          submitButton.disabled = passwordAgainField.value !== passwordField.value;
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h2>화원가입</h2>
+    <form action="/users/new" method="POST">
+        <p><label for="id">ID <input type="text" name="id"></label></p>
+        <p>
+            <label for="password">
+                비밀번호 <input type="password" name="password" onchange="checkPassword()" id="password">
+            </label>
+        </p>
+        <p>
+            <label for="password">
+                비밀번호 확인 <input type="password" onchange="checkPassword()" id="password-again">
+            </label>
+        </p>
+        <p>
+            <label for="color">
+                네마 색상 <input type="color" id="color">
+            </label>
+        </p>
+        <input type="submit" disabled id="submit">
+    </form>
+{% endblock %}
