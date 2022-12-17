@@ -29,13 +29,16 @@ def login(user_id: str, password: str) -> Optional[User]:
     return user
 
 
+def parse_data(request_):
+    if request_.content_type == 'application/json':
+        return request_.get_json()
+
+    return dict(parse_qsl(request_.get_data(as_text=True), strict_parsing=True))
+
+
 @app.route('/users', methods=['GET'])
 def get_users():
-    if request.content_type is None:
-        data = dict()
-    else:
-        data = request.get_json()
-
+    data = parse_data(request)
     limit = data.get('limit')
 
     with get_connection() as database:
@@ -44,11 +47,7 @@ def get_users():
 
 @app.route('/users/new', methods=['POST'])
 def post_users_new():
-    if request.content_type == 'application/json':
-        data = request.get_json()
-    else:
-        data = dict(parse_qsl(request.get_data(as_text=True), strict_parsing=True))
-
+    data = parse_data(request)
     id_ = data.get('id')
     password = data.get('password')
     color = data.get('color')
@@ -77,10 +76,7 @@ def get_users_id(user_id: str):
 
 @app.route('/login', methods=['POST'])
 def post_login():
-    if request.headers.get('Content-Type') == 'application/json':
-        data = request.get_json()
-    else:
-        data = dict(parse_qsl(request.get_data(as_text=True), strict_parsing=True))
+    data = parse_data(request)
     user_id = data.get('id')
     password = data.get('password')
 
@@ -141,11 +137,7 @@ def delete_users_id(user_id: str):
 
 @app.route('/games', methods=['GET'])
 def get_games():
-    if request.content_type is None:
-        data = dict()
-    else:
-        data = request.get_json()
-
+    data = parse_data(request)
     limit = data.get('limit')
 
     with get_connection() as database:
