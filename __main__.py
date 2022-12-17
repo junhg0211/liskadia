@@ -87,7 +87,7 @@ def post_login():
         return message(get_string('client_error.unauthorized'), 401)
 
     session['id'] = user_id
-    return message('OK', 200)
+    return redirect('/')
 
 
 @app.route('/logout', methods=['GET'])
