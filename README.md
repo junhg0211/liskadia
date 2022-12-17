@@ -45,7 +45,7 @@ API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc595754728
 유저 정보 변경하기
 * `token` 변경할 수 있음
 
-#### DELETE `/users/{user.id}`*
+#### ~~DELETE `/users/{user.id}`*~~
 ~~유저 삭제하기~~
 
 ### Game
