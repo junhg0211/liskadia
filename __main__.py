@@ -65,8 +65,9 @@ def post_users_new():
         if users.exists(id_, database):
             return message(get_string('client_error.duplicated_id'), 409)
 
-        user = users.new(id_, password, color, database)
-    return message('OK', 200, user=user.jsonify())
+        users.new(id_, password, color, database)
+
+    return redirect('/')
 
 
 @app.route('/users/<user_id>', methods=['GET'])
