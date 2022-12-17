@@ -3,7 +3,7 @@ from random import randint
 from typing import Optional
 from urllib.parse import parse_qsl
 
-from flask import Flask, jsonify, request, render_template, session
+from flask import Flask, jsonify, request, render_template, session, redirect
 
 from lyskad import User, Nema, calculate_score
 from lyskad.game import GameState
@@ -294,8 +294,19 @@ def get_games_id_nema(game_id: int):
     return message('OK', 200, nemas=list(map(lambda x: x.jsonify(), ingame_nemas)))
 
 
+@app.route('/', methods=['GET'])
+def get_index():
+    return redirect('/game')
+
+
+@app.route('/game', methods=['GET'])
+def get_game():
+    with get_connection() as database:
+        return render_template('games.html', login_id=session.get('id'), games=games.get_all(database))
+
+
 @app.route('/game/<int:game_id>', methods=['GET'])
-def game_id_(game_id: int):
+def get_game_id(game_id: int):
     with get_connection() as database:
         try:
             game = games.get(game_id, database)

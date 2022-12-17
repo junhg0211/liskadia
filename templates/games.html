@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>게임 목록</h2>
+    <ol>
+        {% for game in games %}
+            <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
+        {% endfor %}
+    </ol>
+{% endblock %}
