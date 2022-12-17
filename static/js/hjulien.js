@@ -2,6 +2,8 @@ let hjulien;
 let hjulienCtx;
 
 let nemaHistoryTable;
+let stateSpan;
+let startForm, joinForm;
 
 let hjulienDirection = false;
 
@@ -13,6 +15,8 @@ let floatX, floatY;
 
 let nemas = [];
 let colors = {};
+let gameCreator;
+let gameState = 0;
 
 let nemaUpdate = true;
 let colorUpdate = true;
@@ -61,9 +65,12 @@ function updateNemas() {
   nemaUpdate = false;
 }
 
+let meInGame = false;
+
 function updateColors() {
   if (!colorUpdate) return;
 
+  meInGame = false;
   fetch(`/games/${GAME_ID}`)
     .then(res => res.json())
     .then(data => {
@@ -74,9 +81,31 @@ function updateColors() {
         [r, g] = [Math.floor(g / 0x100), g % 0x100];
 
         colors[user['id']] = `rgb(${r}, ${g}, ${b})`;
+
+        if (!meInGame && user['id'] === LOGIN_ID) {
+          meInGame = true;
+        }
       });
 
       hjulienDirection = data['game']['direction'];
+
+      gameCreator = data['game']['created_by'];
+
+      gameState = data['game']['state'];
+      startForm.style.display = 'none';
+      joinForm.style.display = 'none';
+
+      if (gameState === 0) {
+        stateSpan.innerText = '(시작 대기중)';
+        if (gameCreator === LOGIN_ID)
+          startForm.style.display = 'block';
+        if (!meInGame)
+          joinForm.style.display = 'block';
+      } else if (gameState === 1) {
+        stateSpan.innerText = '';
+      } else if (gameState === 2) {
+        stateSpan.innerText = '(종료됨)';
+      }
     });
 
   colorUpdate = false;
@@ -86,6 +115,10 @@ function sendNema(e) {
   if (!(0 <= floatX && floatX <= 9 && 0 <= floatY && floatY <= 9)) return;
 
   if (LOGIN_ID === null) return;
+
+  if (gameState !== 1) return;
+
+  if (!meInGame) return;
 
   let nemaPosition = floatY * 10 + floatX;
   fetch(`/games/${GAME_ID}/nemas/${nemaPosition}`, {method: 'POST'})
@@ -219,6 +252,9 @@ function loadHjulien() {
   }, 1000 / 30);
 
   nemaHistoryTable = document.querySelector('#nema-history');
+  stateSpan = document.querySelector('#game-metadata__state');
+  startForm = document.querySelector('#start-form');
+  joinForm = document.querySelector('#join-form');
 }
 
 document.addEventListener('DOMContentLoaded', loadHjulien);
