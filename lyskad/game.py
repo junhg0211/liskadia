@@ -21,7 +21,7 @@ class Game:
         created_by = data['created_by']
         direction = data['direction']
 
-        result = Game(game_id, created_by, direction)
+        result = Game(game_id, created_by, 3, direction)
         result.state = data['state']
         result.created_at = data['created_at']
         return result

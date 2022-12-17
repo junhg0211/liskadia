@@ -77,7 +77,6 @@ function updateColors() {
       });
 
       hjulienDirection = data['game']['direction'];
-      console.log(hjulienDirection);
     });
 
   colorUpdate = false;
