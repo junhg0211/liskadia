@@ -29,11 +29,15 @@ def login(user_id: str, password: str) -> Optional[User]:
     return user
 
 
-def parse_data(request_):
+def parse_data(request_) -> dict:
     if request_.content_type == 'application/json':
         return request_.get_json()
 
-    return dict(parse_qsl(request_.get_data(as_text=True), strict_parsing=True))
+    data = request_.get_data(as_text=True)
+    if not data:
+        return dict()
+
+    return dict(parse_qsl(data, strict_parsing=True))
 
 
 @app.route('/users', methods=['GET'])
