@@ -94,6 +94,12 @@ def post_login():
     return message('OK', 200)
 
 
+@app.route('/logout', methods=['GET'])
+def get_logout():
+    session.pop('id', None)
+    return redirect('/')
+
+
 @app.route('/users/<user_id>', methods=['PATCH'])
 def patch_users_id(user_id: str):
     with get_connection() as database:
