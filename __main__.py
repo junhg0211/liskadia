@@ -154,14 +154,15 @@ def post_games_new():
     if (login_id := session.get('id')) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
-    direction = request.get_json().get('direction')
+    data = parse_data(request)
+    direction = data.get('direction') == 'on'
 
     with get_connection() as database:
         user = users.get(login_id, database)
         game_id = games.new(user.id, direction, database)
         game = games.get(game_id, database)
         participants.new(user.id, game.id, database)
-    return message('OK', 200, game=game.jsonify())
+    return redirect(f'/game/{game_id}')
 
 
 @app.route('/games/<int:game_id>', methods=['GET'])
@@ -327,6 +328,11 @@ def get_game_id(game_id: int):
 
         user_ids = sorted(participants.get_ids(game.id, database))
     return render_template('game.html', game=game, participants=user_ids, login_id=session.get('id'))
+
+
+@app.route('/new_game', methods=['GET'])
+def get_new_game():
+    return render_template('new_game.html', login_id=session.get('id'))
 
 
 if __name__ == '__main__':
