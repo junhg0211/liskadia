@@ -7,8 +7,12 @@
 {% block content %}
     <h2>로그인</h2>
     <form action="/login" method="POST" onsubmit="encrypt()">
-        <label>ID <input type="text" name="id"></label>
-        <label>비밀번호 <input type="password" name="password" id="password"></label>
+        <p>
+            <label>ID <input type="text" name="id"></label>
+        </p>
+        <p>
+            <label>비밀번호 <input type="password" name="password" id="password"></label>
+        </p>
         <input type="submit">
     </form>
 {% endblock %}
