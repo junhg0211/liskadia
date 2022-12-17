@@ -29,3 +29,9 @@ def get_game_ids(user_id: str, database: Connection) -> list[int]:
         while line := cursor.fetchone():
             ids.append(line[0])
     return ids
+
+
+def is_in(user_id: str, game_id: int, database: Connection):
+    with database.cursor() as cursor:
+        cursor.execute('SELECT game_id FROM participant WHERE user_id = %s AND game_id = %s', (user_id, game_id))
+        return bool(cursor.fetchone())

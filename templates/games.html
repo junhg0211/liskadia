@@ -1,10 +1,36 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>게임 목록</h2>
-    <ol>
-        {% for game in games %}
-            <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
-        {% endfor %}
-    </ol>
+    {% if idle_games %}
+        <h2>모집중인 게임 목록</h2>
+        <ul>
+            {% for game in idle_games %}
+                <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if ongoing_games %}
+        <h2>진행중인 게임 목록</h2>
+        <ul>
+            {% for game in ongoing_games %}
+                <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if ended_games %}
+        <h2>종료된 게임 목록</h2>
+        <ul>
+            {% for game in ended_games %}
+                <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if login_id and joined_games %}
+        <h2>내가 참여한 게임 목록</h2>
+        <ul>
+            {% for game in joined_games %}
+                <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 {% endblock %}

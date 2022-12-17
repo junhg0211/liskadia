@@ -20,13 +20,16 @@ def get(game_id: int, database: Connection) -> Game:
 GET_ALL_DEFAULT_LIMIT = 50
 
 
-def get_all(database: Connection, limit: Optional[int] = None) -> list[Game]:
+def get_all(database: Connection, limit: Optional[int] = None, state: Optional[int] = None) -> list[Game]:
     if limit is None:
         limit = GET_ALL_DEFAULT_LIMIT
 
     result = list()
     with database.cursor(DictCursor) as cursor:
-        cursor.execute('SELECT * FROM game LIMIT %s', limit)
+        if state is None:
+            cursor.execute('SELECT * FROM game LIMIT %s', limit)
+        else:
+            cursor.execute('SELECT * FROM game WHERE state = %s LIMIT %s', (state, limit))
         while data := cursor.fetchone():
             result.append(Game.get(data))
     return result

@@ -315,8 +315,24 @@ def get_login():
 
 @app.route('/game', methods=['GET'])
 def get_game():
+    login_id = session.get('id')
     with get_connection() as database:
-        return render_template('games.html', login_id=session.get('id'), games=games.get_all(database))
+        games_list = [list(), list(), list()]
+
+        joined_games = list()
+        if login_id:
+            joined_ids = participants.get_game_ids(login_id, database)
+
+        for game in games.get_all(database):
+            # noinspection PyTypeChecker
+            games_list[game.state].append(game)
+
+            if login_id and game.id in joined_ids:
+                joined_games.append(game)
+
+    return render_template(
+        'games.html', login_id=login_id,
+        idle_games=games_list[0], ongoing_games=games_list[1], ended_games=games_list[2], joined_games=joined_games)
 
 
 @app.route('/game/<int:game_id>', methods=['GET'])
