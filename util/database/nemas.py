@@ -26,7 +26,9 @@ def get_nemas(game_id: int, database: Connection) -> list[Nema]:
 
 def get(game_id: int, position: int, database: Connection) -> Optional[Nema]:
     with database.cursor(DictCursor) as cursor:
-        cursor.execute('SELECT * FROM nema WHERE game_id = %s AND position = %s', (game_id, position))
+        cursor.execute(
+            'SELECT * FROM nema WHERE game_id = %s AND position = %s ORDER BY created_at',
+            (game_id, position))
         data = cursor.fetchone()
 
     if data is None:

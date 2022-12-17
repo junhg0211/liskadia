@@ -7,3 +7,7 @@
     flex: 1;
     margin-left: 20px;
 }
+
+.game-metadata__history {
+    width: 100%;
+}

@@ -1,6 +1,8 @@
 let hjulien;
 let hjulienCtx;
 
+let nemaHistoryTable;
+
 let hjulienDirection = false;
 
 let mouseX, mouseY;
@@ -21,8 +23,10 @@ function updateNemas() {
     if (!nemaUpdate)
         return;
 
+    nemaHistoryTable.children[0].innerHTML = nemaHistoryTable.rows[0].innerHTML;
     nemas.length = 0;
 
+    let index = 0;
     fetch(`/games/${GAME_ID}/nemas`)
         .then(res => res.json())
         .then(data => data['nemas'])
@@ -32,6 +36,27 @@ function updateNemas() {
             let id = nema['user_id'];
 
             nemas.push([x, y, id]);
+
+            let td;
+            let tr = document.createElement('tr');
+
+            td = document.createElement('td');
+            td.innerText = (++index).toString();
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.innerText = `X${x}Y${y}`;
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.innerText = id;
+            tr.appendChild(td);
+
+            td = document.createElement('td');
+            td.innerText = nema['created_at'];
+            tr.appendChild(td);
+
+            nemaHistoryTable.children[0].appendChild(tr);
         }));
 
     nemaUpdate = false;
@@ -196,6 +221,8 @@ function loadHjulien() {
         tick();
         render();
     }, 1000 / 30);
+
+    nemaHistoryTable = document.querySelector('#nema-history');
 }
 
 document.addEventListener('DOMContentLoaded', loadHjulien);
