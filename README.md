@@ -2,11 +2,6 @@
 
 > 리스카드 서버 엔진
 
-## API
-
-API의 구상은 [이 링크](https://sch-jeon.notion.site/Liskadia-fdc59575472843dd99b6ae900dc01a9c)에서 진행하고,
-이 문서에는 코드로 구현된 API만 나열한다.
-
 ### 로그인 토큰
 
 로그인 정보는 `id`와 `password` 값이다.
