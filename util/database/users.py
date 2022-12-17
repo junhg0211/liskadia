@@ -36,15 +36,15 @@ def new(user_id: str, token: str, color: int, database: Connection) -> User:
     with database.cursor() as cursor:
         cursor.execute(
             'INSERT INTO user (id, password, joined_at, color) VALUES (%s, %s, %s, %s)',
-            (user_id, user.encrypted_token, user.joined_at, color))
+            (user_id, user.token, user.joined_at, color))
         database.commit()
     return user
 
 
 def change_password(user: User, token: str, database: Connection) -> User:
-    user.encrypted_token = encrypt(token, user.id)
+    user.token = encrypt(token, user.id)
     with database.cursor() as cursor:
-        cursor.execute('UPDATE user SET password = %s WHERE id = %s', (user.encrypted_token, user.id))
+        cursor.execute('UPDATE user SET password = %s WHERE id = %s', (user.token, user.id))
         database.commit()
     return user
 
@@ -66,5 +66,5 @@ def exists(user_id: str, database: Connection):
 
 def login(user_id: str, password: str, database: Connection) -> User:
     user = get(user_id, database)
-    if user.encrypted_token == encrypt(password, user_id):
+    if user.token == encrypt(password, user_id):
         return user

@@ -14,6 +14,11 @@
 <body>
     <nav>
         <h1>Liskadia</h1>
+        {% if login_id %}
+            <p>{{ login_id }}으로 로그인함</p>
+        {% else %}
+            <a href="/login">로그인하기</a>
+        {% endif %}
     </nav>
     <article>
         {% block content %}

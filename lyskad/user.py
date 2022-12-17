@@ -7,14 +7,14 @@ class User:
         result = User(data['id'], '')
         result.wins = data['wins']
         result.games = data['games']
-        result.encrypted_token = data['password']
+        result.token = data['password']
         result.joined_at = data['joined_at']
         result.color = data['color']
         return result
 
     def __init__(self, id_: str, encrypted_token: str):
         self.id = id_
-        self.encrypted_token = encrypted_token
+        self.token = encrypted_token
         self.wins = 0
         self.games = 0
         self.joined_at = datetime.now()

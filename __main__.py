@@ -1,6 +1,7 @@
 from hashlib import sha256
 from random import randint
 from typing import Optional
+from urllib.parse import parse_qsl
 
 from flask import Flask, jsonify, request, render_template, session
 
@@ -19,9 +20,9 @@ def message(message_, code: int, **kwargs):
     return jsonify(kwargs), code
 
 
-def login(user_id: str, token: str) -> Optional[User]:
+def login(user_id: str, password: str) -> Optional[User]:
     with get_connection() as database:
-        if (user := users.login(user_id, token, database)) is None:
+        if (user := users.login(user_id, password, database)) is None:
             return
     if user.id != user_id:
         return
@@ -45,19 +46,19 @@ def get_users():
 def post_users_new():
     data = request.get_json()
     id_ = data.get('id')
-    token = data.get('token')
+    password = data.get('password')
     color = data.get('color')
 
     if color is None:
         color = randint(0, 0xFFFFFF)
 
-    if id_ is None or token is None:
+    if id_ is None or password is None:
         return message(get_string('client_error.register_malformed'), 400)
     with get_connection() as database:
         if users.exists(id_, database):
             return message(get_string('client_error.duplicated_id'), 409)
 
-        user = users.new(id_, token, color, database)
+        user = users.new(id_, password, color, database)
     return message('OK', 200, user=user.jsonify())
 
 
@@ -71,19 +72,27 @@ def get_users_id(user_id: str):
 
 
 @app.route('/login', methods=['POST'])
-def login_():
-    data = request.get_json()
+def post_login():
+    if request.headers.get('Content-Type') == 'application/json':
+        data = request.get_json()
+    else:
+        data = dict(parse_qsl(request.get_data(as_text=True), strict_parsing=True))
     user_id = data.get('id')
-    token = data.get('token')
+    password = data.get('password')
 
-    if user_id is None or token is None:
+    if user_id is None or password is None:
         return message(get_string('client_error.register_malformed'), 400)
 
-    if login(user_id, token) is None:
+    if login(user_id, password) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
     session['id'] = user_id
     return message('OK', 200)
+
+
+@app.route('/login', methods=['GET'])
+def get_login():
+    return render_template('login.html')
 
 
 @app.route('/users/<user_id>', methods=['PATCH'])
@@ -101,8 +110,8 @@ def patch_users_id(user_id: str):
             return message(get_string('client_error.forbidden'), 403)
 
         data = request.get_json()
-        if token := data.get('token'):
-            users.change_password(user, token, database)
+        if password := data.get('password'):
+            users.change_password(user, password, database)
 
     return message('OK', 200)
 
@@ -294,7 +303,7 @@ def game_id_(game_id: int):
             return str(e), 404
 
         user_ids = sorted(participants.get_ids(game.id, database))
-    return render_template('game.html', game=game, participants=user_ids, print=print)
+    return render_template('game.html', game=game, participants=user_ids, login_id=session.get('id'))
 
 
 if __name__ == '__main__':
