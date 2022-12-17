@@ -195,7 +195,7 @@ def post_games_id_join(game_id: int):
             return message(get_string('client_error.already_in'), 403)
 
         participants.new(user.id, game_id, database)
-    return message('OK', 200)
+    return redirect(f'/game/{game.id}')
 
 
 @app.route('/games/<int:game_id>/leave', methods=['POST'])
@@ -239,7 +239,7 @@ def post_games_id_start(game_id: int):
             return message(get_string('client_error.not_enough_player'), 403)
 
         games.set_state(game.id, GameState.PLAYING, database)
-    return message('OK', 200)
+    return redirect(f'/game/{game.id}')
 
 
 @app.route('/users/<user_id>/games', methods=['GET'])

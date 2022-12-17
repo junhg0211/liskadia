@@ -9,8 +9,21 @@
     <div class="game-container">
         <canvas id="hjulien"></canvas>
         <div class="game-metadata">
-            <h2>#<span id="game-metadata__id">{{ game.id }}</span></h2>
+            <h2>
+                #<span id="game-metadata__id">{{ game.id }}</span>
+                {% if game.state == 0 %}
+                    (시작 대기중)
+                {% elif game.state == 2 %}
+                    (종료됨)
+                {% endif %}
+            </h2>
             <p>--- <span id="game-metadata__author">{{ game.created_by }}</span></p>
+            <form action="/games/{{ game.id }}/start" method="POST">
+                <input type="submit" value="게임 시작하기">
+            </form>
+            <form action="/games/{{ game.id }}/join" method="POST">
+                <input type="submit" value="참가하기">
+            </form>
             <ul>
                 {% for user_id in participants %}
                     <li>{{ user_id }}</li>
