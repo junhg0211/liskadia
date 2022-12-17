@@ -28,7 +28,7 @@ function updateNemas() {
         .then(data => data['nemas'])
         .then(nemas_ => nemas_.forEach(nema => {
             let position = nema['position'];
-            let [x, y] = [Math.floor(position / 10), position % 10];
+            let [y, x] = [Math.floor(position / 10), position % 10];
             let id = nema['user_id'];
 
             nemas.push([x, y, id]);
@@ -54,6 +54,20 @@ function updateColors() {
         }));
 
     colorUpdate = false;
+}
+
+function sendNema(e) {
+    if (!(0 <= floatX && floatX <= 9 && 0 <= floatY && floatY <= 9))
+        return;
+
+    let nemaPosition = floatY * 10 + floatX;
+    fetch(`/games/${GAME_ID}/nemas/${nemaPosition}`, {method: 'POST'})
+      .then(res => res.json())
+      .then(data => {
+          if (data.code === 200) {
+              nemaUpdate = true;
+          }
+      });
 }
 
 function tick() {
@@ -186,3 +200,4 @@ document.addEventListener('mousemove', e => {
     mouseX = e.clientX - rect.left;
     mouseY = e.clientY - rect.top;
 });
+document.addEventListener('click', sendNema);
