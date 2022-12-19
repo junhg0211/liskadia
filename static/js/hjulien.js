@@ -15,11 +15,14 @@ let floatX, floatY;
 
 let nemas = [];
 let colors = {};
+let order = [];
 let gameCreator;
 let gameState = 0;
+let nextTurn;
 
 let nemaUpdate = true;
 let colorUpdate = true;
+let nextTurnUpdate = false;
 
 let GAME_ID;
 
@@ -60,7 +63,8 @@ function updateNemas() {
       tr.appendChild(td);
 
       nemaHistoryTable.children[0].appendChild(tr);
-    }));
+    }))
+    .then(() => nextTurnUpdate++);
 
   nemaUpdate = false;
 }
@@ -69,6 +73,8 @@ let meInGame = false;
 
 function updateColors() {
   if (!colorUpdate) return;
+
+  order.length = 0;
 
   meInGame = false;
   fetch(`/games/${GAME_ID}`)
@@ -81,6 +87,8 @@ function updateColors() {
         [r, g] = [Math.floor(g / 0x100), g % 0x100];
 
         colors[user['id']] = `rgb(${r}, ${g}, ${b})`;
+
+        order.push(user['id']);
 
         if (!meInGame && user['id'] === LOGIN_ID) {
           meInGame = true;
@@ -106,19 +114,38 @@ function updateColors() {
       } else if (gameState === 2) {
         stateSpan.innerText = '(종료됨)';
       }
-    });
+    }).then(() => nextTurnUpdate++);
 
   colorUpdate = false;
 }
 
-function sendNema(e) {
+function updateNextTurn(force) {
+  if (!force) {
+    if (nextTurnUpdate < 2) return;
+    if (gameState !== 1) return;
+  }
+
+  let tr = document.createElement('tr');
+
+  tr.appendChild(document.createElement('td'));
+  tr.appendChild(document.createElement('td'));
+  tr.appendChild(document.createElement('td'));
+  tr.appendChild(document.createElement('td'));
+
+  nextTurn = order[nemas.length % order.length];
+  tr.children[2].innerText = nextTurn;
+
+  nemaHistoryTable.children[0].appendChild(tr);
+
+  nextTurnUpdate = 0;
+}
+
+function sendNema() {
   if (!(0 <= floatX && floatX <= 9 && 0 <= floatY && floatY <= 9)) return;
-
   if (LOGIN_ID === null) return;
-
   if (gameState !== 1) return;
-
   if (!meInGame) return;
+  if (LOGIN_ID !== nextTurn) return;
 
   let nemaPosition = floatY * 10 + floatX;
   fetch(`/games/${GAME_ID}/nemas/${nemaPosition}`, {method: 'POST'})
@@ -126,6 +153,7 @@ function sendNema(e) {
     .then(data => {
       if (data.code === 200) {
         nemaUpdate = true;
+        nextTurnUpdate++;
       }
     });
 }
@@ -134,8 +162,9 @@ function tick() {
   floatX = Math.round((mouseX / unit - 3.5) / 2);
   floatY = Math.round((mouseY / unit - 3.5) / 2);
 
-  updateNemas();
   updateColors();
+  updateNemas();
+  updateNextTurn();
 }
 
 function nemaRect(xi, yi) {

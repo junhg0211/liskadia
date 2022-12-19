@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Iterable
 
 from pymysql import Connection
 
@@ -10,13 +11,10 @@ def new(user_id: str, game_id: int, database: Connection):
         database.commit()
 
 
-def get_ids(game_id: int, database: Connection) -> list[str]:
-    ids = list()
+def get_ids(game_id: int, database: Connection) -> Iterable[str]:
     with database.cursor() as cursor:
-        cursor.execute('SELECT user_id FROM participant WHERE game_id = %s', game_id)
-        while line := cursor.fetchone():
-            ids.append(line[0])
-    return ids
+        cursor.execute('SELECT user_id FROM participant WHERE game_id = %s ORDER BY joined_at', game_id)
+        return map(lambda x: x[0], cursor.fetchall())
 
 
 def leave(user_id: str, game_id: int, database: Connection):
