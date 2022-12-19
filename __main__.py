@@ -234,7 +234,7 @@ def post_games_id_start(game_id: int):
         if game.state != GameState.IDLE:
             return message(get_string('client_error.game_not_idle'), 403)
 
-        ids = participants.get_ids(game.id, database)
+        ids = tuple(participants.get_ids(game.id, database))
         if len(ids) < 2:
             return message(get_string('client_error.not_enough_player'), 403)
 
@@ -264,7 +264,7 @@ def post_games_id_put(game_id: int, nema_position: int):
             return message(get_string('client_error.game_not_found'), 404)
 
         user = users.get(login_id, database)
-        ids = participants.get_ids(game.id, database)
+        ids = tuple(participants.get_ids(game.id, database))
         if user.id not in ids:
             return message(get_string('client_error.not_joined'), 403)
 
@@ -276,6 +276,9 @@ def post_games_id_put(game_id: int, nema_position: int):
 
         if nemas.get(game.id, nema_position, database) is not None:
             return message(get_string('client_error.duplicated'), 403)
+
+        if ids[nemas.get_nema_count(game.id, database) % len(ids)] != login_id:
+            return message(get_string('client_error.not_turn'), 403)
 
         nema = Nema(user.id, game.id, nema_position)
         nemas.new(nema, database)
@@ -295,7 +298,8 @@ def get_games_id_nema(game_id: int):
             return message(get_string('client_error.game_not_found'), 404)
 
         ingame_nemas = nemas.get_nemas(game_id, database)
-    return message('OK', 200, nemas=list(map(lambda x: x.jsonify(), ingame_nemas)))
+    nemas_ = list(map(lambda x: x.jsonify(), ingame_nemas))
+    return message('OK', 200, nemas=nemas_, count=len(nemas_))
 
 
 @app.route('/', methods=['GET'])

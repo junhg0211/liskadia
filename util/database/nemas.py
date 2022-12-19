@@ -34,3 +34,9 @@ def get(game_id: int, position: int, database: Connection) -> Optional[Nema]:
     if data is None:
         return
     return Nema.get(data)
+
+
+def get_nema_count(game_id: int, database: Connection) -> int:
+    with database.cursor() as cursor:
+        cursor.execute('SELECT COUNT(*) FROM nema WHERE game_id = %s', game_id)
+        return cursor.fetchone()[0]
