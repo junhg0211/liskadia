@@ -19,6 +19,9 @@
             <form action="/games/{{ game.id }}/join" method="POST" id="join-form" style="display: none;">
                 <input type="submit" value="참가하기">
             </form>
+            <form action="/games/{{ game.id }}/leave" method="POST" id="leave-form" style="display: none;">
+                <input type="submit" value="퇴장하기">
+            </form>
             <ol id="participants">
             </ol>
             <table class="game-metadata__history" id="nema-history">

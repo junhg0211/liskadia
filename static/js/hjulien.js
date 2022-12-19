@@ -3,7 +3,7 @@ let hjulienCtx;
 
 let nemaHistoryTable;
 let stateSpan;
-let startForm, joinForm;
+let startForm, joinForm, leaveForm;
 let participantsList;
 
 let hjulienDirection = false;
@@ -124,13 +124,21 @@ function updateColors() {
       gameState = data['game']['state'];
       startForm.style.display = 'none';
       joinForm.style.display = 'none';
+      leaveForm.style.display = 'none';
 
       if (gameState === 0) {
         stateSpan.innerText = '(시작 대기중)';
         if (gameCreator === LOGIN_ID)
           startForm.style.display = 'block';
-        if (LOGIN_ID && !meInGame)
-          joinForm.style.display = 'block';
+        if (LOGIN_ID) {
+          if (meInGame) {
+            if (gameCreator !== LOGIN_ID) {
+              leaveForm.style.display = "block";
+            }
+          } else {
+            joinForm.style.display = 'block';
+          }
+        }
       } else if (gameState === 1) {
         stateSpan.innerText = '';
       } else if (gameState === 2) {
@@ -293,6 +301,7 @@ function loadHjulien() {
   stateSpan = document.querySelector('#game-metadata__state');
   startForm = document.querySelector('#start-form');
   joinForm = document.querySelector('#join-form');
+  leaveForm = document.querySelector('#leave-form');
   participantsList = document.querySelector('#participants');
 }
 
