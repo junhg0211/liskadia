@@ -63,6 +63,13 @@
 #### GET `/games/{game.id}`
 게임 정보 불러오기
 
+#### GET `/games/{game.id}/meta`
+게임의 메타적인 정보를 불러온다.
+
+* 네마의 개수
+* `game.state`
+* 게임에 참가중인 플레이어의 수
+
 ### Participant
 
 | FIELD     | TYPE      | DESCRIPTION |
