@@ -99,7 +99,7 @@ function updateColors() {
         stateSpan.innerText = '(시작 대기중)';
         if (gameCreator === LOGIN_ID)
           startForm.style.display = 'block';
-        if (!meInGame)
+        if (LOGIN_ID && !meInGame)
           joinForm.style.display = 'block';
       } else if (gameState === 1) {
         stateSpan.innerText = '';
