@@ -54,7 +54,7 @@ def post_users_new():
     data = parse_data(request)
     id_ = data.get('id')
     password = data.get('password')
-    color = data.get('color')
+    color = int(data.get('color')[1:], 16)
 
     if color is None:
         color = randint(0, 0xFFFFFF)
@@ -212,8 +212,12 @@ def post_games_id_leave(game_id: int):
         if user.id not in ids:
             return message(get_string('client_error.not_joined'), 404)
 
+        state = games.get_state(game_id, database)
+        if state != GameState.IDLE:
+            return message(get_string('client_error.not_in_idle_mode'), 403)
+
         participants.leave(user.id, game_id, database)
-    return message('OK', 200)
+    return redirect(f'/game/{game_id}')
 
 
 @app.route('/games/<int:game_id>/start', methods=['POST'])
