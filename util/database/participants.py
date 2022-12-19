@@ -1,9 +1,12 @@
+from datetime import datetime
+
 from pymysql import Connection
 
 
 def new(user_id: str, game_id: int, database: Connection):
+    joined_at = datetime.now()
     with database.cursor() as cursor:
-        cursor.execute("INSERT INTO participant VALUES (%s, %s)", (user_id, game_id))
+        cursor.execute("INSERT INTO participant VALUES (%s, %s, %s)", (user_id, game_id, joined_at))
         database.commit()
 
 

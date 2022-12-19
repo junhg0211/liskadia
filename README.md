@@ -65,10 +65,11 @@
 
 ### Participant
 
-| FIELD   | TYPE    | DESCRIPTION |
-|---------|---------|-------------|
-| user_id | user.id | 참가자 id      |
-| game_id | game.id | 게임 id       |
+| FIELD     | TYPE      | DESCRIPTION |
+|-----------|-----------|-------------|
+| user_id   | user.id   | 참가자 id      |
+| game_id   | game.id   | 게임 id       |
+| joined_at | datetime  | 참가한 시각      |
 
 #### POST `/games/{game.id}/join`*
 게임에 참가
