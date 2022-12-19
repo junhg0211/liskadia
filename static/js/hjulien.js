@@ -4,6 +4,7 @@ let hjulienCtx;
 let nemaHistoryTable;
 let stateSpan;
 let startForm, joinForm;
+let participantsList;
 
 let hjulienDirection = false;
 
@@ -20,15 +21,35 @@ let gameCreator;
 let gameState = 0;
 let nextTurn;
 
-let nemaUpdate = true;
-let colorUpdate = true;
-let nextTurnUpdate = false;
-
 let GAME_ID;
 
-function updateNemas() {
-  if (!nemaUpdate) return;
+let lastNemaCountCheck;
+function checkMeta() {
+  let now = Date.now();
+  if (lastNemaCountCheck !== null && now - lastNemaCountCheck < 1500) return;
 
+  fetch(`/games/${GAME_ID}/meta`)
+    .then(res => res.json())
+    .then(data => {
+      let stateChange = false;
+      if (gameState !== data['state']) {
+        gameState = data['state'];
+        stateChange = true;
+      }
+
+      if (order.length !== data['user_count'] || stateChange) {
+        updateColors();
+      }
+
+      if (data['nema_count'] !== nemas.length) {
+        updateNemas();
+      }
+    });
+
+  lastNemaCountCheck = now;
+}
+
+function updateNemas() {
   nemaHistoryTable.children[0].innerHTML = nemaHistoryTable.rows[0].innerHTML;
   nemas.length = 0;
 
@@ -64,17 +85,14 @@ function updateNemas() {
 
       nemaHistoryTable.children[0].appendChild(tr);
     }))
-    .then(() => nextTurnUpdate++);
-
-  nemaUpdate = false;
+    .then(updateNextTurn);
 }
 
 let meInGame = false;
 
 function updateColors() {
-  if (!colorUpdate) return;
-
   order.length = 0;
+  participantsList.innerHTML = '';
 
   meInGame = false;
   fetch(`/games/${GAME_ID}`)
@@ -89,6 +107,10 @@ function updateColors() {
         colors[user['id']] = `rgb(${r}, ${g}, ${b})`;
 
         order.push(user['id']);
+
+        let li = document.createElement('li');
+        li.innerText = user['id'];
+        participantsList.appendChild(li);
 
         if (!meInGame && user['id'] === LOGIN_ID) {
           meInGame = true;
@@ -114,16 +136,15 @@ function updateColors() {
       } else if (gameState === 2) {
         stateSpan.innerText = '(종료됨)';
       }
-    }).then(() => nextTurnUpdate++);
-
-  colorUpdate = false;
+    }).then(updateNextTurn);
 }
 
-function updateNextTurn(force) {
-  if (!force) {
-    if (nextTurnUpdate < 2) return;
-    if (gameState !== 1) return;
-  }
+function updateNextTurn() {
+  if (gameState !== 1) return;
+
+  nextTurn = order[nemas.length % order.length];
+
+  if (nextTurn === undefined) return;
 
   let tr = document.createElement('tr');
 
@@ -132,12 +153,9 @@ function updateNextTurn(force) {
   tr.appendChild(document.createElement('td'));
   tr.appendChild(document.createElement('td'));
 
-  nextTurn = order[nemas.length % order.length];
   tr.children[2].innerText = nextTurn;
 
   nemaHistoryTable.children[0].appendChild(tr);
-
-  nextTurnUpdate = 0;
 }
 
 function sendNema() {
@@ -148,23 +166,14 @@ function sendNema() {
   if (LOGIN_ID !== nextTurn) return;
 
   let nemaPosition = floatY * 10 + floatX;
-  fetch(`/games/${GAME_ID}/nemas/${nemaPosition}`, {method: 'POST'})
-    .then(res => res.json())
-    .then(data => {
-      if (data.code === 200) {
-        nemaUpdate = true;
-        nextTurnUpdate++;
-      }
-    });
+  fetch(`/games/${GAME_ID}/nemas/${nemaPosition}`, {method: 'POST'}).then(updateNemas);
 }
 
 function tick() {
   floatX = Math.round((mouseX / unit - 3.5) / 2);
   floatY = Math.round((mouseY / unit - 3.5) / 2);
 
-  updateColors();
-  updateNemas();
-  updateNextTurn();
+  checkMeta();
 }
 
 function nemaRect(xi, yi) {
@@ -284,6 +293,7 @@ function loadHjulien() {
   stateSpan = document.querySelector('#game-metadata__state');
   startForm = document.querySelector('#start-form');
   joinForm = document.querySelector('#join-form');
+  participantsList = document.querySelector('#participants');
 }
 
 document.addEventListener('DOMContentLoaded', loadHjulien);

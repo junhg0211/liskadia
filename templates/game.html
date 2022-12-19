@@ -19,11 +19,8 @@
             <form action="/games/{{ game.id }}/join" method="POST" id="join-form" style="display: none;">
                 <input type="submit" value="참가하기">
             </form>
-            <ul>
-                {% for user_id in participants %}
-                    <li>{{ user_id }}</li>
-                {% endfor %}
-            </ul>
+            <ol id="participants">
+            </ol>
             <table class="game-metadata__history" id="nema-history">
                 <tr>
                     <th>#</th>

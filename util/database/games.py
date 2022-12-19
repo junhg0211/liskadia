@@ -63,3 +63,12 @@ def set_state(game_id: int, state: int, database: Connection):
     with database.cursor() as cursor:
         cursor.execute('UPDATE game SET state = %s WHERE id = %s', (state, game_id))
         database.commit()
+
+
+def get_state(game_id, database):
+    with database.cursor() as cursor:
+        cursor.execute('SELECT state FROM game WHERE id = %s', game_id)
+        try:
+            return cursor.fetchone()[0]
+        except IndexError:
+            return

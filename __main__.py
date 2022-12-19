@@ -302,6 +302,18 @@ def get_games_id_nema(game_id: int):
     return message('OK', 200, nemas=nemas_, count=len(nemas_))
 
 
+@app.route('/games/<int:game_id>/meta', methods=['GET'])
+def get_games_id_nema_count(game_id: int):
+    with get_connection() as database:
+        if not games.exists(game_id, database):
+            return message(get_string('client_error.game_not_found'), 404)
+
+        nema_count = nemas.get_nema_count(game_id, database)
+        state = games.get_state(game_id, database)
+        user_count = len(tuple(participants.get_ids(game_id, database)))
+        return message('OK', 200, nema_count=nema_count, state=state, user_count=user_count)
+
+
 @app.route('/', methods=['GET'])
 def get_index():
     return redirect('/game')
