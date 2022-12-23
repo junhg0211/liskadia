@@ -28,6 +28,7 @@ let lastNemaCountCheck;
 function checkMeta() {
   let now = Date.now();
   if (lastNemaCountCheck !== null && now - lastNemaCountCheck < 1500) return;
+  if (gameState === 2) return;
 
   fetch(`/games/${GAME_ID}/meta`)
     .then(res => res.json())
@@ -206,6 +207,7 @@ function nemaRect(xi, yi) {
 
 function drawHighlightNema() {
   if (!(0 <= floatX && floatX < 10 && 0 <= floatY && floatY < 10)) return;
+  if (gameState >= 2) return;
 
   let [x, y, width, height] = nemaRect(floatX, floatY);
 
