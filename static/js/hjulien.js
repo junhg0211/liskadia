@@ -113,6 +113,11 @@ function updateColors() {
 
         let li = document.createElement('li');
         li.innerText = user['id'];
+        let span = document.createElement('span');
+        span.id = 'game-metadata__user-color__' + user['id'];
+        span.innerText = ' ⬤';
+        span.style.color = colors[user['id']];
+        li.appendChild(span);
         participantsList.appendChild(li);
 
         if (!meInGame && user['id'] === LOGIN_ID) {
