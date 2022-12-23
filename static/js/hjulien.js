@@ -20,6 +20,7 @@ let order = [];
 let gameCreator;
 let gameState = 0;
 let nextTurn;
+let attacks = [];
 
 let GAME_ID;
 
@@ -44,6 +45,8 @@ function checkMeta() {
       if (data['nema_count'] !== nemas.length) {
         updateNemas();
       }
+
+      attacks = data['attacks'];
     });
 
   lastNemaCountCheck = now;
@@ -201,7 +204,8 @@ function drawHighlightNema() {
 
   let [x, y, width, height] = nemaRect(floatX, floatY);
 
-  hjulienCtx.strokeStyle = "#f7f7f9";
+  hjulienCtx.strokeStyle = "#f7f7f97f";
+  hjulienCtx.lineWidth = 3;
   hjulienCtx.beginPath();
   hjulienCtx.moveTo(x, y);
   hjulienCtx.lineTo(x + width, y);
@@ -228,12 +232,27 @@ function drawNemas() {
    */
 }
 
+function drawScores() {
+  attacks.forEach(attack => {
+    let [xi, yi, attacker] = attack;
+    let [x, y] = [(xi+1.75) * 2*unit, (yi+1.75) * 2*unit];
+
+    hjulienCtx.strokeStyle = colors[attacker];
+    hjulienCtx.lineWidth = 5;
+    hjulienCtx.beginPath();
+    hjulienCtx.arc(x, y, unit / 2, 0, 2*Math.PI);
+    hjulienCtx.stroke();
+  });
+}
+
 function render() {
   drawBackground();
 
   drawNemas();
 
   drawHighlightNema();
+
+  drawScores();
 }
 
 function drawBackground() {
