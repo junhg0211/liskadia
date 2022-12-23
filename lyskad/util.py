@@ -40,16 +40,9 @@ def check_lane(
                 defence = None
                 continue
 
-            if defence is None:
-                attack = now
-                attack_pos = i
-                continue
-
-            if defence != now:
-                attack = now
-                attack_pos = i
-                defence = None
-                continue
+            attack = now
+            attack_pos = i
+            defence = None
         else:
             if attack == now:
                 attack = None
