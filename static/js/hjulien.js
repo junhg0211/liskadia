@@ -239,6 +239,18 @@ function drawNemas() {
    */
 }
 
+function drawLastNema() {
+  let [xi, yi, _] = nemas[nemas.length-1];
+
+  let [x, y] = [2 * unit * (xi + 1.75), 2 * unit * (yi + 1.75)];
+
+  hjulienCtx.strokeStyle = "black";
+  hjulienCtx.lineWidth = 1;
+  hjulienCtx.beginPath();
+  hjulienCtx.arc(x, y, unit / 2, 0, 2 * Math.PI);
+  hjulienCtx.stroke();
+}
+
 function drawScores() {
   attacks.forEach(attack => {
     let [xi, yi, attacker] = attack;
@@ -258,6 +270,8 @@ function render() {
   drawNemas();
 
   drawHighlightNema();
+
+  drawLastNema();
 
   drawScores();
 }
