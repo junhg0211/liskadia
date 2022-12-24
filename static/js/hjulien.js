@@ -163,6 +163,7 @@ function updateNextTurn() {
 
   if (nextTurn === undefined) return;
 
+  // update in nema history
   let tr = document.createElement('tr');
 
   tr.appendChild(document.createElement('td'));
@@ -173,6 +174,18 @@ function updateNextTurn() {
   tr.children[2].innerText = nextTurn;
 
   nemaHistoryTable.children[0].appendChild(tr);
+
+  // update in game metadata member list bold
+  if (gameState === 1) {
+    for (let i = 0; i < participantsList.children.length; i++) {
+      let li = participantsList.children[i];
+      li.style.fontWeight = 'normal';
+      console.log(li.children[0].innerText, nextTurn);
+      if (li.innerText.indexOf(nextTurn) === 0) {
+        li.style.fontWeight = 'bold';
+      }
+    }
+  }
 }
 
 function sendNema() {
@@ -240,6 +253,8 @@ function drawNemas() {
 }
 
 function drawLastNema() {
+  if (nemas.length === 0) return;
+
   let [xi, yi, _] = nemas[nemas.length-1];
 
   let [x, y] = [2 * unit * (xi + 1.75), 2 * unit * (yi + 1.75)];
