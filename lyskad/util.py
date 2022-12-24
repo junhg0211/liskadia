@@ -52,6 +52,10 @@ def check_lane(
                 defence = None
                 continue
 
+            if defence != now:
+                defence = None
+                continue
+
             if defence is None:
                 defence = now
                 continue
