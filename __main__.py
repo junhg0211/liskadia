@@ -319,7 +319,8 @@ def get_games_id_nema_count(game_id: int):
         game = games.get(game_id, database)
         scores, attacks = calculate_score(game, nemas.get_nemas(game.id, database))
 
-        return message('OK', 200, nema_count=nema_count, state=state, user_count=user_count, scores=scores, attacks=attacks)
+        return message(
+            'OK', 200, nema_count=nema_count, state=state, user_count=user_count, scores=scores, attacks=attacks)
 
 
 @app.route('/', methods=['GET'])
