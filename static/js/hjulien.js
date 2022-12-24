@@ -286,9 +286,9 @@ function render() {
 
   drawHighlightNema();
 
-  drawLastNema();
-
   drawScores();
+
+  drawLastNema();
 }
 
 function drawBackground() {
