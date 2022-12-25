@@ -111,3 +111,11 @@
 
 #### GET `/games/{game.id}/nemas`
 게임의 네마 정보 불러오기
+
+### Score
+
+| FIELD     | TYPE    | DESCRIPTION        |
+|-----------|---------|--------------------|
+| game_id   | game.id | 게임 id              |
+| position  | int     | 네마의 위치             |
+| user_id   | user.id | 네마로 점수를 획득한 유저의 id |

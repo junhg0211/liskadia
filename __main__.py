@@ -5,11 +5,11 @@ from urllib.parse import parse_qsl
 
 from flask import Flask, jsonify, request, render_template, session, redirect
 
-from lyskad import User, Nema, calculate_score
+from lyskad import User, Nema, calculate_score, calculate_score_by
 from lyskad.game import GameState
 from lyskad.nema import is_valid_position
 from util import get_string
-from util.database import users, games, participants, nemas, get_connection
+from util.database import users, games, participants, nemas, get_connection, scores
 
 app = Flask(__name__)
 app.secret_key = sha256('ydng0fug lrid2uf'.encode()).hexdigest()
@@ -287,9 +287,15 @@ def post_games_id_put(game_id: int, nema_position: int):
         nema = Nema(user.id, game.id, nema_position)
         nemas.new(nema, database)
 
-        scores, _ = calculate_score(game, nemas.get_nemas(game.id, database))
-        scores = tuple(scores.values())
-        if len(scores) > 0 and min(scores) >= game.max_score or nemas.get_nema_count(game.id, database) == 100:
+        attack_positions, defence_data = calculate_score_by(game, nemas.get_nemas(game.id, database), nema.get_position())
+        for x, y in attack_positions:
+            scores.new(game.id, 10 * y + x, user.id, database)
+        for (x, y), user_id in defence_data:
+            scores.new(game.id, 10 * y + x, user_id, database)
+
+        scores_, _ = calculate_score(game, nemas.get_nemas(game.id, database))
+        scores_ = tuple(scores_.values())
+        if len(scores_) > 0 and min(scores_) >= game.max_score or nemas.get_nema_count(game.id, database) == 100:
             games.set_state(game.id, GameState.END, database)
 
     return message('OK', 200, nema=nema.jsonify())
