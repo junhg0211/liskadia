@@ -15,3 +15,16 @@
 #hjulien {
     height: 100%;
 }
+
+#scoreboard {
+    display: flex;
+    flex-direction: row;
+}
+
+.scoreboard-point {
+    margin: 4px 0;
+}
+
+.scoreboard-row {
+    margin: 0 2px;
+}

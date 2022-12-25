@@ -6,6 +6,9 @@ let stateSpan;
 let startForm, joinForm, leaveForm;
 let participantsList;
 
+let scoreboardDiv;
+let scoreboardUpdate = true;
+
 let hjulienDirection = false;
 
 let mouseX, mouseY;
@@ -48,6 +51,7 @@ function checkMeta() {
       }
 
       scores = data['scores'];
+      scoreboardUpdate = true;
     });
 
   lastNemaCountCheck = now;
@@ -267,17 +271,53 @@ function drawLastNema() {
 }
 
 function drawScores() {
+  if (scores === undefined) return;
+  if (Object.keys(colors).length === 0) return;
+
+  if (scoreboardUpdate)
+    scoreboardDiv.innerHTML = '';
+
+  let scoreboard = {};
   scores.forEach(score => {
-    let [xi, yi] = [score['position'] % 10, Math.floor(score['position'] / 10)];
     let attacker = score['user_id'];
-    let [x, y] = [(xi+1.75) * 2*unit, (yi+1.75) * 2*unit];
+
+    if (scoreboardUpdate) {
+      // process scoreboard
+      if (scoreboard[attacker] === undefined) scoreboard[attacker] = 0;
+      while (scoreboardDiv.children.length <= scoreboard[attacker]) {
+        let row = document.createElement('div');
+        row.className = "scoreboard-row";
+        scoreboardDiv.appendChild(row);
+      }
+      let indicator = document.createElement('div');
+      indicator.className = "scoreboard-point";
+      indicator.style.width = '24px';
+      indicator.style.height = '24px';
+      indicator.style.backgroundColor = colors[attacker];
+      scoreboardDiv.children[scoreboard[attacker]++].appendChild(indicator);
+    }
+
+    // draw score in hjulien
+    let [sxi, syi] = [score['position'] % 10, Math.floor(score['position'] / 10)];
+    let [sx, sy] = [(sxi+1.75) * 2*unit, (syi+1.75) * 2*unit];
 
     hjulienCtx.strokeStyle = colors[attacker];
     hjulienCtx.lineWidth = 5;
     hjulienCtx.beginPath();
-    hjulienCtx.arc(x, y, unit / 2, 0, 2*Math.PI);
+    hjulienCtx.arc(sx, sy, unit / 2, 0, 2*Math.PI);
+    hjulienCtx.stroke();
+
+    let [bxi, byi] = [score['by_nema_position'] % 10, Math.floor(score['by_nema_position'] / 10)];
+    let [bx, by] = [(bxi+1.75) * 2*unit, (byi+1.75) * 2*unit];
+
+    hjulienCtx.lineWidth = 2;
+    hjulienCtx.beginPath();
+    hjulienCtx.moveTo(sx, sy);
+    hjulienCtx.lineTo(bx, by);
     hjulienCtx.stroke();
   });
+
+  scoreboardUpdate = false;
 }
 
 function render() {
@@ -359,6 +399,7 @@ function loadHjulien() {
   joinForm = document.querySelector('#join-form');
   leaveForm = document.querySelector('#leave-form');
   participantsList = document.querySelector('#participants');
+  scoreboardDiv = document.querySelector('#scoreboard');
 }
 
 document.addEventListener('DOMContentLoaded', loadHjulien);
