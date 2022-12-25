@@ -373,6 +373,16 @@ function drawBackground() {
     y = (hjulienDirection ? 4 : 2) * unit + 4 * unit * i;
     hjulienCtx.fillRect(x, y, unit, 3 * unit);
   }
+
+  hjulienCtx.textAlign = "center";
+  hjulienCtx.textBaseline = "middle";
+  for (let i = 0; i < 10; i++) {
+    hjulienCtx.fillText(i.toString(), 3.5 * unit + i * 2 * unit, unit);
+    hjulienCtx.fillText(i.toString(), 3.5 * unit + i * 2 * unit, 24 * unit);
+
+    hjulienCtx.fillText(i.toString(), unit, 3.5 * unit + i * 2 * unit);
+    hjulienCtx.fillText(i.toString(), 24 * unit, 3.5 * unit + i * 2 * unit);
+  }
 }
 
 function loadHjulien() {
