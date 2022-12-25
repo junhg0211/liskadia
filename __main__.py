@@ -5,7 +5,7 @@ from urllib.parse import parse_qsl
 
 from flask import Flask, jsonify, request, render_template, session, redirect
 
-from lyskad import User, Nema, calculate_score, calculate_score_by
+from lyskad import User, Nema, calculate_score_by
 from lyskad.game import GameState
 from lyskad.nema import is_valid_position
 from util import get_string
