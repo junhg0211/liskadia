@@ -293,8 +293,7 @@ def post_games_id_put(game_id: int, nema_position: int):
         for (x, y), user_id in defence_data:
             scores.new(game.id, 10 * y + x, user_id, nema_position, database)
 
-        scores_, _ = calculate_score(game, nemas.get_nemas(game.id, database))
-        scores_ = tuple(scores_.values())
+        scores_ = tuple(scores.get_scores(game.id, database).values())
         if len(scores_) > 0 and min(scores_) >= game.max_score or nemas.get_nema_count(game.id, database) == 100:
             games.set_state(game.id, GameState.END, database)
 
@@ -322,11 +321,9 @@ def get_games_id_nema_count(game_id: int):
         state = games.get_state(game_id, database)
         user_count = len(tuple(participants.get_ids(game_id, database)))
 
-        game = games.get(game_id, database)
-        scores, attacks = calculate_score(game, nemas.get_nemas(game.id, database))
+        scores_ = list(map(lambda x: x.jsonify(), scores.get_scoring_nemas(game_id, database)))
 
-        return message(
-            'OK', 200, nema_count=nema_count, state=state, user_count=user_count, scores=scores, attacks=attacks)
+        return message('OK', 200, nema_count=nema_count, state=state, user_count=user_count, scores=scores_)
 
 
 @app.route('/', methods=['GET'])

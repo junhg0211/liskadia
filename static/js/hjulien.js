@@ -20,7 +20,7 @@ let order = [];
 let gameCreator;
 let gameState = 0;
 let nextTurn;
-let attacks = [];
+let scores;
 
 let GAME_ID;
 
@@ -47,7 +47,7 @@ function checkMeta() {
         updateNemas();
       }
 
-      attacks = data['attacks'];
+      scores = data['scores'];
     });
 
   lastNemaCountCheck = now;
@@ -267,8 +267,9 @@ function drawLastNema() {
 }
 
 function drawScores() {
-  attacks.forEach(attack => {
-    let [xi, yi, attacker] = attack;
+  scores.forEach(score => {
+    let [xi, yi] = [score['position'] % 10, Math.floor(score['position'] / 10)];
+    let attacker = score['user_id'];
     let [x, y] = [(xi+1.75) * 2*unit, (yi+1.75) * 2*unit];
 
     hjulienCtx.strokeStyle = colors[attacker];
