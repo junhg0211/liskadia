@@ -69,7 +69,7 @@
 * 네마의 개수
 * `game.state`
 * 게임에 참가중인 플레이어의 수
-* 득점이 발생한 네마의 중간 위치
+* 득점이 발생한 네마의 중간 위치 (scores 객체)
 
 ### Participant
 
@@ -114,8 +114,9 @@
 
 ### Score
 
-| FIELD     | TYPE    | DESCRIPTION        |
-|-----------|---------|--------------------|
-| game_id   | game.id | 게임 id              |
-| position  | int     | 네마의 위치             |
-| user_id   | user.id | 네마로 점수를 획득한 유저의 id |
+| FIELD            | TYPE    | DESCRIPTION        |
+|------------------|---------|--------------------|
+| game_id          | game.id | 게임 id              |
+| position         | int     | 네마의 위치             |
+| user_id          | user.id | 네마로 점수를 획득한 유저의 id |
+| by_nema_position | int     | 점수를 획득하게 한 네마의 위치  |

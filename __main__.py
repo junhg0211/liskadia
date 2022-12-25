@@ -289,9 +289,9 @@ def post_games_id_put(game_id: int, nema_position: int):
 
         attack_positions, defence_data = calculate_score_by(game, nemas.get_nemas(game.id, database), nema.get_position())
         for x, y in attack_positions:
-            scores.new(game.id, 10 * y + x, user.id, database)
+            scores.new(game.id, 10 * y + x, user.id, nema_position, database)
         for (x, y), user_id in defence_data:
-            scores.new(game.id, 10 * y + x, user_id, database)
+            scores.new(game.id, 10 * y + x, user_id, nema_position, database)
 
         scores_, _ = calculate_score(game, nemas.get_nemas(game.id, database))
         scores_ = tuple(scores_.values())
