@@ -18,7 +18,7 @@
     <nav>
         <h1><a href="/">Liskadia</a></h1>
         {% if login_id %}
-            {{ login_id }}으로 로그인함 <a href="/logout">로그아웃</a>
+            <a href="/profile/{{ login_id }}">{{ login_id }}</a>으로 로그인함 <a href="/logout">로그아웃</a>
             <a href="/new_game">새 게임</a>
         {% else %}
             <a href="/login">로그인</a>

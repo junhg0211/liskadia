@@ -116,9 +116,13 @@ function updateColors() {
 
         order.push(user['id']);
 
-        let li = document.createElement('li');
-        li.innerText = user['id'];
-        let span = document.createElement('span');
+        let li, span, a;
+        li = document.createElement('li');
+        a = document.createElement('a');
+        a.href = `/profile/${user['id']}`;
+        a.innerText = user['id'];
+        li.appendChild(a);
+        span = document.createElement('span');
         span.id = 'game-metadata__user-color__' + user['id'];
         span.innerText = ' ⬤';
         span.style.color = colors[user['id']];

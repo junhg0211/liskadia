@@ -380,5 +380,19 @@ def get_new_game():
     return render_template('new_game.html', login_id=session.get('id'))
 
 
+@app.route('/profile/<user_id>', methods=['GET'])
+def get_profile_id(user_id: str):
+    with get_connection() as database:
+        try:
+            user = users.get(user_id, database)
+        except ValueError:
+            return message(get_string('client_error.user_not_found'), 404)
+
+        played_games = list(participants.get_games(user_id, database))
+
+    return render_template(
+        'profile.html', user=user, played_games=played_games, login_id=session.get('id'))
+
+
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')

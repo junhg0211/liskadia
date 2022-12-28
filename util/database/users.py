@@ -8,6 +8,12 @@ from util import encrypt
 
 
 def get(user_id: str, database: Connection) -> User:
+    """
+    :except ValueError: 사용자가 존재하지 않는 경우 발생
+    :param user_id: 사용자의 아이디
+    :param database: 사용자 정보를 가져올 데이터베이스
+    :return: 사용자 User 객체
+    """
     with database.cursor(DictCursor) as cursor:
         cursor.execute('SELECT * FROM user WHERE id = %s', user_id)
         data = cursor.fetchone()

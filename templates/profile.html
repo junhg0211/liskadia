@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <script>
+        window.addEventListener("load", () => {
+          const userColorSpan = document.querySelector("#user-color__{{ user.id }}");
+
+          let color = {{ user.color }};
+          let r, g, b;
+          [g, b] = [Math.floor(color / 256), color % 256];
+          [r, g] = [Math.floor(g / 256), g % 256];
+          color = `rgb(${r}, ${g}, ${b})`;
+
+          userColorSpan.style.color = color;
+        });
+    </script>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ user.id }}<span id="user-color__{{ user.id }}"> ⬤</span></h1>
+    <h2>참여한 게임</h2>
+    {% if played_games %}
+        <ul>
+            {% for game in played_games %}
+                <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>아직 플레이한 게임이 없습니다.</p>
+    {% endif %}
+{% endblock %}
