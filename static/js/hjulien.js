@@ -85,6 +85,10 @@ function updateNemas() {
 
       td = document.createElement('td');
       td.innerText = id;
+      let span = document.createElement('span');
+      span.className = 'user-color__' + id;
+      span.innerText = ' ⬤';
+      td.appendChild(span);
       tr.appendChild(td);
 
       td = document.createElement('td');
@@ -101,6 +105,12 @@ let meInGame = false;
 function updateColors() {
   order.length = 0;
   participantsList.innerHTML = '';
+
+  let styleSheet = document.styleSheets[document.styleSheets.length-1];
+  let styleSheetRuleCount = styleSheet.rules.length;
+  for (let i = 0; i < styleSheetRuleCount; i++) {
+    styleSheet.deleteRule(0);
+  }
 
   meInGame = false;
   fetch(`/games/${GAME_ID}`)
@@ -123,9 +133,9 @@ function updateColors() {
         a.innerText = user['id'];
         li.appendChild(a);
         span = document.createElement('span');
-        span.id = 'game-metadata__user-color__' + user['id'];
+        span.className = 'user-color__' + user['id'];
         span.innerText = ' ⬤';
-        span.style.color = colors[user['id']];
+        styleSheet.insertRule(`.user-color__${user['id']} { color: ${colors[user['id']]}; }`, 0);
         li.appendChild(span);
         participantsList.appendChild(li);
 
@@ -180,6 +190,10 @@ function updateNextTurn() {
   tr.appendChild(document.createElement('td'));
 
   tr.children[2].innerText = nextTurn;
+  let span = document.createElement('span');
+  span.innerText = ' ⬤';
+  span.className = `user-color__${nextTurn}`;
+  tr.children[2].appendChild(span);
 
   nemaHistoryTable.children[0].appendChild(tr);
 
@@ -188,7 +202,6 @@ function updateNextTurn() {
     for (let i = 0; i < participantsList.children.length; i++) {
       let li = participantsList.children[i];
       li.style.fontWeight = 'normal';
-      console.log(li.children[0].innerText, nextTurn);
       if (li.innerText.indexOf(nextTurn) === 0) {
         li.style.fontWeight = 'bold';
       }
@@ -406,6 +419,9 @@ function loadHjulien() {
     tick();
     render();
   }, 1000 / 30);
+
+  let style = document.createElement('style');
+  document.head.appendChild(style);
 
   nemaHistoryTable = document.querySelector('#nema-history');
   stateSpan = document.querySelector('#game-metadata__state');
