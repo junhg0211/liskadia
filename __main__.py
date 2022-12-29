@@ -6,7 +6,7 @@ from urllib.parse import parse_qsl
 from flask import Flask, jsonify, request, render_template, session, redirect
 
 from lyskad import User, Nema, calculate_score_by
-from lyskad.game import GameState
+from lyskad.game import GameState, Game
 from lyskad.nema import is_valid_position
 from util import get_string
 from util.database import users, games, participants, nemas, get_connection, scores
@@ -345,18 +345,13 @@ def get_login():
 def get_game():
     login_id = session.get('id')
     with get_connection() as database:
-        games_list = [list(), list(), list()]
+        games_list: list[list[Game]] = [list(), list(), list()]
 
-        joined_games = list()
         if login_id:
-            joined_ids = participants.get_game_ids(login_id, database)
+            joined_games = list(participants.get_games(login_id, database, 10))
 
-        for game in games.get_all(database):
-            # noinspection PyTypeChecker
+        for game in games.get_all(database, 20):
             games_list[game.state].append(game)
-
-            if login_id and game.id in joined_ids:
-                joined_games.append(game)
 
     return render_template(
         'games.html', login_id=login_id,

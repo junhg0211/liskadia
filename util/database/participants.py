@@ -35,11 +35,12 @@ def get_game_ids(user_id: str, database: Connection) -> list[int]:
     return ids
 
 
-def get_games(user_id: str, database: Connection) -> Iterator[Game]:
+def get_games(user_id: str, database: Connection, limit: int = 100) -> Iterator[Game]:
     with database.cursor(DictCursor) as cursor:
         cursor.execute('SELECT * FROM game '
                        'JOIN participant p ON game.id = p.game_id AND p.user_id = %s '
-                       'ORDER BY id', user_id)
+                       'ORDER BY id DESC '
+                       'LIMIT %s', (user_id, limit))
         while line := cursor.fetchone():
             yield Game.get(line)
 

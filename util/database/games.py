@@ -27,9 +27,9 @@ def get_all(database: Connection, limit: Optional[int] = None, state: Optional[i
     result = list()
     with database.cursor(DictCursor) as cursor:
         if state is None:
-            cursor.execute('SELECT * FROM game LIMIT %s', limit)
+            cursor.execute('SELECT * FROM game ORDER BY id DESC LIMIT %s', limit)
         else:
-            cursor.execute('SELECT * FROM game WHERE state = %s LIMIT %s', (state, limit))
+            cursor.execute('SELECT * FROM game WHERE state = %s ORDER BY id DESC LIMIT %s', (state, limit))
         while data := cursor.fetchone():
             result.append(Game.get(data))
     return result
