@@ -306,8 +306,10 @@ def post_games_id_put(game_id: int, nema_position: int):
         for (x, y), user_id in defence_data:
             scores.new(game.id, 10 * y + x, user_id, nema_position, database)
 
+        player_ids = tuple(participants.get_ids(game.id, database))
         scores_ = tuple(scores.get_scores(game.id, database).values())
-        if len(scores_) > 0 and min(scores_) >= game.max_score or nemas.get_nema_count(game.id, database) == 100:
+        if len(scores_) == len(player_ids) and min(scores_) >= game.max_score \
+                or nemas.get_nema_count(game.id, database) == 100:
             games.set_state(game.id, GameState.END, database)
 
     return message('OK', 200, nema=nema.jsonify())
