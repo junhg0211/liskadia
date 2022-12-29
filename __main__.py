@@ -343,6 +343,7 @@ def get_login():
 
 @app.route('/game', methods=['GET'])
 def get_game():
+    joined_games = list()
     login_id = session.get('id')
     with get_connection() as database:
         games_list: list[list[Game]] = [list(), list(), list()]
