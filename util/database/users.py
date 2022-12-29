@@ -15,7 +15,7 @@ def get(user_id: str, database: Connection) -> User:
     :return: 사용자 User 객체
     """
     with database.cursor(DictCursor) as cursor:
-        cursor.execute('SELECT * FROM user WHERE id = %s', user_id)
+        cursor.execute('SELECT * FROM user WHERE id = %s', (user_id,))
         data = cursor.fetchone()
     if data is None:
         raise ValueError('존재하지 않는 사용자 ID입니다.')
@@ -70,7 +70,11 @@ def exists(user_id: str, database: Connection):
         return True
 
 
-def login(user_id: str, password: str, database: Connection) -> User:
+def login(user_id: str, password: str, database: Connection, encrypted: bool = False) -> User:
     user = get(user_id, database)
-    if user.token == encrypt(password, user_id):
+    if encrypted:
+        encrypted_token = password
+    else:
+        encrypted_token = encrypt(password, user_id)
+    if user.token == encrypted_token:
         return user

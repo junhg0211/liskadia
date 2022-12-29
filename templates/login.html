@@ -13,6 +13,23 @@
         <p>
             <label>비밀번호 <input type="password" name="password" id="password"></label>
         </p>
+        <p>
+            <input type="checkbox" id="remember-me" name="remember-me">
+            <label for="during-day">
+                <select name="during-day" id="during-day">
+                    <option value="1">1일</option>
+                    <option value="2">2일</option>
+                    <option value="4">4일</option>
+                    <option value="8">8일</option>
+                    <option value="16">16일</option>
+                    <option value="32">32일</option>
+                    <option value="64">64일</option>
+                    <option value="128" selected>128일</option>
+                    <option value="256">256일</option>
+                </select>
+            </label>
+            <label for="remember-me">동안 기억해 줘</label>
+        </p>
         <input type="submit">
     </form>
 {% endblock %}

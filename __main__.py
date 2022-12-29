@@ -1,14 +1,15 @@
+from datetime import datetime, timedelta
 from hashlib import sha256
 from random import randint
 from typing import Optional
 from urllib.parse import parse_qsl
 
-from flask import Flask, jsonify, request, render_template, session, redirect
+from flask import Flask, jsonify, request, render_template, session, redirect, make_response
 
 from lyskad import User, Nema, calculate_score_by
 from lyskad.game import GameState, Game
 from lyskad.nema import is_valid_position
-from util import get_string
+from util import get_string, encrypt
 from util.database import users, games, participants, nemas, get_connection, scores
 
 app = Flask(__name__)
@@ -20,9 +21,9 @@ def message(message_, code: int, **kwargs):
     return jsonify(kwargs), code
 
 
-def login(user_id: str, password: str) -> Optional[User]:
+def login(user_id: str, password: str, *, encrypted: bool = False) -> Optional[User]:
     with get_connection() as database:
-        if (user := users.login(user_id, password, database)) is None:
+        if (user := users.login(user_id, password, database, encrypted)) is None:
             return
     if user.id != user_id:
         return
@@ -84,6 +85,8 @@ def post_login():
     data = parse_data(request)
     user_id = data.get('id')
     password = data.get('password')
+    remember_me = data.get('remember-me')
+    during_day = int(data.get('during-day'))
 
     if user_id is None or password is None:
         return message(get_string('client_error.register_malformed'), 400)
@@ -91,14 +94,23 @@ def post_login():
     if login(user_id, password) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
+    res = make_response(redirect('/'))
+    if remember_me == 'on':
+        until = datetime.now() + timedelta(days=during_day)
+        res.set_cookie('id', user_id, expires=until)
+        res.set_cookie('password', encrypt(password, user_id), expires=until)
+
     session['id'] = user_id
-    return redirect('/')
+    return res
 
 
 @app.route('/logout', methods=['GET'])
 def get_logout():
     session.pop('id', None)
-    return redirect('/')
+    res = redirect('/')
+    res.set_cookie('id', '', expires=0)
+    res.set_cookie('password', '', expires=0)
+    return res
 
 
 @app.route('/users/<user_id>', methods=['PATCH'])
@@ -346,6 +358,13 @@ def get_login():
 def get_game():
     joined_games = list()
     login_id = session.get('id')
+
+    cookie_id = request.cookies.get('id')
+    cookie_password = request.cookies.get('password')
+    if login_id is None and cookie_id and cookie_password and login(cookie_id, cookie_password, encrypted=True):
+        session['id'] = cookie_id
+        login_id = cookie_id
+
     with get_connection() as database:
         games_list: list[list[Game]] = [list(), list(), list()]
 
