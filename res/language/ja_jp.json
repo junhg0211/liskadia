@@ -1,0 +1,62 @@
+{
+  "base": {
+    "logined_as": "{0}でログイン",
+    "profile": "プロフィール",
+    "logout": "ログアウト",
+    "new_game": "新しいゲーム",
+    "login": "ログイン",
+    "register": "加入"
+  },
+  "game": {
+    "start": "ゲーム作成",
+    "join": "参加する",
+    "leave": "退出する",
+    "participants": "参加者",
+    "end_condition": "終了条件",
+    "condition_template": "みんなが{0}点以上を得点、またはオトーク状態",
+    "scoreboard": "スコアボード",
+    "rankings": "ランキング",
+    "nema_history": "ネマ履歴",
+    "place": "位置",
+    "player": "プレイヤー",
+    "placed_at": "打った時間"
+  },
+  "games": {
+    "idle_games": "某集中のゲーム",
+    "ongoing_games": "進行中のゲーム",
+    "ended_games": "終了したゲーム",
+    "joined_games": "参加したゲーム"
+  },
+  "login": {
+    "login": "ログイン",
+    "id": "ID",
+    "password": "パスワード",
+    "remember_me_for": "ログイン情報保存期間",
+    "during": {
+      "1": "1日",
+      "2": "2日",
+      "4": "4日",
+      "8": "8日",
+      "16": "16日",
+      "32": "32日",
+      "64": "64日",
+      "128": "128日",
+      "256": "256日"
+    }
+  },
+  "new_game": {
+    "open_new_game": "新しいゲームを作成する",
+    "least_scores_for_end": "終了条件点数",
+    "open": "作る"
+  },
+  "profile": {
+    "participated_games": "参加したゲーム",
+    "does_not_played_yet": "まだゲームをプレイしていません。"
+  },
+  "register": {
+    "register": "加入",
+    "password_confirm": "パスワート確認",
+    "nema_color": "ネマの色",
+    "language": "言語"
+  }
+}
