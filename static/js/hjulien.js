@@ -125,7 +125,7 @@ function updateNemas() {
 
       // append on nema history
       let td;
-      let tr = document.createElement('tr');
+      let tr = nemaHistoryTable.insertRow(1);
 
       td = document.createElement('td');
       td.innerText = (++index).toString();
@@ -146,8 +146,6 @@ function updateNemas() {
       td = document.createElement('td');
       td.innerText = nema['created_at'];
       tr.appendChild(td);
-
-      nemaHistoryTable.children[0].appendChild(tr);
     }))
     .then(updateNextTurn);
 }
@@ -235,7 +233,7 @@ function updateNextTurn() {
   if (nextTurn === undefined) return;
 
   // update in nema history
-  let tr = document.createElement('tr');
+  let tr = nemaHistoryTable.children[0].insertRow(1);
 
   tr.appendChild(document.createElement('td'));
   tr.appendChild(document.createElement('td'));
@@ -247,8 +245,6 @@ function updateNextTurn() {
   span.innerText = ' ⬤';
   span.className = `user-color__${escapeUserId(nextTurn)}`;
   tr.children[2].appendChild(span);
-
-  nemaHistoryTable.children[0].appendChild(tr);
 
   // update in game metadata member list bold
   if (gameState === 1) {
