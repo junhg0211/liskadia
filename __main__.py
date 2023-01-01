@@ -300,8 +300,12 @@ def post_games_id_put(game_id: int, nema_position: int):
         if nemas.get(game.id, nema_position, database) is not None:
             return message(get_string('client_error.duplicated'), 403)
 
-        if ids[nemas.get_nema_count(game.id, database) % len(ids)] != login_id:
+        nema_count = nemas.get_nema_count(game.id, database)
+        if ids[nema_count % len(ids)] != login_id:
             return message(get_string('client_error.not_turn'), 403)
+
+        if nema_count == 0 and nema_position not in (44, 45, 54, 55):
+            return message(get_string('client_error.invalid_position'), 403)
 
         nema = Nema(user.id, game.id, nema_position)
         nemas.new(nema, database)
