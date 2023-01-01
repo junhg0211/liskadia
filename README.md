@@ -23,6 +23,7 @@
 * `user.color`: 6자리 HTML 16진수 색상 코드를 그대로 10진수로 변환한 것을 사용한다.
 * `user.language`: 다음 중 하나를 사용한다.
   * `ko_kr`
+  * `en_us`
 
 #### GET `/users`
 모든 유저 정보 불러오기

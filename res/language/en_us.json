@@ -1,0 +1,62 @@
+{
+  "base": {
+    "logined_as": "logined as {0}",
+    "profile": "Profile",
+    "logout": "Logout",
+    "new_game": "New Game",
+    "login": "Login",
+    "register": "Register"
+  },
+  "game": {
+    "start": "Start Game",
+    "join": "Join",
+    "leave": "Leave",
+    "participants": "Participants",
+    "end_condition": "End Condition",
+    "condition_template": "All players get at least {0} points or Otoque",
+    "scoreboard": "Scoreboard",
+    "rankings": "Rankings",
+    "nema_history": "Nema History",
+    "place": "Place",
+    "player": "Player",
+    "placed_at": "Placed At"
+  },
+  "games": {
+    "idle_games": "Idle Games",
+    "ongoing_games": "Ongoing Games",
+    "ended_games": "Ended Games",
+    "joined_games": "Joined Games"
+  },
+  "login": {
+    "login": "Login",
+    "id": "ID",
+    "password": "Password",
+    "remember_me_for": "Remember me for",
+    "during": {
+      "1": "1 day",
+      "2": "2 days",
+      "4": "4 days",
+      "8": "8 days",
+      "16": "16 days",
+      "32": "32 days",
+      "64": "64 days",
+      "128": "128 days",
+      "256": "256 days"
+    }
+  },
+  "new_game": {
+    "open_new_game": "Open new game",
+    "least_scores_for_end": "Least scores for end",
+    "open": "Open"
+  },
+  "profile": {
+    "participated_games": "Participated Games",
+    "does_not_played_yet": "This player have not played a game yet."
+  },
+  "register": {
+    "register": "Register",
+    "password_confirm": "Password Confirm",
+    "nema_color": "Nema Color",
+    "language": "Language"
+  }
+}
