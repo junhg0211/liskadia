@@ -46,7 +46,8 @@
   },
   "new_game": {
     "open_new_game": "새 게임 만들기",
-    "least_scores_for_end": "종료 조건 점수"
+    "least_scores_for_end": "종료 조건 점수",
+    "open": "만들기"
   },
   "profile": {
     "participated_games": "참여한 게임",
@@ -55,6 +56,7 @@
   "register": {
     "register": "회원가입",
     "password_confirm": "비밀번호 확인",
-    "nema_color": "네마 색상"
+    "nema_color": "네마 색상",
+    "language": "언어"
   }
 }

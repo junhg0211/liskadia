@@ -56,6 +56,7 @@ def post_users_new():
     id_ = data.get('id')
     password = data.get('password')
     color = int(data.get('color')[1:], 16)
+    language = data.get('language')
 
     if color is None:
         color = randint(0, 0xFFFFFF)
@@ -66,7 +67,7 @@ def post_users_new():
         if users.exists(id_, database):
             return message(get_string('client_error.duplicated_id'), 409)
 
-        users.new(id_, password, color, database)
+        users.new(id_, password, color, language, database)
 
     return redirect('/')
 
@@ -362,12 +363,24 @@ def get_index():
 
 @app.route('/register', methods=['GET'])
 def get_register():
-    return render_template('register.html', get_language=lambda x: get_language(x, 'ko_kr'))
+    language = 'ko_kr'
+    if login_id := session.get('id'):
+        with get_connection() as database:
+            user = users.get(login_id, database)
+        language = user.language
+
+    return render_template('register.html', get_language=lambda x: get_language(x, language))
 
 
 @app.route('/login', methods=['GET'])
 def get_login():
-    return render_template('login.html', get_language=lambda x: get_language(x, 'ko_kr'))
+    language = 'ko_kr'
+    if login_id := session.get('id'):
+        with get_connection() as database:
+            user = users.get(login_id, database)
+        language = user.language
+
+    return render_template('login.html', get_language=lambda x: get_language(x, language))
 
 
 @app.route('/game', methods=['GET'])
@@ -390,10 +403,15 @@ def get_game():
         for game in games.get_all(database, 20):
             games_list[game.state].append(game)
 
+        language = 'ko_kr'
+        if login_id := session.get('id'):
+            user = users.get(login_id, database)
+            language = user.language
+
     return render_template(
         'games.html', login_id=login_id,
         idle_games=games_list[0], ongoing_games=games_list[1], ended_games=games_list[2], joined_games=joined_games,
-        get_language=lambda x: get_language(x, 'ko_kr'))
+        get_language=lambda x: get_language(x, language))
 
 
 @app.route('/game/<int:game_id>', methods=['GET'])
@@ -405,14 +423,28 @@ def get_game_id(game_id: int):
             return str(e), 404
 
         user_ids = sorted(participants.get_ids(game.id, database))
+
+        language = 'ko_kr'
+        if login_id := session.get('id'):
+            user = users.get(login_id, database)
+            language = user.language
+
     return render_template(
         'game.html', game=game, participants=user_ids, login_id=session.get('id'),
-        get_language=lambda x: get_language(x, 'ko_kr'))
+        get_language=lambda x: get_language(x, language))
 
 
 @app.route('/new_game', methods=['GET'])
 def get_new_game():
-    return render_template('new_game.html', login_id=session.get('id'), get_language=lambda x: get_language(x, 'ko_kr'))
+    language = 'ko_kr'
+    if login_id := session.get('id'):
+        with get_connection() as database:
+            user = users.get(login_id, database)
+        language = user.language
+
+    return render_template(
+        'new_game.html', login_id=session.get('id'),
+        get_language=lambda x: get_language(x, language))
 
 
 @app.route('/profile/<user_id>', methods=['GET'])
@@ -425,9 +457,14 @@ def get_profile_id(user_id: str):
 
         played_games = list(participants.get_games(user_id, database))
 
+        language = 'ko_kr'
+        if login_id := session.get('id'):
+            login_user = users.get(login_id, database)
+            language = login_user.language
+
     return render_template(
         'profile.html', user=user, played_games=played_games, login_id=session.get('id'),
-        get_language=lambda x: get_language(x, 'ko_kr'))
+        get_language=lambda x: get_language(x, language))
 
 
 if __name__ == '__main__':

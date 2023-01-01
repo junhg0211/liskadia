@@ -205,7 +205,7 @@ function updateColors() {
       leaveForm.style.display = 'none';
 
       if (gameState === 0) {
-        stateSpan.innerText = '(시작 대기중)';
+        stateSpan.innerText = '(IDLE)';
         if (gameCreator === LOGIN_ID)
           startForm.style.display = 'block';
         if (LOGIN_ID) {
@@ -220,7 +220,7 @@ function updateColors() {
       } else if (gameState === 1) {
         stateSpan.innerText = '';
       } else if (gameState === 2) {
-        stateSpan.innerText = '(종료됨)';
+        stateSpan.innerText = '(FINISHED)';
       }
     }).then(updateNextTurn);
 }

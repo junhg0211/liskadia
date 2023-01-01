@@ -18,8 +18,11 @@
 | wins       | int    | 게임을 이긴 횟수      |
 | games      | int    | 게임을 플레이한 횟수    |
 | color      | int    | 주로 사용하는 네마의 색상 |
+| language   | string | 페이지를 표시할 언어    |
 
-`user.color` 값은 6자리 HTML 16진수 색상 코드를 그대로 10진수로 변환한 것을 사용한다.
+* `user.color`: 6자리 HTML 16진수 색상 코드를 그대로 10진수로 변환한 것을 사용한다.
+* `user.language`: 다음 중 하나를 사용한다.
+  * `ko_kr`
 
 #### GET `/users`
 모든 유저 정보 불러오기
@@ -28,8 +31,9 @@
 새로운 계정 생성
 * `id`, `token` 정보가 전달되어야 함
 * `color` 정보를 전달할 수 있음
+* `language` 정보를 전달할 수 있음
 
-### POST `/login`
+#### POST `/login`
 세션 로그인
 * `id`, `token` 정보가 전달되어야 함
 

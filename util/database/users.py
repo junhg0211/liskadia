@@ -37,12 +37,12 @@ def get_all(database: Connection, limit: Optional[int] = None) -> list[User]:
     return result
 
 
-def new(user_id: str, token: str, color: int, database: Connection) -> User:
+def new(user_id: str, token: str, color: int, language: str, database: Connection) -> User:
     user = User(user_id, encrypt(token, user_id))
     with database.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO user (id, password, joined_at, color) VALUES (%s, %s, %s, %s)',
-            (user_id, user.token, user.joined_at, color))
+            'INSERT INTO user (id, password, joined_at, color, language) VALUES (%s, %s, %s, %s, %s)',
+            (user_id, user.token, user.joined_at, color, language))
         database.commit()
     return user
 
