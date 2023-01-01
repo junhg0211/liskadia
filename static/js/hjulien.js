@@ -28,6 +28,10 @@ let scores;
 
 let GAME_ID;
 
+function escapeUserId(userId) {
+  return userId.replaceAll('.', '-').replaceAll(' ', '-');
+}
+
 let lastNemaCountCheck;
 function checkMeta() {
   let now = Date.now();
@@ -93,7 +97,7 @@ function checkMeta() {
           li.appendChild(a);
 
           let span = document.createElement('span');
-          span.className = 'user-color__' + userId;
+          span.className = 'user-color__' + escapeUserId(userId);
           span.innerText = ' ⬤';
           li.appendChild(span);
 
@@ -134,7 +138,7 @@ function updateNemas() {
       td = document.createElement('td');
       td.innerText = id;
       let span = document.createElement('span');
-      span.className = 'user-color__' + id;
+      span.className = 'user-color__' + escapeUserId(id);
       span.innerText = ' ⬤';
       td.appendChild(span);
       tr.appendChild(td);
@@ -181,9 +185,10 @@ function updateColors() {
         a.innerText = user['id'];
         li.appendChild(a);
         span = document.createElement('span');
-        span.className = 'user-color__' + user['id'];
+        span.className = 'user-color__' + escapeUserId(user['id']);
         span.innerText = ' ⬤';
-        styleSheet.insertRule(`.user-color__${user['id']} { color: ${colors[user['id']]}; }`, 0);
+        let convertedId = escapeUserId(user['id']);
+        styleSheet.insertRule(`.user-color__${convertedId} { color: ${colors[user['id']]}; }`, 0);
         li.appendChild(span);
         participantsList.appendChild(li);
 
@@ -240,7 +245,7 @@ function updateNextTurn() {
   tr.children[2].innerText = nextTurn;
   let span = document.createElement('span');
   span.innerText = ' ⬤';
-  span.className = `user-color__${nextTurn}`;
+  span.className = `user-color__${escapeUserId(nextTurn)}`;
   tr.children[2].appendChild(span);
 
   nemaHistoryTable.children[0].appendChild(tr);
