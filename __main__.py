@@ -168,10 +168,17 @@ def post_games_new():
 
     data = parse_data(request)
     direction = data.get('direction') == 'on'
+    try:
+        target_score = int(data.get('score'))
+    except ValueError:
+        return message(get_string('client_error.invalid_max_score'), 403)
+
+    if not (1 <= target_score <= 100):
+        return message(get_string('client_error.invalid_max_score'), 403)
 
     with get_connection() as database:
         user = users.get(login_id, database)
-        game_id = games.new(user.id, direction, database)
+        game_id = games.new(user.id, direction, target_score, database)
         game = games.get(game_id, database)
         participants.new(user.id, game.id, database)
     return redirect(f'/game/{game_id}')

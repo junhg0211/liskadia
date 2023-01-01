@@ -20,8 +20,9 @@ class Game:
         game_id = data['id']
         created_by = data['created_by']
         direction = data['direction']
+        max_score = data['max_score']
 
-        result = Game(game_id, created_by, 3, direction)
+        result = Game(game_id, created_by, max_score, direction)
         result.state = data['state']
         result.created_at = data['created_at']
         return result

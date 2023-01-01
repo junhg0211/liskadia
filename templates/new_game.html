@@ -4,6 +4,7 @@
     <h2>세 개임 만들기</h2>
     <p>여기는 원래 설정 페이지인데 지금은 아무런 설정이 없습니다.</p>
     <form action="/games/new" method="POST">
+        <p><label for="score">종료 조건 점수 <input type="number" name="score" id="score" value="3" min="1"></label></p>
         <input type="submit">
     </form>
 {% endblock %}
