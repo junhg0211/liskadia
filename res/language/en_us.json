@@ -1,6 +1,6 @@
 {
   "base": {
-    "logined_as": "logined as {0}",
+    "logined_as": "Logined as {0}",
     "profile": "Profile",
     "logout": "Logout",
     "new_game": "New Game",

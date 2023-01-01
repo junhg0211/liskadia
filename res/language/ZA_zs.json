@@ -1,0 +1,62 @@
+{
+  "base": {
+    "logined_as": "Loginè roy {0}",
+    "profile": "Miro",
+    "logout": "Nigol",
+    "new_game": "Novésemüsie",
+    "login": "Login",
+    "register": "Novénuiz"
+  },
+  "game": {
+    "start": "Tiäg",
+    "join": "Modil",
+    "leave": "Temmoque",
+    "participants": "Semüsîn",
+    "end_condition": "Gäitelaz",
+    "condition_template": "Olésemüsîn da vistùqûm lo {0} lesépain laro ä Otoque",
+    "scoreboard": "Paisiulü",
+    "rankings": "Pailindy",
+    "nema_history": "Nemavistupota",
+    "place": "Faxas",
+    "player": "Semüsîn",
+    "placed_at": "Zozaque"
+  },
+  "games": {
+    "idle_games": "Ätìçésemüsis",
+    "ongoing_games": "Sesinìçésemüsis",
+    "ended_games": "Gäitêsemüsis",
+    "joined_games": "Modilêsemüsis"
+  },
+  "login": {
+    "login": "Login",
+    "id": "ID",
+    "password": "Ammiraopta",
+    "remember_me_for": "Sosaque dé Nariprepos lo Login",
+    "during": {
+      "1": "1 lesíc",
+      "2": "2 lesíc",
+      "4": "4 lesíc",
+      "8": "8 lesíc",
+      "16": "16 lesíc",
+      "32": "32 lesíc",
+      "64": "64 lesíc",
+      "128": "128 lesíc",
+      "256": "256 lesíc"
+    }
+  },
+  "new_game": {
+    "open_new_game": "Dev lo Novéülien",
+    "least_scores_for_end": "Gäipain",
+    "open": "Dev"
+  },
+  "profile": {
+    "participated_games": "Sesinêsemüsis",
+    "does_not_played_yet": "Erç hòsesinàhe."
+  },
+  "register": {
+    "register": "Novénuiz",
+    "password_confirm": "Ammirapotataupas",
+    "nema_color": "Neminoc",
+    "language": "Spika"
+  }
+}
