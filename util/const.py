@@ -13,6 +13,8 @@ for filename in listdir('res/language'):
         with open(join('res', 'language', filename), 'r', encoding='utf-8') as file:
             _languages[filename[:-5]] = load(file)
 
+DEFAULT_LANGUAGE = 'en-US'
+
 
 def parse(dictionary: dict, directory: str):
     directory = directory.split('.')

@@ -9,7 +9,7 @@ from flask import Flask, jsonify, request, render_template, session, redirect, m
 from lyskad import User, Nema, calculate_score_by
 from lyskad.game import GameState, Game
 from lyskad.nema import is_valid_position
-from util import get_string, encrypt, get_language
+from util import get_string, encrypt, get_language, DEFAULT_LANGUAGE
 from util.database import users, games, participants, nemas, get_connection, scores
 
 app = Flask(__name__)
@@ -363,7 +363,7 @@ def get_index():
 
 @app.route('/register', methods=['GET'])
 def get_register():
-    language = 'ko_kr'
+    language = DEFAULT_LANGUAGE
     if login_id := session.get('id'):
         with get_connection() as database:
             user = users.get(login_id, database)
@@ -374,7 +374,7 @@ def get_register():
 
 @app.route('/login', methods=['GET'])
 def get_login():
-    language = 'ko_kr'
+    language = DEFAULT_LANGUAGE
     if login_id := session.get('id'):
         with get_connection() as database:
             user = users.get(login_id, database)
@@ -403,7 +403,7 @@ def get_game():
         for game in games.get_all(database, 20):
             games_list[game.state].append(game)
 
-        language = 'ko_kr'
+        language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             user = users.get(login_id, database)
             language = user.language
@@ -424,7 +424,7 @@ def get_game_id(game_id: int):
 
         user_ids = sorted(participants.get_ids(game.id, database))
 
-        language = 'ko_kr'
+        language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             user = users.get(login_id, database)
             language = user.language
@@ -436,7 +436,7 @@ def get_game_id(game_id: int):
 
 @app.route('/new_game', methods=['GET'])
 def get_new_game():
-    language = 'ko_kr'
+    language = DEFAULT_LANGUAGE
     if login_id := session.get('id'):
         with get_connection() as database:
             user = users.get(login_id, database)
@@ -457,7 +457,7 @@ def get_profile_id(user_id: str):
 
         played_games = list(participants.get_games(user_id, database))
 
-        language = 'ko_kr'
+        language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             login_user = users.get(login_id, database)
             language = login_user.language
