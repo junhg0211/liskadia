@@ -1,0 +1,60 @@
+{
+  "base": {
+    "logined_as": "{0}으로 로그인함",
+    "profile": "프로필",
+    "logout": "로그아웃",
+    "new_game": "새 게임",
+    "login": "로그인",
+    "register": "회원가입"
+  },
+  "game": {
+    "start": "게임 시작하기",
+    "join": "참가하기",
+    "leave": "퇴장하기",
+    "participants": "참여자",
+    "end_condition": "종료 조건",
+    "condition_template": "모두가 {0}점 이상 득점 또는 오토크",
+    "scoreboard": "점수판",
+    "rankings": "랭킹",
+    "nema_history": "네마 이력",
+    "place": "위치",
+    "player": "플레이어",
+    "placed_at": "놓은 시각"
+  },
+  "games": {
+    "idle_games": "모집중인 게임 목록",
+    "ongoing_games": "진행중인 게임 목록",
+    "ended_games": "종료된 게임 목록",
+    "joined_games": "내가 참여한 게임 목록"
+  },
+  "login": {
+    "login": "로그인",
+    "id": "ID",
+    "password": "비밀번호",
+    "remember_me_for": "로그인 정보 보존 기간",
+    "during": {
+      "1": "1일",
+      "2": "2일",
+      "4": "4일",
+      "8": "8일",
+      "16": "16일",
+      "32": "32일",
+      "64": "64일",
+      "128": "128일",
+      "256": "256일"
+    }
+  },
+  "new_game": {
+    "open_new_game": "새 게임 만들기",
+    "least_scores_for_end": "종료 조건 점수"
+  },
+  "profile": {
+    "participated_games": "참여한 게임",
+    "does_not_played_yet": "아직 플레이한 게임이 없습니다."
+  },
+  "register": {
+    "register": "회원가입",
+    "password_confirm": "비밀번호 확인",
+    "nema_color": "네마 색상"
+  }
+}

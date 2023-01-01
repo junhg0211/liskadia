@@ -23,23 +23,20 @@
 {% endblock %}
 
 {% block content %}
-    <h2>화원가입</h2>
+    <h2>{{ get_language('register.register') }}</h2>
     <form action="/users/new" method="POST">
         <p><label for="id">ID <input type="text" name="id"></label></p>
         <p>
-            <label for="password">
-                비밀번호 <input type="password" name="password" onchange="checkPassword()" id="password">
-            </label>
+            <label for="password">{{ get_language('login.password') }}</label>
+            <input type="password" name="password" onchange="checkPassword()" id="password">
         </p>
         <p>
-            <label for="password">
-                비밀번호 확인 <input type="password" onchange="checkPassword()" id="password-again">
-            </label>
+            <label for="password-again">{{ get_language('register.password_confirm') }}</label>
+            <input type="password" onchange="checkPassword()" id="password-again">
         </p>
         <p>
-            <label for="color">
-                네마 색상 <input type="color" id="color" name="color">
-            </label>
+            <label for="color">{{ get_language('register.nema_color') }}</label>
+            <input type="color" id="color" name="color">
         </p>
         <input type="submit" disabled id="submit">
     </form>

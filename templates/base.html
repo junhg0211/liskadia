@@ -18,11 +18,13 @@
     <nav>
         <h1><a href="/">Liskadia</a></h1>
         {% if login_id %}
-            <a href="/profile/{{ login_id }}">{{ login_id }}</a>으로 로그인함 <a href="/logout">로그아웃</a>
-            <a href="/new_game">새 게임</a>
+            {{ get_language('base.logined_as').format(login_id) }}
+            <a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a>
+            <a href="/logout">{{ get_language('base.logout') }}</a>
+            <a href="/new_game">{{ get_language('base.new_game') }}</a>
         {% else %}
-            <a href="/login">로그인</a>
-            <a href="/register">회원가입</a>
+            <a href="/login">{{ get_language('base.login') }}</a>
+            <a href="/register">{{ get_language('base.register') }}</a>
         {% endif %}
     </nav>
     <article>

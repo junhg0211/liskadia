@@ -9,7 +9,7 @@ from flask import Flask, jsonify, request, render_template, session, redirect, m
 from lyskad import User, Nema, calculate_score_by
 from lyskad.game import GameState, Game
 from lyskad.nema import is_valid_position
-from util import get_string, encrypt
+from util import get_string, encrypt, get_language
 from util.database import users, games, participants, nemas, get_connection, scores
 
 app = Flask(__name__)
@@ -362,12 +362,12 @@ def get_index():
 
 @app.route('/register', methods=['GET'])
 def get_register():
-    return render_template('register.html')
+    return render_template('register.html', get_language=lambda x: get_language(x, 'ko_kr'))
 
 
 @app.route('/login', methods=['GET'])
 def get_login():
-    return render_template('login.html')
+    return render_template('login.html', get_language=lambda x: get_language(x, 'ko_kr'))
 
 
 @app.route('/game', methods=['GET'])
@@ -392,7 +392,8 @@ def get_game():
 
     return render_template(
         'games.html', login_id=login_id,
-        idle_games=games_list[0], ongoing_games=games_list[1], ended_games=games_list[2], joined_games=joined_games)
+        idle_games=games_list[0], ongoing_games=games_list[1], ended_games=games_list[2], joined_games=joined_games,
+        get_language=lambda x: get_language(x, 'ko_kr'))
 
 
 @app.route('/game/<int:game_id>', methods=['GET'])
@@ -404,12 +405,14 @@ def get_game_id(game_id: int):
             return str(e), 404
 
         user_ids = sorted(participants.get_ids(game.id, database))
-    return render_template('game.html', game=game, participants=user_ids, login_id=session.get('id'))
+    return render_template(
+        'game.html', game=game, participants=user_ids, login_id=session.get('id'),
+        get_language=lambda x: get_language(x, 'ko_kr'))
 
 
 @app.route('/new_game', methods=['GET'])
 def get_new_game():
-    return render_template('new_game.html', login_id=session.get('id'))
+    return render_template('new_game.html', login_id=session.get('id'), get_language=lambda x: get_language(x, 'ko_kr'))
 
 
 @app.route('/profile/<user_id>', methods=['GET'])
@@ -423,7 +426,8 @@ def get_profile_id(user_id: str):
         played_games = list(participants.get_games(user_id, database))
 
     return render_template(
-        'profile.html', user=user, played_games=played_games, login_id=session.get('id'))
+        'profile.html', user=user, played_games=played_games, login_id=session.get('id'),
+        get_language=lambda x: get_language(x, 'ko_kr'))
 
 
 if __name__ == '__main__':

@@ -2,7 +2,7 @@
 
 {% block content %}
     {% if idle_games %}
-        <h2>모집중인 게임 목록</h2>
+        <h2>{{ get_language('games.idle_games') }}</h2>
         <ul>
             {% for game in idle_games %}
                 <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
@@ -10,7 +10,7 @@
         </ul>
     {% endif %}
     {% if ongoing_games %}
-        <h2>진행중인 게임 목록</h2>
+        <h2>{{ get_language('games.ongoing_games') }}</h2>
         <ul>
             {% for game in ongoing_games %}
                 <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
@@ -18,7 +18,7 @@
         </ul>
     {% endif %}
     {% if ended_games %}
-        <h2>종료된 게임 목록</h2>
+        <h2>{{ get_language('games.ended_games') }}</h2>
         <ul>
             {% for game in ended_games %}
                 <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
@@ -26,7 +26,7 @@
         </ul>
     {% endif %}
     {% if login_id and joined_games %}
-        <h2>내가 참여한 게임 목록</h2>
+        <h2>{{ get_language('games.joined_games') }}</h2>
         <ul>
             {% for game in joined_games %}
                 <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>

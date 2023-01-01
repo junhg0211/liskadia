@@ -1,9 +1,12 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <h2>세 개임 만들기</h2>
+    <h2>{{ get_language('new_game.open_new_game') }}</h2>
     <form action="/games/new" method="POST">
-        <p><label for="score">종료 조건 점수 <input type="number" name="score" id="score" value="3" min="1"></label></p>
+        <p>
+            <label for="score">{{ get_language('new_game.least_scores_for_end') }}</label>
+            <input type="number" name="score" id="score" value="3" min="1">
+        </p>
         <input type="submit">
     </form>
 {% endblock %}

@@ -15,29 +15,29 @@
             </h2>
             <p>--- <a id="game-metadata__author" href="/profile/{{ game.created_by }}">{{ game.created_by }}</a></p>
             <form action="/games/{{ game.id }}/start" method="POST" id="start-form" style="display: none;">
-                <input type="submit" value="게임 시작하기">
+                <input type="submit" value="{{ get_language('game.start') }}">
             </form>
             <form action="/games/{{ game.id }}/join" method="POST" id="join-form" style="display: none;">
-                <input type="submit" value="참가하기">
+                <input type="submit" value="{{ get_language('game.join') }}">
             </form>
             <form action="/games/{{ game.id }}/leave" method="POST" id="leave-form" style="display: none;">
-                <input type="submit" value="퇴장하기">
+                <input type="submit" value="{{ get_language('game.leave') }}">
             </form>
-            <h3>참여자</h3>
+            <h3>{{ get_language('game.participants') }}</h3>
             <ol id="participants"></ol>
-            <h3>종료 조건</h3>
-            <p>모두가 <strong>{{ game.max_score }}점</strong> 이상 득점 또는 <strong>오토크</strong></p>
-            <h3>점수판</h3>
+            <h3>{{ get_language('game.end_condition') }}</h3>
+            <p>{{ get_language('game.condition_template').format(game.max_score) }}</p>
+            <h3>{{ get_language('game.scoreboard') }}</h3>
             <div id="scoreboard"></div>
-            <h3>랭킹</h3>
+            <h3>{{ get_language('game.rankings') }}</h3>
             <ol id="ranking"></ol>
-            <h3>네마 이력</h3>
+            <h3>{{ get_language('game.nema_history') }}</h3>
             <table class="game-metadata__history" id="nema-history">
                 <tr>
                     <th>#</th>
-                    <th>위치</th>
-                    <th>놓은 플레이어</th>
-                    <th>놓은 시각</th>
+                    <th>{{ get_language('game.place') }}</th>
+                    <th>{{ get_language('game.player') }}</th>
+                    <th>{{ get_language('game.placed_at') }}</th>
                 </tr>
             </table>
         </div>

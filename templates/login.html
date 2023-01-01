@@ -5,31 +5,31 @@
 {% endblock %}
 
 {% block content %}
-    <h2>로그인</h2>
+    <h2>{{ get_language('login.login') }}</h2>
     <form action="/login" method="POST" onsubmit="encrypt()">
         <p>
-            <label>ID <input type="text" name="id"></label>
+            <label>{{ get_language('login.id') }} <input type="text" name="id"></label>
         </p>
         <p>
-            <label>비밀번호 <input type="password" name="password" id="password"></label>
+            <label>{{ get_language('login.password') }} <input type="password" name="password" id="password"></label>
         </p>
         <p>
             <input type="checkbox" id="remember-me" name="remember-me">
+            <label for="remember-me">{{ get_language('login.remember_me_for') }}</label>
             <label for="during-day">
                 <select name="during-day" id="during-day">
-                    <option value="1">1일</option>
-                    <option value="2">2일</option>
-                    <option value="4">4일</option>
-                    <option value="8">8일</option>
-                    <option value="16">16일</option>
-                    <option value="32">32일</option>
-                    <option value="64">64일</option>
-                    <option value="128" selected>128일</option>
-                    <option value="256">256일</option>
+                    <option value="1">{{ get_language('login.during.1') }}</option>
+                    <option value="2">{{ get_language('login.during.2') }}</option>
+                    <option value="4">{{ get_language('login.during.4') }}</option>
+                    <option value="8">{{ get_language('login.during.8') }}</option>
+                    <option value="16">{{ get_language('login.during.16') }}</option>
+                    <option value="32">{{ get_language('login.during.32') }}</option>
+                    <option value="64">{{ get_language('login.during.64') }}</option>
+                    <option value="128" selected>{{ get_language('login.during.128') }}</option>
+                    <option value="256">{{ get_language('login.during.256') }}</option>
                 </select>
             </label>
-            <label for="remember-me">동안 기억해 줘</label>
         </p>
-        <input type="submit">
+        <input type="submit" value="{{ get_language('login.login') }}">
     </form>
 {% endblock %}

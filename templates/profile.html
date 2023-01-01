@@ -18,7 +18,7 @@
 
 {% block content %}
     <h1>{{ user.id }}<span id="user-color__{{ user.id }}"> ⬤</span></h1>
-    <h2>참여한 게임</h2>
+    <h2>{{ get_language('profile.participated_games') }}</h2>
     {% if played_games %}
         <ul>
             {% for game in played_games %}
@@ -26,6 +26,6 @@
             {% endfor %}
         </ul>
     {% else %}
-        <p>아직 플레이한 게임이 없습니다.</p>
+        <p>{{ get_language('profile.does_not_played_yet') }}</p>
     {% endif %}
 {% endblock %}
