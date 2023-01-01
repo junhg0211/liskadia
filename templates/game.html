@@ -10,7 +10,8 @@
         <canvas id="hjulien"></canvas>
         <div class="game-metadata">
             <h2>
-                #<span id="game-metadata__id">{{ game.id }}</span><span id="game-metadata__state"></span>
+                #<span id="game-metadata__id">{{ game.id }}</span>
+                <span id="game-metadata__state"></span>
             </h2>
             <p>--- <a id="game-metadata__author" href="/profile/{{ game.created_by }}">{{ game.created_by }}</a></p>
             <form action="/games/{{ game.id }}/start" method="POST" id="start-form" style="display: none;">
