@@ -5,6 +5,7 @@ let nemaHistoryTable;
 let stateSpan;
 let startForm, joinForm, leaveForm;
 let participantsList;
+let rankingList;
 
 let scoreboardDiv;
 let scoreboardUpdate = true;
@@ -52,6 +53,52 @@ function checkMeta() {
 
       scores = data['scores'];
       scoreboardUpdate = true;
+
+      let userScores = {};
+      let scoredUserCounts = [];
+      let userInformation = {};
+
+      scores.forEach(score => {
+        let attacker = score['user_id'];
+
+        // calculate score
+        if (Object.keys(userScores).indexOf(attacker) !== -1) {
+          userScores[attacker] += 1;
+        } else {
+          userScores[attacker] = 1;
+        }
+        let pointCount = userScores[attacker];
+
+        if (Object.keys(scoredUserCounts).length < pointCount) {
+          scoredUserCounts.push(1)
+        } else {
+          scoredUserCounts[pointCount - 1] += 1
+        }
+        let count = scoredUserCounts[pointCount - 1];
+        userInformation[attacker] = [pointCount, -count];
+      });
+
+      console.log(userInformation);
+
+      rankingList.innerHTML = '';
+      Object.entries(userInformation)
+        .sort((a, b) => 100*(b[1][0] - a[1][0]) + (b[1][1] - a[1][1]))
+        .map(([key, _]) => key)
+        .forEach(userId => {
+          let li = document.createElement('li');
+
+          let a = document.createElement('a');
+          a.innerText = userId;
+          a.href = `/profile/${userId}`;
+          li.appendChild(a);
+
+          let span = document.createElement('span');
+          span.className = 'user-color__' + userId;
+          span.innerText = ' ⬤';
+          li.appendChild(span);
+
+          rankingList.appendChild(li);
+        });
     });
 
   lastNemaCountCheck = now;
@@ -72,6 +119,7 @@ function updateNemas() {
 
       nemas.push([x, y, id]);
 
+      // append on nema history
       let td;
       let tr = document.createElement('tr');
 
@@ -430,6 +478,7 @@ function loadHjulien() {
   leaveForm = document.querySelector('#leave-form');
   participantsList = document.querySelector('#participants');
   scoreboardDiv = document.querySelector('#scoreboard');
+  rankingList = document.querySelector('#ranking');
 }
 
 document.addEventListener('DOMContentLoaded', loadHjulien);
