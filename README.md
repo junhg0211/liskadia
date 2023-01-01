@@ -40,9 +40,9 @@
 #### GET `/users/{user.id}`
 유저 정보 불러오기
 
-#### PATCH `/users/{user.id}`*
-유저 정보 변경하기
-* `token` 변경할 수 있음
+#### ~~PATCH `/users/{user.id}`*~~
+~~유저 정보 변경하기~~
+* ~~`token` 변경할 수 있음~~
 
 #### ~~DELETE `/users/{user.id}`*~~
 ~~유저 삭제하기~~
