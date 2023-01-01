@@ -319,6 +319,9 @@ def post_games_id_put(game_id: int, nema_position: int):
                 or nemas.get_nema_count(game.id, database) == 100:
             games.set_state(game.id, GameState.END, database)
 
+            places = participants.get_places(scores.get_scoring_nemas(game.id, database))
+            participants.record_places(places, game.id, database)
+
     return message('OK', 200, nema=nema.jsonify())
 
 
