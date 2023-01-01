@@ -38,6 +38,13 @@
             <label for="color">{{ get_language('register.nema_color') }}</label>
             <input type="color" id="color" name="color">
         </p>
-        <input type="submit" disabled id="submit">
+        <p>
+            <label for="language">{{ get_language('register.language') }}</label>
+            <select name="language" id="language">
+                <option value="en_us">English (United States)</option>
+                <option value="ko_kr" selected>한국어 (대한민국)</option>
+            </select>
+        </p>
+        <input type="submit" disabled id="submit" value="{{ get_language('register.register') }}">
     </form>
 {% endblock %}
