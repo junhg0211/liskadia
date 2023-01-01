@@ -31,7 +31,10 @@ def get_secret(directory: str):
 
 def get_language(directory: str, language: str):
     language = _languages[language]
-    return parse(language, directory)
+    try:
+        return parse(language, directory)
+    except IndexError:
+        return f'{{{directory}}}'
 
 
 def is_valid_language(string: str):
