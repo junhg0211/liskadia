@@ -166,6 +166,8 @@ function updateColors() {
   fetch(`/games/${GAME_ID}`)
     .then(res => res.json())
     .then(data => {
+      colors = {};
+
       data['participants'].forEach(user => {
         let color = user['color'];
         let r, g, b;
@@ -206,7 +208,7 @@ function updateColors() {
 
       if (gameState === 0) {
         stateSpan.innerText = '(IDLE)';
-        if (gameCreator === LOGIN_ID)
+        if (gameCreator === LOGIN_ID && Object.keys(colors).length > 1)
           startForm.style.display = 'block';
         if (LOGIN_ID) {
           if (meInGame) {
