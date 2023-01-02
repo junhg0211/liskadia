@@ -52,6 +52,7 @@
   },
   "profile": {
     "does_not_played_yet": "まだゲームをプレイしていません。",
+    "joined_at": "加入日時",
     "winning_percentage": "勝率",
     "rating": "評点"
   },
