@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Iterable
 
 from pymysql import Connection
 from pymysql.cursors import DictCursor
@@ -35,6 +35,16 @@ def get_all(database: Connection, limit: Optional[int] = None) -> list[User]:
         while data := cursor.fetchone():
             result.append(User.get(data))
     return result
+
+
+def get_by_ranking(database, limit: Optional[int] = None) -> Iterable[User]:
+    if limit is None:
+        limit = GET_ALL_DEFAULT_LIMIT
+
+    with database.cursor(DictCursor) as cursor:
+        cursor.execute('SELECT * FROM user ORDER BY rating DESC LIMIT %s', limit)
+        while data := cursor.fetchone():
+            yield User.get(data)
 
 
 def new(user_id: str, token: str, color: int, language: str, database: Connection) -> User:
@@ -94,4 +104,11 @@ def add_wins(user_id: str, game_id: int, database: Connection):
         cursor.execute('UPDATE user '
                        'SET wins = wins + (SELECT COUNT(*) FROM participant WHERE game_id = %s) '
                        'WHERE id = %s', (game_id, user_id))
+        database.commit()
+
+
+def apply_ratings(users: Iterable[User], database: Connection):
+    with database.cursor() as cursor:
+        for user in users:
+            cursor.execute('UPDATE user SET rating = %s WHERE id = %s', (user.calculate_rating(), user.id))
         database.commit()

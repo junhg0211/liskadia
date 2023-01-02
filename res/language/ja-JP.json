@@ -5,7 +5,8 @@
     "logout": "ログアウト",
     "new_game": "新しいゲーム",
     "login": "ログイン",
-    "register": "加入"
+    "register": "加入",
+    "ranking": "ランキング"
   },
   "game": {
     "start": "ゲーム作成",
@@ -53,6 +54,9 @@
     "does_not_played_yet": "まだゲームをプレイしていません。",
     "winning_percentage": "勝率",
     "rating": "評点"
+  },
+  "ranking": {
+    "ranking": "ランキング"
   },
   "register": {
     "register": "加入",

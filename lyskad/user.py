@@ -12,6 +12,7 @@ class User:
         result.joined_at = data.get('joined_at')
         result.color = data.get('color')
         result.language = data.get('language')
+        result.rating = data.get('rating')
         return result
 
     def __init__(self, id_: str, encrypted_token: str):
@@ -22,6 +23,7 @@ class User:
         self.joined_at = datetime.now()
         self.color = 0
         self.language = ''
+        self.rating = 0.0
 
     def jsonify(self) -> dict:
         return {
@@ -29,14 +31,19 @@ class User:
             'wins': self.wins,
             'games': self.games,
             'joined_at': self.joined_at,
-            'color': self.color
+            'color': self.color,
+            'language': self.language,
+            'rating': self.rating,
         }
 
     def calculate_rating(self) -> float:
+        if self.games == 0:
+            return 0.0
+
         rate = self.wins / self.games
-        play_rating = 200 * (1 - 0.995 ** self.games)
+        play_rating = 50 * (1 - 0.98 ** self.games)
         win_rating = 160 * rate * log(self.wins / 160 + 1)
         return play_rating + win_rating
 
     def get_formatted_rating(self) -> str:
-        return format(self.calculate_rating(), '.2f')
+        return format(self.calculate_rating(), '.3f')

@@ -5,7 +5,8 @@
     "logout": "Logout",
     "new_game": "New Game",
     "login": "Login",
-    "register": "Register"
+    "register": "Register",
+    "ranking": "Ranking"
   },
   "game": {
     "start": "Start Game",
@@ -53,6 +54,9 @@
     "does_not_played_yet": "This player have not played a game yet.",
     "winning_percentage": "Winning Percentage",
     "rating": "Rating"
+  },
+  "ranking": {
+    "ranking": "Ranking"
   },
   "register": {
     "register": "Register",

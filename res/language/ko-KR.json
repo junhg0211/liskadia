@@ -5,7 +5,8 @@
     "logout": "로그아웃",
     "new_game": "새 게임",
     "login": "로그인",
-    "register": "회원가입"
+    "register": "회원가입",
+    "ranking": "랭킹"
   },
   "game": {
     "start": "게임 시작하기",
@@ -53,6 +54,9 @@
     "does_not_played_yet": "아직 플레이한 게임이 없습니다.",
     "winning_percentage": "승률",
     "rating": "평점"
+  },
+  "ranking": {
+    "ranking": "랭킹"
   },
   "register": {
     "register": "회원가입",

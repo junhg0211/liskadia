@@ -5,7 +5,8 @@
     "logout": "Nigol",
     "new_game": "Novésemüsie",
     "login": "Login",
-    "register": "Novénuiz"
+    "register": "Novénuiz",
+    "ranking": "Pailindy"
   },
   "game": {
     "start": "Tiäg",
@@ -53,6 +54,9 @@
     "does_not_played_yet": "Erç hòsesinàhe.",
     "winning_percentage": "Vanzitaupie",
     "rating": "Îpain"
+  },
+  "ranking": {
+    "ranking": "Pailindy"
   },
   "register": {
     "register": "Novénuiz",

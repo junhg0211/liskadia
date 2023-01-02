@@ -329,6 +329,7 @@ def post_games_id_put(game_id: int, nema_position: int):
 
             users.add_exp_for_game(game.id, database)
             users.add_wins(places[0], game.id, database)
+            users.apply_ratings(map(lambda id_: users.get(id_, database), places), database)
 
     return message('OK', 200, nema=nema.jsonify())
 
@@ -468,6 +469,19 @@ def get_profile_id(user_id: str):
     return render_template(
         'profile.html', user=user, played_games=played_games, login_id=session.get('id'),
         get_language=lambda x: get_language(x, language))
+
+
+@app.route('/ranking', methods=['GET'])
+def get_ranking():
+    with get_connection() as database:
+        user_list = list(users.get_by_ranking(database))
+
+        language = DEFAULT_LANGUAGE
+        if login_id := session.get('id'):
+            login_user = users.get(login_id, database)
+            language = login_user.language
+
+    return render_template('ranking.html', users=user_list, get_language=lambda x: get_language(x, language))
 
 
 if __name__ == '__main__':

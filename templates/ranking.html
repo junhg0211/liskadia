@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ get_language('ranking.ranking') }}</h1>
+    <ol>
+        {% for user in users %}
+            <li>
+                <strong>{{ user.get_formatted_rating() }}</strong> -
+                <a href="/profile/{{ user.id }}">{{ user.id }}</a>
+            </li>
+        {% endfor %}
+    </ol>
+{% endblock %}
