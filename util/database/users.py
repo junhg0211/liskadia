@@ -47,6 +47,12 @@ def get_by_ranking(database, limit: Optional[int] = None) -> Iterable[User]:
             yield User.get(data)
 
 
+def get_ranking_place(user_id: str, database: Connection) -> int:
+    with database.cursor() as cursor:
+        cursor.execute('SELECT COUNT(*) FROM user WHERE rating > (SELECT rating FROM user WHERE id = %s)', user_id)
+        return cursor.fetchone()[0]
+
+
 def new(user_id: str, token: str, color: int, language: str, database: Connection) -> User:
     user = User(user_id, encrypt(token, user_id))
     with database.cursor() as cursor:

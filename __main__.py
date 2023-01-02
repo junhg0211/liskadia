@@ -461,13 +461,15 @@ def get_profile_id(user_id: str):
 
         played_games = list(participants.get_games(user_id, database))
 
+        ranking_place = users.get_ranking_place(user.id, database) + 1
+
         language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             login_user = users.get(login_id, database)
             language = login_user.language
 
     return render_template(
-        'profile.html', user=user, played_games=played_games, login_id=session.get('id'),
+        'profile.html', user=user, played_games=played_games, login_id=session.get('id'), ranking_place=ranking_place,
         get_language=lambda x: get_language(x, language))
 
 

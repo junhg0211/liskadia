@@ -20,7 +20,7 @@
     <h1>{{ user.id }}<span id="user-color__{{ user.id }}"> ⬤</span></h1>
     {% if user.games > 0 %}
         <p>{{ get_language('profile.winning_percentage') }} : {{ user.wins }} / {{ user.games }} = {{ user.wins / user.games }}</p>
-        <p>{{ get_language('profile.rating') }} : {{ user.get_formatted_rating() }}</p>
+        <p>{{ get_language('profile.rating') }} : {{ user.get_formatted_rating() }} #{{ ranking_place }}</p>
     {% endif %}
     <h2>{{ get_language('games.joined_games') }}</h2>
     {% if played_games %}

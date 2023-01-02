@@ -41,8 +41,8 @@ class User:
             return 0.0
 
         rate = self.wins / self.games
-        play_rating = 50 * (1 - 0.98 ** self.games)
-        win_rating = 160 * rate * log(self.wins / 160 + 1)
+        play_rating = 40 * (1 - 0.975 ** self.games)
+        win_rating = 20 * rate * log(self.wins / 20 + 1)
         return play_rating + win_rating
 
     def get_formatted_rating(self) -> str:
