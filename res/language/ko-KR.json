@@ -50,9 +50,9 @@
     "open": "만들기"
   },
   "profile": {
-    "participated_games": "참여한 게임",
     "does_not_played_yet": "아직 플레이한 게임이 없습니다.",
-    "winning_percentage": "승률"
+    "winning_percentage": "승률",
+    "rating": "평점"
   },
   "register": {
     "register": "회원가입",

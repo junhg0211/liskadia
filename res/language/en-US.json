@@ -50,9 +50,9 @@
     "open": "Open"
   },
   "profile": {
-    "participated_games": "Participated Games",
     "does_not_played_yet": "This player have not played a game yet.",
-    "winning_percentage": "Winning Percentage"
+    "winning_percentage": "Winning Percentage",
+    "rating": "Rating"
   },
   "register": {
     "register": "Register",

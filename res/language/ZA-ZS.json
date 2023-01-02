@@ -50,9 +50,9 @@
     "open": "Dev"
   },
   "profile": {
-    "participated_games": "Sesinêsemüsis",
     "does_not_played_yet": "Erç hòsesinàhe.",
-    "winning_percentage": "Vanzitaupie"
+    "winning_percentage": "Vanzitaupie",
+    "rating": "Îpain"
   },
   "register": {
     "register": "Novénuiz",

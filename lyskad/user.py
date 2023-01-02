@@ -1,4 +1,5 @@
 from datetime import datetime
+from math import log
 
 
 class User:
@@ -30,3 +31,12 @@ class User:
             'joined_at': self.joined_at,
             'color': self.color
         }
+
+    def calculate_rating(self) -> float:
+        rate = self.wins / self.games
+        play_rating = 200 * (1 - 0.995 ** self.games)
+        win_rating = 160 * rate * log(self.wins / 160 + 1)
+        return play_rating + win_rating
+
+    def get_formatted_rating(self) -> str:
+        return format(self.calculate_rating(), '.2f')

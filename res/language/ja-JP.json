@@ -50,9 +50,9 @@
     "open": "作る"
   },
   "profile": {
-    "participated_games": "参加したゲーム",
     "does_not_played_yet": "まだゲームをプレイしていません。",
-    "winning_percentage": "勝率"
+    "winning_percentage": "勝率",
+    "rating": "評点"
   },
   "register": {
     "register": "加入",
