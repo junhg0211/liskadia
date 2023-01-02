@@ -20,6 +20,12 @@ def get_ids(game_id: int, database: Connection) -> Iterable[str]:
         return map(lambda x: x[0], cursor.fetchall())
 
 
+def get_participant_count(game_id: int, database: Connection) -> int:
+    with database.cursor() as cursor:
+        cursor.execute('SELECT COUNT(*) FROM participant WHERE game_id = %s', game_id)
+        return cursor.fetchone()[0]
+
+
 def leave(user_id: str, game_id: int, database: Connection):
     with database.cursor() as cursor:
         cursor.execute('DELETE FROM participant WHERE user_id = %s AND game_id = %s', (user_id, game_id))
@@ -67,8 +73,8 @@ def get_places(scores: list[Score]) -> tuple[str]:
         if len(scored_user_counts) < score:
             scored_user_counts.append(1)
         else:
-            scored_user_counts[score-1] += 1
-        count = scored_user_counts[score-1]
+            scored_user_counts[score - 1] += 1
+        count = scored_user_counts[score - 1]
         user_information[user_id] = (score, -count)
 
     # noinspection PyTypeChecker
@@ -78,7 +84,39 @@ def get_places(scores: list[Score]) -> tuple[str]:
 def record_places(places: tuple[str], game_id: int, database: Connection):
     with database.cursor() as cursor:
         for i, user_id in enumerate(places):
-            cursor.execute(
-                'UPDATE participant SET place = %s WHERE game_id = %s AND user_id = %s',
-                (i, game_id, user_id))
+            cursor.execute('UPDATE participant SET place = %s WHERE game_id = %s AND user_id = %s',
+                           (i, game_id, user_id))
         database.commit()
+
+
+def calculate_exp(user_id: str, database: Connection) -> int:
+    """
+    얼마나 게임을 많이 플레이했는지에 대한 수치.
+    모든 플레이한 게임들에 대해 그 게임에 플레이한 사람들의 수를 곱해서 더해 출력한다.
+
+    디버그 전용 함수이므로 웬만하면 사용하지 않을 것
+    """
+    with database.cursor() as cursor:
+        cursor.execute('SELECT COUNT(*) FROM participant JOIN game g ON g.id = game_id '
+                       'WHERE g.state = 2 '
+                       'AND game_id IN ('
+                       '    SELECT game_id FROM participant '
+                       '    WHERE user_id = %s AND game_id >= 33)', user_id)
+        return cursor.fetchone()[0]
+
+
+def calculate_wins(user_id: str, database: Connection) -> int:
+    """
+    이긴 게임의 정도에 대한 수치
+    모든 이긴 게임들에 대해 그 게임에 플레이한 사람들의 수를 곱해서 더해 출력한다.
+
+    디버그 전용 함수이므로 웬만하면 사용하지 않을 것
+    """
+    with database.cursor() as cursor:
+        cursor.execute('SELECT COUNT(*) FROM participant JOIN game g ON g.id = game_id '
+                       'WHERE g.state = 2 '
+                       'AND game_id IN ('
+                       '    SELECT game_id FROM participant '
+                       '    WHERE user_id = %s AND game_id >= 33 AND place = 0)',
+                       user_id)
+        return cursor.fetchone()[0]

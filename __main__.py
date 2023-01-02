@@ -327,6 +327,9 @@ def post_games_id_put(game_id: int, nema_position: int):
             places = participants.get_places(scores.get_scoring_nemas(game.id, database))
             participants.record_places(places, game.id, database)
 
+            users.add_exp_for_game(game.id, database)
+            users.add_wins(places[0], game.id, database)
+
     return message('OK', 200, nema=nema.jsonify())
 
 

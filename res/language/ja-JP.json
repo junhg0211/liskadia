@@ -51,7 +51,8 @@
   },
   "profile": {
     "participated_games": "参加したゲーム",
-    "does_not_played_yet": "まだゲームをプレイしていません。"
+    "does_not_played_yet": "まだゲームをプレイしていません。",
+    "winning_percentage": "勝率"
   },
   "register": {
     "register": "加入",

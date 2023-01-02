@@ -18,6 +18,7 @@
 
 {% block content %}
     <h1>{{ user.id }}<span id="user-color__{{ user.id }}"> ⬤</span></h1>
+    <p>{{ get_language('profile.winning_percentage') }} : {{ user.wins }} / {{ user.games }}</p>
     <h2>{{ get_language('profile.participated_games') }}</h2>
     {% if played_games %}
         <ul>

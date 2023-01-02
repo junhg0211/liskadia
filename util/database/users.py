@@ -78,3 +78,20 @@ def login(user_id: str, password: str, database: Connection, encrypted: bool = F
         encrypted_token = encrypt(password, user_id)
     if user.token == encrypted_token:
         return user
+
+
+def add_exp_for_game(game_id: int, database: Connection):
+    with database.cursor() as cursor:
+        cursor.execute('UPDATE user '
+                       'SET games = games + (SELECT COUNT(*) FROM participant WHERE game_id = %s) '
+                       'WHERE id IN (SELECT user_id FROM participant WHERE game_id = %s)',
+                       (game_id, game_id))
+        database.commit()
+
+
+def add_wins(user_id: str, game_id: int, database: Connection):
+    with database.cursor() as cursor:
+        cursor.execute('UPDATE user '
+                       'SET wins = wins + (SELECT COUNT(*) FROM participant WHERE game_id = %s) '
+                       'WHERE id = %s', (game_id, user_id))
+        database.commit()

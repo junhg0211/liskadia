@@ -51,7 +51,8 @@
   },
   "profile": {
     "participated_games": "Sesinêsemüsis",
-    "does_not_played_yet": "Erç hòsesinàhe."
+    "does_not_played_yet": "Erç hòsesinàhe.",
+    "winning_percentage": "Vanzitaupie"
   },
   "register": {
     "register": "Novénuiz",
