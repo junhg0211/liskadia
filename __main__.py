@@ -483,7 +483,9 @@ def get_ranking():
             login_user = users.get(login_id, database)
             language = login_user.language
 
-    return render_template('ranking.html', users=user_list, get_language=lambda x: get_language(x, language))
+    return render_template(
+        'ranking.html', users=user_list, get_language=lambda x: get_language(x, language),
+        login_id=login_id)
 
 
 if __name__ == '__main__':
