@@ -35,7 +35,7 @@ def get_language(directory: str, language: str):
     language = _languages[language]
     try:
         return parse(language, directory)
-    except IndexError:
+    except KeyError:
         return f'{{{directory}}}'
 
 
