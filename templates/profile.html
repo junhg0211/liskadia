@@ -3,7 +3,7 @@
 {% block head %}
     <script>
         window.addEventListener("load", () => {
-          const userColorSpan = document.querySelector("#user-color__{{ user.id }}");
+          const userColorSpan = document.querySelector("#user-color__{{ user.id.replace('.', '-').replace(' ', '-') }}");
 
           let color = {{ user.color }};
           let r, g, b;
@@ -17,7 +17,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ user.id }}<span id="user-color__{{ user.id }}"> ⬤</span></h1>
+    <h1>{{ user.id }}<span id="user-color__{{ user.id.replace('.', '-').replace(' ', '-') }}"> ⬤</span></h1>
     {% if user.games > 0 %}
         <p>{{ get_language('profile.winning_percentage') }} : {{ user.wins }} / {{ user.games }} = {{ user.wins / user.games }}</p>
         <p>{{ get_language('profile.rating') }} : {{ user.get_formatted_rating() }} #{{ ranking_place }}</p>
