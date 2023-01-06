@@ -53,6 +53,7 @@
   "profile": {
     "does_not_played_yet": "This player have not played a game yet.",
     "joined_at": "Joined At",
+    "last_interaction": "Last Interaction",
     "winning_percentage": "Winning Percentage",
     "rating": "Rating"
   },

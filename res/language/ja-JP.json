@@ -53,6 +53,7 @@
   "profile": {
     "does_not_played_yet": "まだゲームをプレイしていません。",
     "joined_at": "加入日時",
+    "last_interaction": "最後相互作用",
     "winning_percentage": "勝率",
     "rating": "評点"
   },

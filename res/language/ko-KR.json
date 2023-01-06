@@ -53,6 +53,7 @@
   "profile": {
     "does_not_played_yet": "아직 플레이한 게임이 없습니다.",
     "joined_at": "가입일시",
+    "last_interaction": "마지막 상호작용",
     "winning_percentage": "승률",
     "rating": "평점"
   },

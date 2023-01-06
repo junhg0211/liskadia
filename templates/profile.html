@@ -19,9 +19,12 @@
 {% block content %}
     <h1>{{ user.id }}<span id="user-color__{{ user.id.replace('.', '-').replace(' ', '-') }}"> ⬤</span></h1>
     {% if user.games > 0 %}
-        <p>{{ get_language('profile.joined_at') }} : {{ user.joined_at }}</p>
-        <p>{{ get_language('profile.winning_percentage') }} : {{ user.wins }} / {{ user.games }} = {{ user.wins / user.games }}</p>
-        <p>{{ get_language('profile.rating') }} : {{ user.get_formatted_rating() }} #{{ ranking_place }}</p>
+        <ul>
+            <li>{{ get_language('profile.joined_at') }} : {{ user.joined_at }}</li>
+            <li>{{ get_language('profile.last_interaction') }} : {{ user.last_interaction }}</li>
+            <li>{{ get_language('profile.winning_percentage') }} : {{ user.wins }} / {{ user.games }} = {{ user.wins / user.games }}</li>
+            <li>{{ get_language('profile.rating') }} : {{ user.get_formatted_rating() }} #{{ ranking_place }}</li>
+        </ul>
     {% endif %}
     <h2>{{ get_language('games.joined_games') }}</h2>
     {% if played_games %}
