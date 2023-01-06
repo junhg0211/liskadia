@@ -13,6 +13,7 @@ class User:
         result.color = data.get('color')
         result.language = data.get('language')
         result.rating = data.get('rating')
+        result.last_interaction = data.get('last_interaction')
         return result
 
     def __init__(self, id_: str, encrypted_token: str):
@@ -24,6 +25,7 @@ class User:
         self.color = 0
         self.language = ''
         self.rating = 0.0
+        self.last_interaction = self.joined_at
 
     def jsonify(self) -> dict:
         return {
@@ -34,6 +36,7 @@ class User:
             'color': self.color,
             'language': self.language,
             'rating': self.rating,
+            'last_interaction': self.last_interaction,
         }
 
     def calculate_rating(self) -> float:

@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Optional, Iterable
 
 from pymysql import Connection
@@ -57,8 +58,9 @@ def new(user_id: str, token: str, color: int, language: str, database: Connectio
     user = User(user_id, encrypt(token, user_id))
     with database.cursor() as cursor:
         cursor.execute(
-            'INSERT INTO user (id, password, joined_at, color, language) VALUES (%s, %s, %s, %s, %s)',
-            (user_id, user.token, user.joined_at, color, language))
+            'INSERT INTO user (id, password, joined_at, color, language, last_interaction) '
+            'VALUES (%s, %s, %s, %s, %s, %s)',
+            (user_id, user.token, user.joined_at, color, language, user.last_interaction))
         database.commit()
     return user
 
@@ -117,4 +119,12 @@ def apply_ratings(users: Iterable[User], database: Connection):
     with database.cursor() as cursor:
         for user in users:
             cursor.execute('UPDATE user SET rating = %s WHERE id = %s', (user.calculate_rating(), user.id))
+        database.commit()
+
+
+def update_last_interaction(user_id: str, database: Connection, last_interaction: Optional[datetime] = None):
+    if last_interaction is None:
+        last_interaction = datetime.now()
+    with database.cursor() as cursor:
+        cursor.execute('UPDATE user SET last_interaction = %s WHERE id = %s', (last_interaction, user_id))
         database.commit()

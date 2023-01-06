@@ -5,6 +5,7 @@ from typing import Optional
 from urllib.parse import parse_qsl
 
 from flask import Flask, jsonify, request, render_template, session, redirect, make_response
+from pymysql import Connection
 
 from lyskad import User, Nema, calculate_score_by
 from lyskad.game import GameState, Game
@@ -21,10 +22,9 @@ def message(message_, code: int, **kwargs):
     return jsonify(kwargs), code
 
 
-def login(user_id: str, password: str, *, encrypted: bool = False) -> Optional[User]:
-    with get_connection() as database:
-        if (user := users.login(user_id, password, database, encrypted)) is None:
-            return
+def login(user_id: str, password: str, database: Connection, *, encrypted: bool = False) -> Optional[User]:
+    if (user := users.login(user_id, password, database, encrypted)) is None:
+        return
     if user.id != user_id:
         return
     return user
@@ -92,8 +92,11 @@ def post_login():
     if user_id is None or password is None:
         return message(get_string('client_error.register_malformed'), 400)
 
-    if login(user_id, password) is None:
-        return message(get_string('client_error.unauthorized'), 401)
+    with get_connection() as database:
+        if login(user_id, password, database) is None:
+            return message(get_string('client_error.unauthorized'), 401)
+
+        users.update_last_interaction(user_id, database)
 
     res = make_response(redirect('/'))
     if remember_me == 'on':
@@ -182,6 +185,8 @@ def post_games_new():
         game_id = games.new(user.id, direction, target_score, database)
         game = games.get(game_id, database)
         participants.new(user.id, game.id, database)
+
+        users.update_last_interaction(user.id, database)
     return redirect(f'/game/{game_id}')
 
 
@@ -215,6 +220,8 @@ def post_games_id_join(game_id: int):
             return message(get_string('client_error.already_in'), 403)
 
         participants.new(user.id, game_id, database)
+
+        users.update_last_interaction(user.id, database)
     return redirect(f'/game/{game.id}')
 
 
@@ -237,6 +244,8 @@ def post_games_id_leave(game_id: int):
             return message(get_string('client_error.not_in_idle_mode'), 403)
 
         participants.leave(user.id, game_id, database)
+
+        users.update_last_interaction(user.id, database)
     return redirect(f'/game/{game_id}')
 
 
@@ -263,6 +272,8 @@ def post_games_id_start(game_id: int):
             return message(get_string('client_error.not_enough_player'), 403)
 
         games.set_state(game.id, GameState.PLAYING, database)
+
+        users.update_last_interaction(user.id, database)
     return redirect(f'/game/{game.id}')
 
 
@@ -331,6 +342,8 @@ def post_games_id_put(game_id: int, nema_position: int):
             users.add_wins(places[0], game.id, database)
             users.apply_ratings(map(lambda id_: users.get(id_, database), places), database)
 
+        users.update_last_interaction(user.id, database)
+
     return message('OK', 200, nema=nema.jsonify())
 
 
@@ -394,11 +407,15 @@ def get_game():
 
     cookie_id = request.cookies.get('id')
     cookie_password = request.cookies.get('password')
-    if login_id is None and cookie_id and cookie_password and login(cookie_id, cookie_password, encrypted=True):
-        session['id'] = cookie_id
-        login_id = cookie_id
 
     with get_connection() as database:
+        if login_id is None \
+                and cookie_id and cookie_password \
+                and login(cookie_id, cookie_password, database, encrypted=True):
+            session['id'] = cookie_id
+            login_id = cookie_id
+            users.update_last_interaction(cookie_id, database)
+
         games_list: list[list[Game]] = [list(), list(), list()]
 
         if login_id:
