@@ -19,6 +19,7 @@
 | games      | int    | 게임을 플레이한 횟수    |
 | color      | int    | 주로 사용하는 네마의 색상 |
 | language   | string | 페이지를 표시할 언어    |
+| rating     | double | 레이팅 점수         |
 
 * `user.color`: 6자리 HTML 16진수 색상 코드를 그대로 10진수로 변환한 것을 사용한다.
 * `user.language`: 다음 중 하나를 사용한다.
