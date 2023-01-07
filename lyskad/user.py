@@ -50,3 +50,6 @@ class User:
 
     def get_formatted_rating(self) -> str:
         return format(self.calculate_rating(), '.3f')
+
+    def get_color_code(self) -> str:
+        return f'#{self.color:06x}'

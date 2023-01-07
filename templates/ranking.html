@@ -6,7 +6,7 @@
         {% for user in users %}
             <li>
                 <strong>{{ user.get_formatted_rating() }}</strong> -
-                <a href="/profile/{{ user.id }}">{{ user.id }}</a>
+                <a href="/profile/{{ user.id }}">{{ user.id }}</a> <span style="color: {{ user.get_color_code() }};">⬤</span>
             </li>
         {% endfor %}
     </ol>
