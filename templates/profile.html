@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+    <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
     <script>
         window.addEventListener("load", () => {
           const userColorSpan = document.querySelector("#user-color__{{ user.id.replace('.', '-').replace(' ', '-') }}");
@@ -17,7 +18,7 @@
 {% endblock %}
 
 {% block content %}
-    <h1>{{ user.id }}<span id="user-color__{{ user.id.replace('.', '-').replace(' ', '-') }}"> ⬤</span></h1>
+    <h1>{{ user.id }} <span id="user-color__{{ user.id.replace('.', '-').replace(' ', '-') }}">⬤</span></h1>
     {% if user.games > 0 %}
         <ul>
             <li>{{ get_language('profile.joined_at') }} : {{ user.joined_at }}</li>
