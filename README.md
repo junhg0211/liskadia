@@ -11,16 +11,16 @@
 
 ### User
 
-| FIELD            | TYPE     | DESCRIPTION    |
-|------------------|----------|----------------|
-| id               | string   | 유저 아이디         |
-| _password_       | string   | 비밀번호           |
-| wins             | int      | 게임을 이긴 횟수      |
-| games            | int      | 게임을 플레이한 횟수    |
-| color            | int      | 주로 사용하는 네마의 색상 |
-| language         | string   | 페이지를 표시할 언어    |
-| rating           | double   | 레이팅 점수         |
-| last_interaction | datetime | 마지막으로 상호작용한 시각 |
+| FIELD            | TYPE        | DESCRIPTION    |
+|------------------|-------------|----------------|
+| id               | varchar(30) | 유저 아이디         |
+| _password_       | varchar(64) | 비밀번호           |
+| wins             | int         | 게임을 이긴 횟수      |
+| games            | int         | 게임을 플레이한 횟수    |
+| color            | int         | 주로 사용하는 네마의 색상 |
+| language         | varchar(7)  | 페이지를 표시할 언어    |
+| rating           | double      | 레이팅 점수         |
+| last_interaction | datetime    | 마지막으로 상호작용한 시각 |
 
 * `user.color`: 6자리 HTML 16진수 색상 코드를 그대로 10진수로 변환한 것을 사용한다.
 * `user.language`: 다음 중 하나를 사용한다.
@@ -65,14 +65,14 @@
 
 ### Game
 
-| FIELD      | TYPE     | DESCRIPTION     |
-|------------|----------|-----------------|
-| id         | int      | 게임 아이디          |
-| direction  | boolean  | 네마 순환의 방향       |
-| state      | int      | 게임 진행 상태        |
-| max_score  | int      | 게임 종료에 필요한 점수 수 |
-| created_at | datetime | 게임 생성 시각        |
-| created_by | user.id  | 게임을 생성한 유저      |
+| FIELD      | TYPE         | DESCRIPTION     |
+|------------|--------------|-----------------|
+| id         | int          | 게임 아이디          |
+| direction  | boolean      | 네마 순환의 방향       |
+| state      | int          | 게임 진행 상태        |
+| max_score  | unsigned int | 게임 종료에 필요한 점수 수 |
+| created_at | datetime     | 게임 생성 시각        |
+| created_by | user.id      | 게임을 생성한 유저      |
 
 #### GET `/games`
 게임 목록 불러오기
