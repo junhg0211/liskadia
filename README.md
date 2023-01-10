@@ -63,6 +63,14 @@
 #### ~~DELETE `/users/{user.id}`*~~
 ~~유저 삭제하기~~
 
+### RatingHistory
+
+| FIELD  | TYPE     | DESCRIPTION |
+|--------|----------|-------------|
+| id     | user.id  | 유저 아이디      |
+| rating | double   | 레이팅 점수      |
+| time   | datetime | 레이팅 계산 시점   |
+
 ### Game
 
 | FIELD      | TYPE         | DESCRIPTION     |

@@ -340,7 +340,8 @@ def post_games_id_put(game_id: int, nema_position: int):
 
             users.add_exp_for_game(game.id, database)
             users.add_wins(places[0], game.id, database)
-            users.apply_ratings(map(lambda id_: users.get(id_, database), places), database)
+            now = datetime.now()
+            users.apply_ratings(map(lambda id_: users.get(id_, database), places), database, now)
 
         users.update_last_interaction(user.id, database)
 

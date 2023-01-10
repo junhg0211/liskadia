@@ -115,10 +115,14 @@ def add_wins(user_id: str, game_id: int, database: Connection):
         database.commit()
 
 
-def apply_ratings(users: Iterable[User], database: Connection):
+def apply_ratings(users: Iterable[User], database: Connection, time: Optional[datetime] = None):
+    if time is None:
+        time = datetime.now()
     with database.cursor() as cursor:
         for user in users:
-            cursor.execute('UPDATE user SET rating = %s WHERE id = %s', (user.calculate_rating(), user.id))
+            rating = user.calculate_rating()
+            cursor.execute('UPDATE user SET rating = %s WHERE id = %s', (rating, user.id))
+            cursor.execute('INSERT INTO rating_history VALUES (%s, %s, %s)', (user.id, rating, time))
         database.commit()
 
 
