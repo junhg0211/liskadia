@@ -101,7 +101,7 @@ def post_login():
 
     res = make_response(redirect('/'))
     if remember_me == 'on':
-        until = datetime.now() + timedelta(days=during_day)
+        until = datetime.utcnow() + timedelta(days=during_day)
         res.set_cookie('id', user_id, expires=until)
         res.set_cookie('password', encrypt(password, user_id), expires=until)
 
@@ -352,7 +352,7 @@ def post_games_id_put(game_id: int, nema_position: int):
 
             users.add_exp_for_game(game.id, database)
             users.add_wins(places[0], game.id, database)
-            now = datetime.now()
+            now = datetime.utcnow()
             users.apply_ratings(map(lambda id_: users.get(id_, database), places), database, now)
 
         users.update_last_interaction(user.id, database)

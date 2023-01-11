@@ -16,7 +16,7 @@ def get(user_id: str, database: Connection) -> Iterable[RatingHistory]:
 
 def apply(user_id: str, rating: float, database: Connection, time: Optional[datetime] = None):
     if time is None:
-        time = datetime.now()
+        time = datetime.utcnow()
     with database.cursor(DictCursor) as cursor:
         cursor.execute('INSERT INTO rating_history VALUES (%s, %s, %s)', (user_id, rating, time))
         database.commit()
