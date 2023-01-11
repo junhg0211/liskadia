@@ -14,6 +14,8 @@
 
           userColorSpan.style.color = color;
         });
+
+        let USER_ID = '{{ user.id }}';
     </script>
     <title>Liskadia - @{{ user.id }}</title>
 {% endblock %}
@@ -27,6 +29,7 @@
             <li>{{ get_language('profile.winning_percentage') }} : {{ user.wins }} / {{ user.games }} = {{ user.wins / user.games }}</li>
             <li>{{ get_language('profile.rating') }} : {{ user.get_formatted_rating() }} #{{ ranking_place }}</li>
         </ul>
+        <canvas id="rating-history"></canvas>
     {% endif %}
     <h2>{{ get_language('games.joined_games') }}</h2>
     {% if played_games %}
