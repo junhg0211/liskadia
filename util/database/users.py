@@ -117,7 +117,7 @@ def add_wins(user_id: str, game_id: int, database: Connection):
 
 def apply_ratings(users: Iterable[User], database: Connection, time: Optional[datetime] = None):
     if time is None:
-        time = datetime.now()
+        time = datetime.utcnow()
     with database.cursor() as cursor:
         for user in users:
             rating = user.calculate_rating()
@@ -128,7 +128,7 @@ def apply_ratings(users: Iterable[User], database: Connection, time: Optional[da
 
 def update_last_interaction(user_id: str, database: Connection, last_interaction: Optional[datetime] = None):
     if last_interaction is None:
-        last_interaction = datetime.now()
+        last_interaction = datetime.utcnow()
     with database.cursor() as cursor:
         cursor.execute('UPDATE user SET last_interaction = %s WHERE id = %s', (last_interaction, user_id))
         database.commit()

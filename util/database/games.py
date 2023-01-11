@@ -44,7 +44,7 @@ def new(created_by: str, direction: Optional[bool], max_score: int, database: Co
         game_id = cursor.fetchone()[0]
         cursor.execute(
             'INSERT INTO game (direction, max_score, created_at, created_by) VALUES (%s, %s, %s, %s)',
-            (direction, max_score, datetime.now(), created_by)
+            (direction, max_score, datetime.utcnow(), created_by)
         )
         database.commit()
     return game_id

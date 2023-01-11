@@ -8,7 +8,7 @@ from lyskad import Game, Score
 
 
 def new(user_id: str, game_id: int, database: Connection):
-    joined_at = datetime.now()
+    joined_at = datetime.utcnow()
     with database.cursor() as cursor:
         cursor.execute("INSERT INTO participant VALUES (%s, %s, %s, NULL)", (user_id, game_id, joined_at))
         database.commit()
