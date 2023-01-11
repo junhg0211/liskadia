@@ -51,22 +51,28 @@ window.addEventListener('DOMContentLoaded', () => {
       }
 
       // noinspection JSCheckFunctionSignatures
-      minTime = new Date(minTime);
-      maxTime = new Date(maxTime);
+      minTime = Math.max(new Date() - 1000*60*60*24*90, minTime);
+      maxTime = new Date();
 
       context.beginPath();
+      let lastY;
       history.forEach(row => {
         let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 0, canvas.width);
         let y = linearInterpolation(row['rating'], minRating, maxRating, canvas.height, 0);
 
         context.lineTo(x, y);
-        context.stroke();
+        lastY = y;
+      });
+      context.lineTo(canvas.width, lastY);
+      context.stroke();
+
+      history.forEach(row => {
+        let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 0, canvas.width);
+        let y = linearInterpolation(row['rating'], minRating, maxRating, canvas.height, 0);
+
         context.beginPath();
         context.arc(x, y, 3, 0, 2*Math.PI);
         context.stroke();
-        context.beginPath();
-        context.moveTo(x, y);
       });
-      context.stroke();
     });
 });
