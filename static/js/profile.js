@@ -54,18 +54,18 @@ window.addEventListener('DOMContentLoaded', () => {
       minTime = new Date(minTime);
       maxTime = new Date(maxTime);
 
-      let notMoved;
       context.beginPath();
       history.forEach(row => {
         let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 0, canvas.width);
         let y = linearInterpolation(row['rating'], minRating, maxRating, canvas.height, 0);
 
-        if (notMoved) {
-          context.moveTo(x, y);
-          notMoved = false;
-        } else {
-          context.lineTo(x, y);
-        }
+        context.lineTo(x, y);
+        context.stroke();
+        context.beginPath();
+        context.arc(x, y, 3, 0, 2*Math.PI);
+        context.stroke();
+        context.beginPath();
+        context.moveTo(x, y);
       });
       context.stroke();
     });
