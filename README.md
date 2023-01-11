@@ -71,6 +71,9 @@
 | rating | double   | 레이팅 점수      |
 | time   | datetime | 레이팅 계산 시점   |
 
+#### GET `/ratings/{user.id}`
+유저의 레이팅 이력 불러오기
+
 ### Game
 
 | FIELD      | TYPE         | DESCRIPTION     |

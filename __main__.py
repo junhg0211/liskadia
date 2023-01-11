@@ -11,7 +11,7 @@ from lyskad import User, Nema, calculate_score_by
 from lyskad.game import GameState, Game
 from lyskad.nema import is_valid_position
 from util import get_string, encrypt, get_language, DEFAULT_LANGUAGE
-from util.database import users, games, participants, nemas, get_connection, scores
+from util.database import users, games, participants, nemas, get_connection, scores, histories
 
 app = Flask(__name__)
 app.secret_key = sha256('ydng0fug lrid2uf'.encode()).hexdigest()
@@ -154,6 +154,17 @@ def delete_users_id(user_id: str):
 
         users.delete_user(user_id, database)
     return message('OK', 200)
+
+
+@app.route('/ratings/<user_id>', methods=['GET'])
+def get_ratings_id(user_id: str):
+    with get_connection() as database:
+        if not users.exists(user_id, database):
+            return message(get_string('client_error.user_not_found'), 404)
+
+        history = list(histories.get(user_id, database))
+
+    return message('OK', 200, history=history)
 
 
 @app.route('/games', methods=['GET'])
