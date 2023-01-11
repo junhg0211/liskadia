@@ -157,6 +157,8 @@ function updateNemas() {
     }))
     .then(updateNextTurn);
 
+  if (gameState !== 1) return;
+
   // noinspection JSIgnoredPromiseFromCall
   audioes[Math.floor(Math.random() * 5)].play();
 }
