@@ -68,6 +68,7 @@ def post_users_new():
             return message(get_string('client_error.duplicated_id'), 409)
 
         users.new(id_, password, color, language, database)
+        histories.apply(id_, 0, database)
 
     return redirect('/')
 
