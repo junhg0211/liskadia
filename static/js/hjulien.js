@@ -108,6 +108,14 @@ function checkMeta() {
   lastNemaCountCheck = now;
 }
 
+let audioes = [
+  new Audio('/static/wav/nema1.wav'),
+  new Audio('/static/wav/nema2.wav'),
+  new Audio('/static/wav/nema3.wav'),
+  new Audio('/static/wav/nema4.wav'),
+  new Audio('/static/wav/nema5.wav')
+];
+
 function updateNemas() {
   nemaHistoryTable.children[0].innerHTML = nemaHistoryTable.rows[0].innerHTML;
   nemas.length = 0;
@@ -148,6 +156,9 @@ function updateNemas() {
       tr.appendChild(td);
     }))
     .then(updateNextTurn);
+
+  // noinspection JSIgnoredPromiseFromCall
+  audioes[Math.floor(Math.random() * 5)].play();
 }
 
 let meInGame = false;
