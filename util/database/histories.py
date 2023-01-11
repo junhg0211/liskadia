@@ -9,7 +9,7 @@ from lyskad import RatingHistory
 
 def get(user_id: str, database: Connection) -> Iterable[RatingHistory]:
     with database.cursor(DictCursor) as cursor:
-        cursor.execute('SELECT * FROM rating_history WHERE user_id = %s', user_id)
+        cursor.execute('SELECT * FROM rating_history WHERE user_id = %s ORDER BY time', user_id)
         for row in cursor.fetchall():
             yield RatingHistory.get(row)
 
