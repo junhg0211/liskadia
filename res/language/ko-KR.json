@@ -7,6 +7,7 @@
     "login": "로그인",
     "register": "회원가입",
     "ranking": "랭킹",
+    "setting": "설정",
     "footer": {
       "github_repository": "GitHub 레포지토리",
       "contact": "문의",
@@ -70,5 +71,10 @@
     "password_confirm": "비밀번호 확인",
     "nema_color": "네마 색상",
     "language": "언어"
+  },
+  "setting": {
+    "setting": "설정",
+    "select_language": "언어 선택 (선택사항)",
+    "apply": "적용"
   }
 }

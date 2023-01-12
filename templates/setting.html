@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>{{ get_language('setting.setting') }}</h1>
+    <form action="/users/edit" method="post">
+        <p>
+            <label for="language">{{ get_language('register.language') }}</label>
+            <select name="language" id="language">
+                <option value="" selected disabled hidden>{{ get_language('setting.select_language') }}</option>
+                <option value="en-US">English (United States)</option>
+                <option value="ko-KR">한국어 (대한민국)</option>
+                <option value="ja-JP">日本語（日本）</option>
+                <option value="ZA-ZS">Zasospika (Eraxeniluins dé Zasoque)</option>
+            </select>
+        </p>
+        <p>
+            <label for="color">{{ get_language('register.nema_color') }}</label>
+            <input type="color" id="color" name="color" value="{{ user.get_color_code() }}">
+        </p>
+        <input type="submit" value="{{ get_language('setting.apply') }}">
+    </form>
+{% endblock %}

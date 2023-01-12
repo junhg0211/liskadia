@@ -7,6 +7,7 @@
     "login": "Login",
     "register": "Novénuiz",
     "ranking": "Pailindy",
+    "setting": "Vlanque",
     "footer": {
       "github_repository": "Repository die GitHub",
       "contact": "Uatemp",
@@ -70,5 +71,10 @@
     "password_confirm": "Ammirapotataupas",
     "nema_color": "Neminoc",
     "language": "Spika"
+  },
+  "setting": {
+    "setting": "Vlanque",
+    "select_language": "Spikal ast (Unasàh)",
+    "apply": "Poirn"
   }
 }

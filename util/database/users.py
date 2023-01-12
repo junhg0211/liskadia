@@ -132,3 +132,15 @@ def update_last_interaction(user_id: str, database: Connection, last_interaction
     with database.cursor() as cursor:
         cursor.execute('UPDATE user SET last_interaction = %s WHERE id = %s', (last_interaction, user_id))
         database.commit()
+
+
+def set_language(user_id: str, language: str, database: Connection):
+    with database.cursor() as cursor:
+        cursor.execute('UPDATE user SET language = %s WHERE id = %s', (language, user_id))
+        database.commit()
+
+
+def set_color(user_id: str, color: int, database: Connection):
+    with database.cursor() as cursor:
+        cursor.execute('UPDATE user SET color = %s WHERE id = %s', (color, user_id))
+        database.commit()

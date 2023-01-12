@@ -7,6 +7,7 @@
     "login": "Login",
     "register": "Register",
     "ranking": "Ranking",
+    "setting": "Setting",
     "footer": {
       "github_repository": "GitHub Repository",
       "contact": "Contact",
@@ -70,5 +71,10 @@
     "password_confirm": "Password Confirm",
     "nema_color": "Nema Color",
     "language": "Language"
+  },
+  "setting": {
+    "setting": "Setting",
+    "select_language": "Select Language (Optional)",
+    "apply": "Apply"
   }
 }

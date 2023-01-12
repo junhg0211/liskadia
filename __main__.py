@@ -118,43 +118,27 @@ def get_logout():
     return res
 
 
-@app.route('/users/<user_id>', methods=['PATCH'])
-def patch_users_id(user_id: str):
+@app.route('/users/edit', methods=['POST'])
+def patch_users_id():
+    if (login_id := session.get('id')) is None:
+        return message(get_string('client_error.unauthorized'), 401)
+
+    data = parse_data(request)
+
     with get_connection() as database:
-        try:
-            user = users.get(user_id, database)
-        except ValueError:
-            return message(get_string('client_error.user_not_found'), 404)
+        user = users.get(login_id, database)
 
-        if (login_id := session.get('id')) is None:
-            return message(get_string('client_error.unauthorized'), 401)
+        color = int(data.get('color')[1:], 16)
+        if user.color != color:
+            users.set_color(login_id, color, database)
+            print(color)
 
-        if login_id != user.id:
-            return message(get_string('client_error.forbidden'), 403)
+        language = data.get('language')
+        if language:
+            users.set_language(login_id, language, database)
+            print(language)
 
-        data = request.get_json()
-        if password := data.get('password'):
-            users.change_password(user, password, database)
-
-    return message('OK', 200)
-
-
-@app.route('/users/<user_id>', methods=['DELETE'])
-def delete_users_id(user_id: str):
-    with get_connection() as database:
-        try:
-            user = users.get(user_id, database)
-        except ValueError:
-            return message(get_string('client_error.user_not_found'), 404)
-
-        if (login_id := session.get('id')) is None:
-            return message(get_string('client_error.unauthorized'), 401)
-
-        if user.id != login_id:
-            return message(get_string('client_error.forbidden'), 403)
-
-        users.delete_user(user_id, database)
-    return message('OK', 200)
+    return redirect('/')
 
 
 @app.route('/ratings/<user_id>', methods=['GET'])
@@ -516,6 +500,21 @@ def get_ranking():
     return render_template(
         'ranking.html', users=user_list, get_language=lambda x: get_language(x, language),
         login_id=login_id)
+
+
+@app.route('/setting', methods=['GET'])
+def get_setting():
+    with get_connection() as database:
+        language = DEFAULT_LANGUAGE
+        if (login_id := session.get('id')) is None:
+            return message(get_string('client_error.unauthorized'), 401)
+
+        login_user = users.get(login_id, database)
+        language = login_user.language
+
+    return render_template(
+        'setting.html', get_language=lambda x: get_language(x, language), login_id=login_id,
+        user=login_user)
 
 
 if __name__ == '__main__':
