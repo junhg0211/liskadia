@@ -2,13 +2,14 @@
 
 {% block head %}
     <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
+    <script src="{{ url_for('static', filename='js/svg.js') }}"></script>
     <script src="{{ url_for('static', filename='js/hjulien.js') }}"></script>
     <title>Liskadia - #{{ game.id }}</title>
 {% endblock %}
 
 {% block content %}
     <div class="game-container">
-        <canvas id="hjulien"></canvas>
+        <svg id="hjulien"></svg>
         <div class="game-metadata">
             <h2>
                 #<span id="game-metadata__id">{{ game.id }}</span>

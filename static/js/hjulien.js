@@ -1,5 +1,4 @@
 let hjulien;
-let hjulienCtx;
 
 let nemaHistoryTable;
 let stateSpan;
@@ -74,15 +73,13 @@ function checkMeta() {
         let pointCount = userScores[attacker];
 
         if (Object.keys(scoredUserCounts).length < pointCount) {
-          scoredUserCounts.push(1)
+          scoredUserCounts.push(1);
         } else {
-          scoredUserCounts[pointCount - 1] += 1
+          scoredUserCounts[pointCount - 1] += 1;
         }
         let count = scoredUserCounts[pointCount - 1];
         userInformation[attacker] = [pointCount, -count];
       });
-
-      console.log(userInformation);
 
       rankingList.innerHTML = '';
       Object.entries(userInformation)
@@ -155,7 +152,8 @@ function updateNemas() {
       td.innerText = nema['created_at'];
       tr.appendChild(td);
     }))
-    .then(updateNextTurn);
+    .then(updateNextTurn)
+    .then(drawNemas);
 
   if (gameState !== 1) return;
 
@@ -237,7 +235,10 @@ function updateColors() {
       } else if (gameState === 2) {
         stateSpan.innerText = '(FINISHED)';
       }
-    }).then(updateNextTurn);
+    })
+    .then(updateNextTurn)
+    .then(drawScores)
+    .then(drawNemas);
 }
 
 function updateNextTurn() {
@@ -303,32 +304,29 @@ function nemaRect(xi, yi) {
   return [x, y, width, height];
 }
 
+let highlightNema;
+
 function drawHighlightNema() {
   if (!(0 <= floatX && floatX < 10 && 0 <= floatY && floatY < 10)) return;
   if (gameState >= 2) return;
 
   let [x, y, width, height] = nemaRect(floatX, floatY);
 
-  hjulienCtx.strokeStyle = "#f7f7f97f";
-  hjulienCtx.lineWidth = 3;
-  hjulienCtx.beginPath();
-  hjulienCtx.moveTo(x, y);
-  hjulienCtx.lineTo(x + width, y);
-  hjulienCtx.lineTo(x + width, y + height);
-  hjulienCtx.lineTo(x, y + height);
-  hjulienCtx.lineTo(x, y);
-  hjulienCtx.stroke();
+  configureRect(highlightNema, x, y, width, height);
 }
 
+let nemaGroup;
+
 function drawNemas() {
+  nemaGroup.innerHTML = '';
+
   nemas.forEach(nema => {
     let [xi, yi, id] = nema;
     let color = colors[id];
 
     let [x, y, width, height] = nemaRect(xi, yi);
 
-    hjulienCtx.fillStyle = color;
-    hjulienCtx.fillRect(x, y, width, height);
+    fillRect(nemaGroup, x, y, width, height, color);
   });
 
   /*
@@ -337,19 +335,22 @@ function drawNemas() {
    */
 }
 
+let lastNemaIndicator;
 function drawLastNema() {
   if (nemas.length === 0) return;
+  if (lastNemaIndicator === undefined)
+    lastNemaIndicator = drawCircle(hjulien, 0, 0, unit / 2, 'black', 2);
 
   let [xi, yi, _] = nemas[nemas.length-1];
 
   let [x, y] = [2 * unit * (xi + 1.75), 2 * unit * (yi + 1.75)];
 
-  hjulienCtx.strokeStyle = "black";
-  hjulienCtx.lineWidth = 1;
-  hjulienCtx.beginPath();
-  hjulienCtx.arc(x, y, unit / 2, 0, 2 * Math.PI);
-  hjulienCtx.stroke();
+  lastNemaIndicator.setAttribute('cx', x.toString());
+  lastNemaIndicator.setAttribute('cy', y.toString());
+  lastNemaIndicator.setAttribute('cy', y.toString());
 }
+
+let scoresGroup;
 
 function drawScores() {
   if (scores === undefined) return;
@@ -357,6 +358,8 @@ function drawScores() {
 
   if (scoreboardUpdate)
     scoreboardDiv.innerHTML = '';
+
+  scoresGroup.innerHTML = '';
 
   let scoreboard = {};
   scores.forEach(score => {
@@ -382,102 +385,92 @@ function drawScores() {
     let [sxi, syi] = [score['position'] % 10, Math.floor(score['position'] / 10)];
     let [sx, sy] = [(sxi+1.75) * 2*unit, (syi+1.75) * 2*unit];
 
-    hjulienCtx.strokeStyle = colors[attacker];
-    hjulienCtx.lineWidth = 5;
-    hjulienCtx.beginPath();
-    hjulienCtx.arc(sx, sy, unit / 2, 0, 2*Math.PI);
-    hjulienCtx.stroke();
+    drawCircle(scoresGroup, sx, sy, unit / 2, colors[attacker], 5);
 
     let [bxi, byi] = [score['by_nema_position'] % 10, Math.floor(score['by_nema_position'] / 10)];
     let [bx, by] = [(bxi+1.75) * 2*unit, (byi+1.75) * 2*unit];
 
-    hjulienCtx.lineWidth = 2;
-    hjulienCtx.beginPath();
-    hjulienCtx.moveTo(sx, sy);
-    hjulienCtx.lineTo(bx, by);
-    hjulienCtx.stroke();
+    drawLine(scoresGroup, sx, sy, bx, by, colors[attacker], 2)
   });
 
   scoreboardUpdate = false;
 }
 
 function render() {
-  drawBackground();
-
-  drawNemas();
+  // drawNemas();
 
   drawHighlightNema();
-
-  drawScores();
 
   drawLastNema();
 }
 
 function drawBackground() {
-  hjulienCtx.fillStyle = "#2c2c2c";
-  hjulienCtx.fillRect(0, 0, hjulien.width, hjulien.height);
+  let background = newGroup();
+
+  fillRect(background, 0, 0, HJULIEN_WIDTH, HJULIEN_HEIGHT, '#2c2c2c');
 
   let x, y;
-  hjulienCtx.fillStyle = "#f7f7f9";
+  let color;
   for (let i = 0; i < 9; i++) {
     y = 2 * unit * i + 4 * unit;
     for (let j = 0; j < 9; j++) {
       x = 2 * unit * j + 4 * unit;
-      if (i === 4 && j === 4) hjulienCtx.fillStyle = "#fdde59";
-
-      hjulienCtx.fillRect(x, y, unit, unit);
-
-      if (i === 4 && j === 4) hjulienCtx.fillStyle = "#f7f7f9";
+      color = i === 4 && j === 4 ? '#fdde59' : '#f7f7f9';
+      fillRect(background, x, y, unit, unit, color);
     }
   }
 
   y = 2 * unit;
   for (let i = 0; i < 5; i++) {
     x = (hjulienDirection ? 4 : 2) * unit + 4 * unit * i;
-    hjulienCtx.fillRect(x, y, 3 * unit, unit);
+    fillRect(background, x, y, 3 * unit, unit, '#f7f7f9');
   }
 
   x = 2 * unit;
   for (let i = 0; i < 5; i++) {
     y = (hjulienDirection ? 2 : 4) * unit + 4 * unit * i;
-    hjulienCtx.fillRect(x, y, unit, 3 * unit);
+    fillRect(background, x, y, unit, 3 * unit, '#f7f7f9');
   }
 
   y = 22 * unit;
   for (let i = 0; i < 5; i++) {
     x = (hjulienDirection ? 2 : 4) * unit + 4 * unit * i;
-    hjulienCtx.fillRect(x, y, 3 * unit, unit);
+    fillRect(background, x, y, 3 * unit, unit, '#f7f7f9');
   }
 
   x = 22 * unit;
   for (let i = 0; i < 5; i++) {
     y = (hjulienDirection ? 4 : 2) * unit + 4 * unit * i;
-    hjulienCtx.fillRect(x, y, unit, 3 * unit);
+    fillRect(background, x, y, unit, 3 * unit, '#f7f7f9');
   }
 
-  hjulienCtx.textAlign = "center";
-  hjulienCtx.textBaseline = "middle";
   for (let i = 0; i < 10; i++) {
-    hjulienCtx.fillText(i.toString(), 3.5 * unit + i * 2 * unit, unit);
-    hjulienCtx.fillText(i.toString(), 3.5 * unit + i * 2 * unit, 24 * unit);
+    fillText(background, 3.5 * unit + i * 2 * unit, unit, i.toString(), '#f7f7f9');
+    fillText(background, 3.5 * unit + i * 2 * unit, 24 * unit, i.toString(), '#f7f7f9');
 
-    hjulienCtx.fillText(i.toString(), unit, 3.5 * unit + i * 2 * unit);
-    hjulienCtx.fillText(i.toString(), 24 * unit, 3.5 * unit + i * 2 * unit);
+    fillText(background, unit, 3.5 * unit + i * 2 * unit, i.toString(), '#f7f7f9');
+    fillText(background, 24 * unit, 3.5 * unit + i * 2 * unit, i.toString(), '#f7f7f9');
   }
+
+  hjulien.appendChild(background);
 }
+
+let HJULIEN_WIDTH = 800;
+let HJULIEN_HEIGHT = 800;
 
 function loadHjulien() {
   hjulien = document.querySelector("#hjulien");
-  hjulienCtx = hjulien.getContext("2d");
+  hjulien.setAttribute('width', HJULIEN_WIDTH.toString());
+  hjulien.setAttribute('height', HJULIEN_HEIGHT.toString());
 
   GAME_ID = parseInt(document.querySelector("#game-metadata__id").textContent);
 
-  hjulien.width = 800;
-  hjulien.height = 800;
-
-  unit = hjulien.width / 25;
+  unit = HJULIEN_WIDTH / 25;
 
   drawBackground();
+  nemaGroup = newGroup(); hjulien.appendChild(nemaGroup);
+  highlightNema = drawRect(hjulien, 0, 0, 0, 0, '#f7f7f980', 3);
+  scoresGroup = newGroup(); hjulien.appendChild(scoresGroup);
 
   setInterval(() => {
     tick();
@@ -497,7 +490,7 @@ function loadHjulien() {
   rankingList = document.querySelector('#ranking');
 }
 
-document.addEventListener('DOMContentLoaded', loadHjulien);
+window.addEventListener('DOMContentLoaded', loadHjulien);
 document.addEventListener('mousemove', e => {
   let rect = hjulien.getBoundingClientRect();
   mouseX = e.clientX - rect.left;
