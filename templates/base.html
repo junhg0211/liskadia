@@ -35,7 +35,15 @@
         {% endblock %}
     </article>
     <footer>
-      <p><a href="https://github.com/junhg0211/liskadia">GitHub</a></p>
+      <small>
+        <p>
+          <a href="https://github.com/junhg0211/liskadia">{{ get_language('base.footer.github_repository') }}</a>
+          <a href="mailto:junhg0211@gmail.com">{{ get_language('base.footer.contact') }}</a>
+        </p>
+        <p>
+        {{ get_language('base.footer.cc')|safe }}
+        </p>
+      </small>
     </footer>
 </body>
 </html>
