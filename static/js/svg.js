@@ -56,7 +56,7 @@ function drawCircle(at, x, y, r, color, stroke) {
   return circle;
 }
 
-function drawLine(at, x1, y1, x2, y2, color, stroke) {
+function drawLine(at, x1, y1, x2, y2, color, stroke, dashArray) {
   let line = document.createElementNS(URL, 'line');
   line.setAttribute('x1', x1.toString());
   line.setAttribute('y1', y1.toString());
@@ -64,6 +64,7 @@ function drawLine(at, x1, y1, x2, y2, color, stroke) {
   line.setAttribute('y2', y2.toString());
   line.setAttribute('stroke', color);
   line.setAttribute('stroke-width', stroke.toString());
+  if (dashArray) line.setAttribute('stroke-dasharray', dashArray);
   at.appendChild(line);
   return line;
 }

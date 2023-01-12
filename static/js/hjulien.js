@@ -394,7 +394,7 @@ function drawScores() {
     let [bxi, byi] = [score['by_nema_position'] % 10, Math.floor(score['by_nema_position'] / 10)];
     let [bx, by] = [(bxi+1.75) * 2*unit, (byi+1.75) * 2*unit];
 
-    drawLine(scoresGroup, sx, sy, bx, by, colors[attacker], 2)
+    drawLine(scoresGroup, sx, sy, bx, by, colors[attacker], 2, '2');
   });
 
   scoreboardUpdate = false;
