@@ -2,10 +2,7 @@ let URL = "http://www.w3.org/2000/svg"
 
 function fillRect(at, x, y, width, height, color) {
   let rect = document.createElementNS(URL, 'rect');
-  rect.setAttribute('x', x.toString());
-  rect.setAttribute('y', y.toString());
-  rect.setAttribute('width', width.toString());
-  rect.setAttribute('height', height.toString());
+  configureRect(rect, x, y, width, height);
   rect.setAttribute('fill', color);
   at.appendChild(rect);
   return rect;
@@ -13,12 +10,19 @@ function fillRect(at, x, y, width, height, color) {
 
 function drawRect(at, x, y, width, height, color, stroke) {
   let rect = document.createElementNS(URL, 'rect');
-  rect.setAttribute('x', x.toString());
-  rect.setAttribute('y', y.toString());
-  rect.setAttribute('width', width.toString());
-  rect.setAttribute('height', height.toString());
+  configureRect(rect, x, y, width, height);
   rect.setAttribute('fill', 'none');
   rect.setAttribute('stroke', color);
+  rect.setAttribute('stroke-width', stroke.toString());
+  at.appendChild(rect);
+  return rect;
+}
+
+function drawFillRect(at, x, y, width, height, color, strokeColor, stroke) {
+  let rect = document.createElementNS(URL, 'rect');
+  configureRect(rect, x, y, width, height);
+  rect.setAttribute('fill', color);
+  rect.setAttribute('stroke', strokeColor);
   rect.setAttribute('stroke-width', stroke.toString());
   at.appendChild(rect);
   return rect;
@@ -64,6 +68,7 @@ function drawLine(at, x1, y1, x2, y2, color, stroke, dashArray) {
   line.setAttribute('y2', y2.toString());
   line.setAttribute('stroke', color);
   line.setAttribute('stroke-width', stroke.toString());
+  line.setAttribute('stroke-linecap', 'round');
   if (dashArray) line.setAttribute('stroke-dasharray', dashArray);
   at.appendChild(line);
   return line;

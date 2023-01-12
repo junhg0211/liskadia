@@ -323,6 +323,12 @@ function drawHighlightNema() {
 
 let nemaGroup;
 
+function dimColor(color, amount) {
+  if (amount === undefined) amount = 0.7;
+  let [r, g, b] = color.substring(4, color.length-1).split(', ');
+  return `rgb(${r * 0.7874 * amount}, ${g * 0.2848 * amount}, ${b * 0.9278 * amount})`;
+}
+
 function drawNemas() {
   nemaGroup.innerHTML = '';
 
@@ -332,7 +338,7 @@ function drawNemas() {
 
     let [x, y, width, height] = nemaRect(xi, yi);
 
-    fillRect(nemaGroup, x, y, width, height, color);
+    drawFillRect(nemaGroup, x, y, width, height, color, dimColor(color), 1);
   });
 
   /*
@@ -341,11 +347,14 @@ function drawNemas() {
    */
 }
 
+let lastNemaIndicatorBackground;
 let lastNemaIndicator;
 function drawLastNema() {
   if (nemas.length === 0) return;
+  if (lastNemaIndicatorBackground === undefined)
+    lastNemaIndicatorBackground = drawCircle(hjulien, 0, 0, unit, '#f7f7f9', 4);
   if (lastNemaIndicator === undefined)
-    lastNemaIndicator = drawCircle(hjulien, 0, 0, unit / 2, 'black', 2);
+    lastNemaIndicator = drawCircle(hjulien, 0, 0, unit, '#2c2c2c', 2);
 
   let [xi, yi, _] = nemas[nemas.length-1];
 
@@ -354,6 +363,10 @@ function drawLastNema() {
   lastNemaIndicator.setAttribute('cx', x.toString());
   lastNemaIndicator.setAttribute('cy', y.toString());
   lastNemaIndicator.setAttribute('cy', y.toString());
+
+  lastNemaIndicatorBackground.setAttribute('cx', x.toString());
+  lastNemaIndicatorBackground.setAttribute('cy', y.toString());
+  lastNemaIndicatorBackground.setAttribute('cy', y.toString());
 }
 
 let scoresGroup;
@@ -390,13 +403,13 @@ function drawScores() {
     // draw score in hjulien
     let [sxi, syi] = [score['position'] % 10, Math.floor(score['position'] / 10)];
     let [sx, sy] = [(sxi+1.75) * 2*unit, (syi+1.75) * 2*unit];
-
-    drawCircle(scoresGroup, sx, sy, unit / 2, colors[attacker], 5);
-
     let [bxi, byi] = [score['by_nema_position'] % 10, Math.floor(score['by_nema_position'] / 10)];
     let [bx, by] = [(bxi+1.75) * 2*unit, (byi+1.75) * 2*unit];
 
-    drawLine(scoresGroup, sx, sy, bx, by, colors[attacker], 2, '2');
+    drawLine(scoresGroup, sx, sy, bx, by, dimColor(colors[attacker]), 4);
+    drawLine(scoresGroup, sx, sy, bx, by, colors[attacker], 2);
+    drawCircle(scoresGroup, sx, sy, unit / 2, dimColor(colors[attacker]), 7);
+    drawCircle(scoresGroup, sx, sy, unit / 2, colors[attacker], 5);
   });
 
   scoreboardUpdate = false;
