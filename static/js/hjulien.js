@@ -100,7 +100,8 @@ function checkMeta() {
 
           rankingList.appendChild(li);
         });
-    });
+    })
+    .then(drawScores);
 
   lastNemaCountCheck = now;
 }
