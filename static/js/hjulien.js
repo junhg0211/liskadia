@@ -283,7 +283,9 @@ function sendNema() {
   if (LOGIN_ID !== nextTurn) return;
 
   let nemaPosition = floatY * 10 + floatX;
-  fetch(`/games/${GAME_ID}/nemas/${nemaPosition}`, {method: 'POST'}).then(updateNemas);
+  fetch(`/games/${GAME_ID}/nemas/${nemaPosition}`, {method: 'POST'})
+    .then(updateNemas)
+    .then(() => lastNemaCountCheck = new Date() - 1500);
 }
 
 function tick() {
