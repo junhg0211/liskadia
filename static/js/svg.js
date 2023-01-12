@@ -68,6 +68,16 @@ function drawLine(at, x1, y1, x2, y2, color, stroke) {
   return line;
 }
 
+function drawPath(at, pathString, color, stroke) {
+  let path = document.createElementNS(URL, 'path');
+  path.setAttribute('d', pathString);
+  path.setAttribute('stroke', color);
+  path.setAttribute('stroke-width', stroke.toString());
+  path.setAttribute('fill', 'none');
+  at.appendChild(path);
+  return path;
+}
+
 function newGroup() {
   return document.createElementNS(URL, 'g');
 }

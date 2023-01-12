@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% block head %}
+    <script src="{{ url_for('static', filename='js/svg.js') }}"></script>
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
     <script>
         window.addEventListener("load", () => {
@@ -29,7 +30,7 @@
             <li>{{ get_language('profile.winning_percentage') }} : {{ user.wins }} / {{ user.games }} = {{ user.wins / user.games }}</li>
             <li>{{ get_language('profile.rating') }} : {{ user.get_formatted_rating() }} #{{ ranking_place }}</li>
         </ul>
-        <canvas id="rating-history"></canvas>
+        <svg id="rating-history" width="100%"></svg>
     {% endif %}
     <h2>{{ get_language('games.joined_games') }}</h2>
     {% if played_games %}

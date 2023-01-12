@@ -25,10 +25,8 @@ function linearInterpolation(v, a1, b1, a2, b2) {
 }
 
 window.addEventListener('DOMContentLoaded', () => {
-  let canvas = document.querySelector('#rating-history');
-  if (canvas === null) return;
-
-  let context = canvas.getContext('2d');
+  let ratingGraph = document.querySelector('#rating-history');
+  if (ratingGraph === null) return;
 
   fetch(`/ratings/${USER_ID}`)
     .then(r => r.json())
@@ -54,25 +52,31 @@ window.addEventListener('DOMContentLoaded', () => {
       minTime = Math.max(new Date() - 1000*60*60*24*90, minTime);
       maxTime = new Date();
 
-      context.beginPath();
+      let pathString = '';
       let lastY;
-      history.forEach(row => {
-        let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 0, canvas.width);
-        let y = linearInterpolation(row['rating'], minRating, maxRating, canvas.height, 0);
+      for (let i = 0; i < history.length; i++) {
+        let row = history[i];
 
-        context.lineTo(x, y);
+        let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 10, ratingGraph.clientWidth - 10);
+        let y = linearInterpolation(row['rating'], minRating, maxRating, ratingGraph.clientHeight - 10, 10);
+
+        console.log(x, y);
+
+        if (i === 0) {
+          pathString += `M ${x} ${y} `;
+        } else {
+          pathString += `L ${x} ${y} `;
+        }
         lastY = y;
-      });
-      context.lineTo(canvas.width, lastY);
-      context.stroke();
+      }
+      pathString += `L ${ratingGraph.clientWidth} ${lastY}`
+      drawPath(ratingGraph, pathString, 'black', 1);
 
       history.forEach(row => {
-        let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 0, canvas.width);
-        let y = linearInterpolation(row['rating'], minRating, maxRating, canvas.height, 0);
+        let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 10, ratingGraph.clientWidth - 10);
+        let y = linearInterpolation(row['rating'], minRating, maxRating, ratingGraph.clientHeight - 10, 10);
 
-        context.beginPath();
-        context.arc(x, y, 3, 0, 2*Math.PI);
-        context.stroke();
+        drawCircle(ratingGraph, x, y, 3, 'black', 1);
       });
     });
 });
