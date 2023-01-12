@@ -308,7 +308,10 @@ let highlightNema;
 
 function drawHighlightNema() {
   if (!(0 <= floatX && floatX < 10 && 0 <= floatY && floatY < 10)) return;
-  if (gameState >= 2) return;
+  if (gameState >= 2) {
+    configureRect(highlightNema, -10, -10, 0, 0);
+    return;
+  }
 
   let [x, y, width, height] = nemaRect(floatX, floatY);
 
@@ -407,7 +410,7 @@ function render() {
 function drawBackground() {
   let background = newGroup();
 
-  fillRect(background, 0, 0, HJULIEN_WIDTH, HJULIEN_HEIGHT, '#2c2c2c');
+  fillRect(background, 0, 0, hjulien.clientWidth, hjulien.clientHeight, '#2c2c2c');
 
   let x, y;
   let color;
@@ -455,17 +458,14 @@ function drawBackground() {
   hjulien.appendChild(background);
 }
 
-let HJULIEN_WIDTH = 800;
-let HJULIEN_HEIGHT = 800;
-
 function loadHjulien() {
   hjulien = document.querySelector("#hjulien");
-  hjulien.setAttribute('width', HJULIEN_WIDTH.toString());
-  hjulien.setAttribute('height', HJULIEN_HEIGHT.toString());
+  hjulien.setAttribute('width', '800');
+  hjulien.setAttribute('height', '800');
 
   GAME_ID = parseInt(document.querySelector("#game-metadata__id").textContent);
 
-  unit = HJULIEN_WIDTH / 25;
+  unit = hjulien.clientWidth / 25;
 
   drawBackground();
   nemaGroup = newGroup(); hjulien.appendChild(nemaGroup);
