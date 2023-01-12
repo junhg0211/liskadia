@@ -10,7 +10,7 @@ from pymysql import Connection
 from lyskad import User, Nema, calculate_score_by
 from lyskad.game import GameState, Game
 from lyskad.nema import is_valid_position
-from util import get_string, encrypt, get_language, DEFAULT_LANGUAGE
+from util import get_string, encrypt, get_language, DEFAULT_LANGUAGE, get_language_list_html
 from util.database import users, games, participants, nemas, get_connection, scores, histories
 
 app = Flask(__name__)
@@ -131,12 +131,10 @@ def patch_users_id():
         color = int(data.get('color')[1:], 16)
         if user.color != color:
             users.set_color(login_id, color, database)
-            print(color)
 
         language = data.get('language')
-        if language:
+        if user.language != language:
             users.set_language(login_id, language, database)
-            print(language)
 
     return redirect('/')
 
@@ -383,7 +381,9 @@ def get_register():
             user = users.get(login_id, database)
         language = user.language
 
-    return render_template('register.html', get_language=lambda x: get_language(x, language))
+    return render_template(
+        'register.html', get_language=lambda x: get_language(x, language),
+        language_list=get_language_list_html())
 
 
 @app.route('/login', methods=['GET'])
@@ -509,12 +509,12 @@ def get_setting():
         if (login_id := session.get('id')) is None:
             return message(get_string('client_error.unauthorized'), 401)
 
-        login_user = users.get(login_id, database)
-        language = login_user.language
+        user = users.get(login_id, database)
+        language = user.language
 
     return render_template(
         'setting.html', get_language=lambda x: get_language(x, language), login_id=login_id,
-        user=login_user)
+        user=user, language_list=get_language_list_html(user.language))
 
 
 if __name__ == '__main__':

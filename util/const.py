@@ -6,6 +6,8 @@ with open('res/string.json', 'r', encoding='utf-8') as file:
     _string = load(file)
 with open('res/secret.json', 'r', encoding='utf-8') as file:
     _secret = load(file)
+with open('res/languages.json', 'r', encoding='utf-8') as file:
+    _language_meta = load(file)
 
 _languages = dict()
 for filename in listdir('res/language'):
@@ -37,6 +39,15 @@ def get_language(directory: str, language: str):
         return parse(language, directory)
     except KeyError:
         return f'{{{directory}}}'
+
+
+def get_language_list_html(selected_language: str = DEFAULT_LANGUAGE):
+    result = list()
+    for code, name in _language_meta['name'].items():
+        selected = ' selected' if selected_language == code else ''
+        result.append(f'<option value="{code}"{selected}>{name}</option>')
+    result = '\n'.join(result)
+    return result
 
 
 def is_valid_language(string: str):

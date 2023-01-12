@@ -41,10 +41,7 @@
         <p>
             <label for="language">{{ get_language('register.language') }}</label>
             <select name="language" id="language">
-                <option value="en-US">English (United States)</option>
-                <option value="ko-KR" selected>한국어 (대한민국)</option>
-                <option value="ja-JP">日本語（日本）</option>
-                <option value="ZA-ZS">Zasospika (Eraxeniluins dé Zasoque)</option>
+                {{ language_list|safe }}
             </select>
         </p>
         <input type="submit" disabled id="submit" value="{{ get_language('register.register') }}">
