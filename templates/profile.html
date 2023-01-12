@@ -4,19 +4,19 @@
     <script src="{{ url_for('static', filename='js/svg.js') }}"></script>
     <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
     <script>
-        window.addEventListener("load", () => {
-          const userColorSpan = document.querySelector("#user-color__{{ user.id.replace('.', '-').replace(' ', '-') }}");
+      window.addEventListener("load", () => {
+        const userColorSpan = document.querySelector("#user-color__{{ user.id.replace('.', '-').replace(' ', '-') }}");
 
-          let color = {{ user.color }};
-          let r, g, b;
-          [g, b] = [Math.floor(color / 256), color % 256];
-          [r, g] = [Math.floor(g / 256), g % 256];
-          color = `rgb(${r}, ${g}, ${b})`;
+        let color = {{ user.color }};
+        let r, g, b;
+        [g, b] = [Math.floor(color / 256), color % 256];
+        [r, g] = [Math.floor(g / 256), g % 256];
+        color = `rgb(${r}, ${g}, ${b})`;
 
-          userColorSpan.style.color = color;
-        });
+        userColorSpan.style.color = color;
+      });
 
-        let USER_ID = '{{ user.id }}';
+      let USER_ID = '{{ user.id }}';
     </script>
     <title>Liskadia - @{{ user.id }}</title>
 {% endblock %}
@@ -27,7 +27,10 @@
         <ul>
             <li>{{ get_language('profile.joined_at') }} : {{ user.joined_at }}</li>
             <li>{{ get_language('profile.last_interaction') }} : {{ user.last_interaction }}</li>
-            <li>{{ get_language('profile.winning_percentage') }} : {{ user.wins }} / {{ user.games }} = {{ user.wins / user.games }}</li>
+            <li>
+                {{ get_language('profile.winning_percentage') }} :
+                {{ user.wins }} / {{ user.games }} = {{ user.wins / user.games }}
+            </li>
             <li>{{ get_language('profile.rating') }} : {{ user.get_formatted_rating() }} #{{ ranking_place }}</li>
         </ul>
         <svg id="rating-history" width="100%"></svg>
@@ -36,7 +39,9 @@
     {% if played_games %}
         <ul>
             {% for game in played_games %}
-                <li><a href="/game/{{ game.id }}">#{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}</a></li>
+                <li><a href="/game/{{ game.id }}">
+                    #{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}
+                </a></li>
             {% endfor %}
         </ul>
     {% else %}

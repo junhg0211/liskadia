@@ -5,46 +5,48 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css" />
+    <link rel="stylesheet" as="style" crossorigin
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
     {% block head %}
 
     {% endblock %}
     <title>Liskadia</title>
     <script>
-        const LOGIN_ID = '{{ login_id }}' === 'None' ? null : '{{ login_id }}';
+      const LOGIN_ID = '{{ login_id }}' === 'None' ? null : '{{ login_id }}';
     </script>
 </head>
 <body>
-    <nav>
-        <h1><a href="/">Liskadia</a></h1>
-        {% if login_id %}
-            {{ get_language('base.logined_as').format(login_id) }}
-            <a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a>
-            <a href="/logout">{{ get_language('base.logout') }}</a>
-            <a href="/new_game">{{ get_language('base.new_game') }}</a>
-            <a href="/setting">{{ get_language('base.setting') }}</a>
-        {% else %}
-            <a href="/login">{{ get_language('base.login') }}</a>
-            <a href="/register">{{ get_language('base.register') }}</a>
-        {% endif %}
-        <a href="/ranking">{{ get_language('base.ranking') }}</a>
-    </nav>
-    <article>
-        {% block content %}
+<nav>
+    <h1><a href="/">Liskadia</a></h1>
+    {% if login_id %}
+        {{ get_language('base.logined_as').format(login_id) }}
+        <a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a>
+        <a href="/logout">{{ get_language('base.logout') }}</a>
+        <a href="/new_game">{{ get_language('base.new_game') }}</a>
+        <a href="/setting">{{ get_language('base.setting') }}</a>
+    {% else %}
+        <a href="/login">{{ get_language('base.login') }}</a>
+        <a href="/register">{{ get_language('base.register') }}</a>
+    {% endif %}
+    <a href="/ranking">{{ get_language('base.ranking') }}</a>
+</nav>
+<article>
+    {% block content %}
 
-        {% endblock %}
-    </article>
-    <footer>
-      <small>
+    {% endblock %}
+</article>
+<footer>
+    <hr>
+    <small>
         <p>
-          <a href="https://github.com/junhg0211/liskadia">{{ get_language('base.footer.github_repository') }}</a>
-          <a href="mailto:junhg0211@gmail.com">{{ get_language('base.footer.contact') }}</a>
+            <a href="https://github.com/junhg0211/liskadia">{{ get_language('base.footer.github_repository') }}</a>
+            <a href="mailto:junhg0211@gmail.com">{{ get_language('base.footer.contact') }}</a>
         </p>
         <p>
-        {{ get_language('base.footer.cc')|safe }}
+            {{ get_language('base.footer.cc')|safe }}
         </p>
-      </small>
-    </footer>
+    </small>
+</footer>
 </body>
 </html>
