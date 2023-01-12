@@ -1,0 +1,20 @@
+name: Deploy Liskadia
+
+on:
+  push:
+    branches: [ "master" ]
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: SSH Command
+        uses: D3rHase/ssh-command-action@v0.2.1
+        with:
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          private_ssh_key: ${{ secrets.SSH_KEY }}
+          command: tmux send-keys -t deploy ^C "git pull ; sudo /usr/local/bin/python3.10 __main__.py" Enter
