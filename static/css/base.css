@@ -52,7 +52,7 @@ a:hover {
 }
 
 nav ul {
-    display: inline;
+    display: inline-block;
 }
 
 nav li {
@@ -70,6 +70,10 @@ nav li {
 
 .nav--right {
     text-align: right;
+}
+
+.nav--right ul li:last-child {
+    margin: 0;
 }
 
 nav {

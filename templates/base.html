@@ -22,10 +22,8 @@
     <div class="width-limiter">
         <div class="nav--flex">
             <div class="nav--left">
-                <span class="nav--title">
-                    <a href="/"><img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon"
-                             alt="{{ get_language('base.logo') }}"></a>
-                </span>
+                <a href="/"><img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon"
+                         alt="{{ get_language('base.logo') }}"></a>
                 <ul>
                     {% if login_id %}
                         <li><a href="/new_game">{{ get_language('base.new_game') }}</a></li>
@@ -45,11 +43,13 @@
                         <li><a href="/login">{{ get_language('base.login') }}</a></li>
                     {% endif %}
                 </ul>
-                <a href="/profile/{{ login_id }}">
-                    <svg width="2rem" height="2rem" class="nav--nema-color-indicator">
-                        <circle cx="1rem" cy="1rem" r="1rem" fill="#000000"></circle>
-                    </svg>
-                </a>
+                {% if login_id %}
+                    <a href="/profile/{{ login_id }}">
+                        <svg width="2rem" height="2rem" class="nav--nema-color-indicator">
+                            <circle cx="1rem" cy="1rem" r="1rem" fill="#000000"></circle>
+                        </svg>
+                    </a>
+                {% endif %}
             </div>
         </div>
     </div>
