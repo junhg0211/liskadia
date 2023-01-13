@@ -39,9 +39,7 @@
     {% if played_games %}
         <ul>
             {% for game in played_games %}
-                <li><a href="/game/{{ game.id }}">
-                    #{{ game.id }} --- {{ game.created_at }}, {{ game.created_by }}
-                </a></li>
+                <a href="/game/{{ game.id }}">{{ game.id }}</a>
             {% endfor %}
         </ul>
     {% else %}
