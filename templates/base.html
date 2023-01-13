@@ -46,7 +46,7 @@
                 {% if login_id %}
                     <a href="/profile/{{ login_id }}">
                         <svg width="2rem" height="2rem" class="nav--nema-color-indicator">
-                            <circle cx="1rem" cy="1rem" r="1rem" fill="#000000"></circle>
+                            <circle cx="1rem" cy="1rem" r="1rem" fill="{{ login_user.get_color_code() }}"></circle>
                         </svg>
                     </a>
                 {% endif %}

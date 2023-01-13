@@ -427,13 +427,14 @@ def get_game():
         for game in games.get_all(database, 20):
             games_list[game.state].append(game)
 
+        user = None
         language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             user = users.get(login_id, database)
             language = user.language
 
     return render_template(
-        'games.html', login_id=login_id,
+        'games.html', login_id=login_id, login_user=user,
         idle_games=games_list[0], ongoing_games=games_list[1], ended_games=games_list[2], joined_games=joined_games,
         get_language=lambda x: get_language(x, language))
 
@@ -448,18 +449,20 @@ def get_game_id(game_id: int):
 
         user_ids = sorted(participants.get_ids(game.id, database))
 
+        user = None
         language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             user = users.get(login_id, database)
             language = user.language
 
     return render_template(
-        'game.html', game=game, participants=user_ids, login_id=session.get('id'),
+        'game.html', game=game, participants=user_ids, login_id=session.get('id'), login_user=user,
         get_language=lambda x: get_language(x, language))
 
 
 @app.route('/new_game', methods=['GET'])
 def get_new_game():
+    user = None
     language = DEFAULT_LANGUAGE
     if login_id := session.get('id'):
         with get_connection() as database:
@@ -467,7 +470,7 @@ def get_new_game():
         language = user.language
 
     return render_template(
-        'new_game.html', login_id=session.get('id'),
+        'new_game.html', login_id=session.get('id'), login_user=user,
         get_language=lambda x: get_language(x, language))
 
 
@@ -483,6 +486,7 @@ def get_profile_id(user_id: str):
 
         ranking_place = users.get_ranking_place(user.id, database) + 1
 
+        login_user = None
         language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             login_user = users.get(login_id, database)
@@ -490,7 +494,7 @@ def get_profile_id(user_id: str):
 
     return render_template(
         'profile.html', user=user, played_games=played_games, login_id=session.get('id'), ranking_place=ranking_place,
-        get_language=lambda x: get_language(x, language))
+        get_language=lambda x: get_language(x, language), login_user=login_user)
 
 
 @app.route('/ranking', methods=['GET'])
@@ -498,6 +502,7 @@ def get_ranking():
     with get_connection() as database:
         user_list = list(users.get_by_ranking(database))
 
+        login_user = None
         language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             login_user = users.get(login_id, database)
@@ -505,7 +510,7 @@ def get_ranking():
 
     return render_template(
         'ranking.html', users=user_list, get_language=lambda x: get_language(x, language),
-        login_id=login_id)
+        login_id=login_id, login_user=login_user)
 
 
 @app.route('/setting', methods=['GET'])
@@ -520,7 +525,7 @@ def get_setting():
 
     return render_template(
         'setting.html', get_language=lambda x: get_language(x, language), login_id=login_id,
-        user=user, language_list=get_language_list_html(user.language))
+        user=user, language_list=get_language_list_html(user.language), login_user=user)
 
 
 if __name__ == '__main__':
