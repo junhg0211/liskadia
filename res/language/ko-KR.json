@@ -1,5 +1,6 @@
 {
   "base": {
+    "logo": "로고",
     "logined_as": "{0}으로 로그인함",
     "profile": "프로필",
     "logout": "로그아웃",

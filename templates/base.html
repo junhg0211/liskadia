@@ -21,7 +21,8 @@
 <nav>
     <span class="nav--title">
         <a href="/">
-            <img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon">
+            <img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon"
+                 alt="{{ get_language('base.logo') }}">
         </a>
     </span>
     <ul>
