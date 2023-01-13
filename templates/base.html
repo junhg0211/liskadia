@@ -19,42 +19,48 @@
 </head>
 <body>
 <nav>
-    <span class="nav--title">
-        <a href="/">
-            <img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon"
-                 alt="{{ get_language('base.logo') }}">
-        </a>
-    </span>
-    <ul>
-        {% if login_id %}
-            <li>{{ get_language('base.logined_as').format(login_id) }}</li>
-            <li><a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a></li>
-            <li><a href="/logout">{{ get_language('base.logout') }}</a></li>
-            <li><a href="/new_game">{{ get_language('base.new_game') }}</a></li>
-            <li><a href="/setting">{{ get_language('base.setting') }}</a></li>
-        {% else %}
-            <li><a href="/login">{{ get_language('base.login') }}</a></li>
-            <li><a href="/register">{{ get_language('base.register') }}</a></li>
-        {% endif %}
-        <li><a href="/ranking">{{ get_language('base.ranking') }}</a></li>
-    </ul>
+    <div class="width-limiter">
+        <span class="nav--title">
+            <a href="/">
+                <img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon"
+                     alt="{{ get_language('base.logo') }}">
+            </a>
+        </span>
+        <ul>
+            {% if login_id %}
+                <li>{{ get_language('base.logined_as').format(login_id) }}</li>
+                <li><a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a></li>
+                <li><a href="/logout">{{ get_language('base.logout') }}</a></li>
+                <li><a href="/new_game">{{ get_language('base.new_game') }}</a></li>
+                <li><a href="/setting">{{ get_language('base.setting') }}</a></li>
+            {% else %}
+                <li><a href="/login">{{ get_language('base.login') }}</a></li>
+                <li><a href="/register">{{ get_language('base.register') }}</a></li>
+            {% endif %}
+            <li><a href="/ranking">{{ get_language('base.ranking') }}</a></li>
+        </ul>
+    </div>
 </nav>
 <article>
-    {% block content %}
+    <div class="width-limiter">
+        {% block content %}
 
-    {% endblock %}
+        {% endblock %}
+    </div>
 </article>
 <footer>
     <hr>
-    <small>
-        <p>
-            <a href="https://github.com/junhg0211/liskadia">{{ get_language('base.footer.github_repository') }}</a>
-            <a href="mailto:junhg0211@gmail.com">{{ get_language('base.footer.contact') }}</a>
-        </p>
-        <p>
-            {{ get_language('base.footer.cc')|safe }}
-        </p>
-    </small>
+    <div class="width-limiter">
+        <small>
+            <p>
+                <a href="https://github.com/junhg0211/liskadia">{{ get_language('base.footer.github_repository') }}</a>
+                <a href="mailto:junhg0211@gmail.com">{{ get_language('base.footer.contact') }}</a>
+            </p>
+            <p>
+                {{ get_language('base.footer.cc')|safe }}
+            </p>
+        </small>
+    </div>
 </footer>
 </body>
 </html>
