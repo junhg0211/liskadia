@@ -7,3 +7,26 @@ article {
     min-width: 1080px;
     margin: 0 auto;
 }
+
+a {
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* navigation */
+
+.nav--logo-icon {
+    height: 2rem;
+    vertical-align: middle;
+}
+
+nav ul {
+    display: inline;
+}
+
+nav li {
+    display: inline;
+    margin-right: 2rem;
+}

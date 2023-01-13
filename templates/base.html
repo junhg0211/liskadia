@@ -8,6 +8,7 @@
     <link rel="stylesheet" as="style" crossorigin
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.6/dist/web/static/pretendard.css"/>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <link rel="icon" href="{{ url_for('static', filename='image/logo.svg') }}">
     {% block head %}
 
     {% endblock %}
@@ -18,18 +19,24 @@
 </head>
 <body>
 <nav>
-    <h1><a href="/">Liskadia</a></h1>
-    {% if login_id %}
-        {{ get_language('base.logined_as').format(login_id) }}
-        <a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a>
-        <a href="/logout">{{ get_language('base.logout') }}</a>
-        <a href="/new_game">{{ get_language('base.new_game') }}</a>
-        <a href="/setting">{{ get_language('base.setting') }}</a>
-    {% else %}
-        <a href="/login">{{ get_language('base.login') }}</a>
-        <a href="/register">{{ get_language('base.register') }}</a>
-    {% endif %}
-    <a href="/ranking">{{ get_language('base.ranking') }}</a>
+    <span class="nav--title">
+        <a href="/">
+            <img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon">
+        </a>
+    </span>
+    <ul>
+        {% if login_id %}
+            <li>{{ get_language('base.logined_as').format(login_id) }}</li>
+            <li><a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a></li>
+            <li><a href="/logout">{{ get_language('base.logout') }}</a></li>
+            <li><a href="/new_game">{{ get_language('base.new_game') }}</a></li>
+            <li><a href="/setting">{{ get_language('base.setting') }}</a></li>
+        {% else %}
+            <li><a href="/login">{{ get_language('base.login') }}</a></li>
+            <li><a href="/register">{{ get_language('base.register') }}</a></li>
+        {% endif %}
+        <li><a href="/ranking">{{ get_language('base.ranking') }}</a></li>
+    </ul>
 </nav>
 <article>
     {% block content %}
