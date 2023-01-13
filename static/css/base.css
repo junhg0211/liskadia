@@ -1,5 +1,27 @@
+@media(prefers-color-scheme: light) {
+    body {
+        --backgorund-color: #f7f7f9;
+        --text-color: #19191e;
+        --em-color: #775201;
+    }
+}
+
+@media(prefers-color-scheme: dark) {
+    body {
+        --backgorund-color: #2c2c2c;
+        --text-color: #f7f7f9;
+        --em-color: #fdde59;
+    }
+
+    .nav--logo-icon {
+        filter: drop-shadow(0 0 5px var(--text-color));
+    }
+}
+
 body {
     font-family: "Pretendard", "Noto Sans", "Noto Sans JP", sans-serif;
+    color: var(--text-color);
+    background-color: var(--backgorund-color);
 }
 
 .width-limiter {
@@ -9,15 +31,20 @@ body {
 }
 
 a {
-    color: black;
+    color: var(--text-color);
     text-decoration: dotted underline;
 }
 
 a:hover {
+    color: var(--em-color);
     text-decoration: underline;
 }
 
 /* navigation */
+
+.nav--logo-icon {
+    filter: drop-shadow(0 0 5px var(--text-color));
+}
 
 .nav--logo-icon, .nav--nema-color-indicator {
     vertical-align: middle;
