@@ -20,25 +20,38 @@
 <body>
 <nav>
     <div class="width-limiter">
-        <span class="nav--title">
-            <a href="/">
-                <img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon"
-                     alt="{{ get_language('base.logo') }}">
-            </a>
-        </span>
-        <ul>
-            {% if login_id %}
-                <li>{{ get_language('base.logined_as').format(login_id) }}</li>
-                <li><a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a></li>
-                <li><a href="/logout">{{ get_language('base.logout') }}</a></li>
-                <li><a href="/new_game">{{ get_language('base.new_game') }}</a></li>
-                <li><a href="/setting">{{ get_language('base.setting') }}</a></li>
-            {% else %}
-                <li><a href="/login">{{ get_language('base.login') }}</a></li>
-                <li><a href="/register">{{ get_language('base.register') }}</a></li>
-            {% endif %}
-            <li><a href="/ranking">{{ get_language('base.ranking') }}</a></li>
-        </ul>
+        <div class="nav--flex">
+            <div class="nav--left">
+                <span class="nav--title">
+                    <a href="/"><img src="{{ url_for('static', filename='image/logo.svg') }}" class="nav--logo-icon"
+                             alt="{{ get_language('base.logo') }}"></a>
+                </span>
+                <ul>
+                    {% if login_id %}
+                        <li><a href="/new_game">{{ get_language('base.new_game') }}</a></li>
+                    {% endif %}
+                    <li><a href="/ranking">{{ get_language('base.ranking') }}</a></li>
+                </ul>
+            </div>
+            <div class="nav--right">
+                <ul>
+                    {% if login_id %}
+                        <li><a href="/logout">{{ get_language('base.logout') }}</a></li>
+                        <li><a href="/setting">{{ get_language('base.setting') }}</a></li>
+                        <li><a href="/profile/{{ login_id }}">{{ get_language('base.profile') }}</a></li>
+                        <li>{{ get_language('base.logined_as').format(login_id)|safe }}</li>
+                    {% else %}
+                        <li><a href="/register">{{ get_language('base.register') }}</a></li>
+                        <li><a href="/login">{{ get_language('base.login') }}</a></li>
+                    {% endif %}
+                </ul>
+                <a href="/profile/{{ login_id }}">
+                    <svg width="2rem" height="2rem" class="nav--nema-color-indicator">
+                        <circle cx="1rem" cy="1rem" r="1rem" fill="#000000"></circle>
+                    </svg>
+                </a>
+            </div>
+        </div>
     </div>
 </nav>
 <article>

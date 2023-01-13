@@ -9,17 +9,19 @@ body {
 }
 
 a {
-    text-decoration: none;
+    color: black;
+    text-decoration: dotted underline;
 }
+
 a:hover {
     text-decoration: underline;
 }
 
 /* navigation */
 
-.nav--logo-icon {
-    height: 2rem;
+.nav--logo-icon, .nav--nema-color-indicator {
     vertical-align: middle;
+    height: 2rem;
 }
 
 nav ul {
@@ -29,4 +31,20 @@ nav ul {
 nav li {
     display: inline;
     margin-right: 2rem;
+}
+
+.nav--flex {
+    display: flex;
+}
+
+.nav--flex div {
+    flex: 1;
+}
+
+.nav--right {
+    text-align: right;
+}
+
+nav {
+    margin-bottom: 1rem;
 }

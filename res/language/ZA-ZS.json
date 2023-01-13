@@ -1,7 +1,7 @@
 {
   "base": {
     "logo": "Draviàs",
-    "logined_as": "Loginè roy {0}",
+    "logined_as": "Loginè roy <a href=\"/profile/{0}\">{0}</a>",
     "profile": "Miro",
     "logout": "Nigol",
     "new_game": "Novésemüsie",

@@ -1,7 +1,7 @@
 {
   "base": {
     "logo": "ロゴ",
-    "logined_as": "{0}でログイン",
+    "logined_as": "<a href=\"/profile/{0}\">{0}</a>でログイン",
     "profile": "プロフィール",
     "logout": "ログアウト",
     "new_game": "新しいゲーム",

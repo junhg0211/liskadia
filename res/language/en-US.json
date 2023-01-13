@@ -1,7 +1,7 @@
 {
   "base": {
     "logo": "Logo",
-    "logined_as": "Logined as {0}",
+    "logined_as": "Logined as <a href=\"/profile/{0}\">{0}</a>",
     "profile": "Profile",
     "logout": "Logout",
     "new_game": "New Game",
