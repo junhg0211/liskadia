@@ -24,9 +24,11 @@ function linearInterpolation(v, a1, b1, a2, b2) {
   return (b2 - a2) * (v - a1) / (b1 - a1) + a2;
 }
 
-window.addEventListener('DOMContentLoaded', () => {
+function drawGraph() {
   let ratingGraph = document.querySelector('#rating-history');
   if (ratingGraph === null) return;
+
+  let color = getComputedStyle(document.body).getPropertyValue('--text-color');
 
   fetch(`/ratings/${USER_ID}`)
     .then(r => r.json())
@@ -60,8 +62,6 @@ window.addEventListener('DOMContentLoaded', () => {
         let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 10, ratingGraph.clientWidth - 10);
         let y = linearInterpolation(row['rating'], minRating, maxRating, ratingGraph.clientHeight - 10, 10);
 
-        console.log(x, y);
-
         if (i === 0) {
           pathString += `M ${x} ${y} `;
         } else {
@@ -70,13 +70,16 @@ window.addEventListener('DOMContentLoaded', () => {
         lastY = y;
       }
       pathString += `L ${ratingGraph.clientWidth} ${lastY}`
-      drawPath(ratingGraph, pathString, 'black', 1);
+      drawPath(ratingGraph, pathString, color, 1);
 
       history.forEach(row => {
         let x = linearInterpolation(row['time'].getTime(), minTime, maxTime, 10, ratingGraph.clientWidth - 10);
         let y = linearInterpolation(row['rating'], minRating, maxRating, ratingGraph.clientHeight - 10, 10);
 
-        drawCircle(ratingGraph, x, y, 3, 'black', 1);
+        drawCircle(ratingGraph, x, y, 3, color, 1);
       });
     });
-});
+}
+
+window.addEventListener('DOMContentLoaded', drawGraph);
+window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', drawGraph);
