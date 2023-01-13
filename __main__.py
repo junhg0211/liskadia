@@ -381,6 +381,9 @@ def get_register():
             user = users.get(login_id, database)
         language = user.language
 
+    if login_id is not None:
+        return redirect('/')
+
     return render_template(
         'register.html', get_language=lambda x: get_language(x, language),
         language_list=get_language_list_html())
@@ -393,6 +396,9 @@ def get_login():
         with get_connection() as database:
             user = users.get(login_id, database)
         language = user.language
+
+    if login_id is not None:
+        return redirect('/')
 
     return render_template('login.html', get_language=lambda x: get_language(x, language))
 

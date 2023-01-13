@@ -72,6 +72,10 @@ nav li {
     text-align: right;
 }
 
+.nav--right svg {
+    margin-left: 2rem;
+}
+
 .nav--right ul li:last-child {
     margin: 0;
 }
