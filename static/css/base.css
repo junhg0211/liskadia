@@ -32,12 +32,12 @@ body {
 
 a {
     color: var(--text-color);
-    text-decoration: dotted underline;
+    text-decoration: none;
 }
 
 a:hover {
     color: var(--em-color);
-    text-decoration: underline;
+    text-decoration: dotted underline;
 }
 
 /* navigation */
