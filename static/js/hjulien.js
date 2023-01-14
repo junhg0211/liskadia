@@ -381,7 +381,8 @@ function drawScores() {
   scoresGroup.innerHTML = '';
 
   let scoreboard = {};
-  scores.forEach(score => {
+  for (let i = 0; i < scores.length; i++) {
+    let score = scores[i];
     let attacker = score['user_id'];
 
     if (scoreboardUpdate) {
@@ -410,7 +411,9 @@ function drawScores() {
     drawLine(scoresGroup, sx, sy, bx, by, colors[attacker], 2);
     drawCircle(scoresGroup, sx, sy, unit / 2, dimColor(colors[attacker]), 7);
     drawCircle(scoresGroup, sx, sy, unit / 2, colors[attacker], 5);
-  });
+
+    drawFillText(scoresGroup, sx, sy, (i+1).toString(), '#19191e', '#f7f7f9', 4);
+  }
 
   scoreboardUpdate = false;
 }

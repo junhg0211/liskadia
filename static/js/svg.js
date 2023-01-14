@@ -48,6 +48,22 @@ function fillText(at, x, y, string, color) {
   return text;
 }
 
+function drawFillText(at, x, y, string, color, strokeColor, stroke) {
+  let text = document.createElementNS(URL, 'text');
+  text.textContent = string;
+  text.setAttribute('x', x.toString());
+  text.setAttribute('y', y.toString());
+  text.setAttribute('fill', color);
+  text.setAttribute('stroke', strokeColor);
+  text.setAttribute('stroke-width', stroke.toString());
+  text.setAttribute('stroke-alignment', 'outer');
+  text.setAttribute('paint-order', 'stroke');
+  text.setAttribute('text-anchor', 'middle');
+  text.setAttribute('dominant-baseline', 'middle');
+  at.appendChild(text);
+  return text;
+}
+
 function drawCircle(at, x, y, r, color, stroke) {
   let circle = document.createElementNS(URL, 'circle');
   circle.setAttribute('cx', x.toString());
