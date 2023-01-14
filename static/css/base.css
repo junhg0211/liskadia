@@ -83,3 +83,14 @@ nav li {
 nav {
     margin-bottom: 1rem;
 }
+
+/* footer */
+
+.footer--list {
+    padding-left: 0;
+}
+
+.footer--list li {
+    display: inline;
+    margin-right: 1rem;
+}

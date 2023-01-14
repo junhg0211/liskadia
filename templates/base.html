@@ -62,16 +62,16 @@
     </div>
 </article>
 <footer>
+    <hr>
     <div class="width-limiter">
-        <small>
-            <p>
-                <a href="https://github.com/junhg0211/liskadia">{{ get_language('base.footer.github_repository') }}</a>
-                <a href="mailto:junhg0211@gmail.com">{{ get_language('base.footer.contact') }}</a>
-            </p>
-            <p>
-                {{ get_language('base.footer.cc')|safe }}
-            </p>
-        </small>
+        <ul class="footer--list">
+            <li><a href="https://github.com/junhg0211/liskadia">{{ get_language('base.footer.github_repository') }}</a></li>
+            <li><a href="https://github.com/junhg0211/liskadia/issues">{{ get_language('base.footer.issue_tracker') }}</a></li>
+            <li><a href="mailto:junhg0211@gmail.com">{{ get_language('base.footer.contact') }}</a></li>
+        </ul>
+        <p>
+            {{ get_language('base.footer.cc')|safe }}
+        </p>
     </div>
 </footer>
 </body>
