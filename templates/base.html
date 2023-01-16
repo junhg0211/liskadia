@@ -12,7 +12,9 @@
     {% block head %}
 
     {% endblock %}
-    <title>Liskadia</title>
+    {% block title %}
+        <title>Liskadia</title>
+    {% endblock %}
     <script>
       const LOGIN_ID = '{{ login_id }}' === 'None' ? null : '{{ login_id }}';
     </script>

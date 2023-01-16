@@ -4,6 +4,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/game.css') }}">
     <script src="{{ url_for('static', filename='js/svg.js') }}"></script>
     <script src="{{ url_for('static', filename='js/hjulien.js') }}"></script>
+{% endblock %}
+{% block title %}
     <title>Liskadia - #{{ game.id }}</title>
 {% endblock %}
 
