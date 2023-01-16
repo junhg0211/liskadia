@@ -13,6 +13,9 @@
         <p>
             <label>{{ get_language('login.password') }} <input type="password" name="password" id="password"></label>
         </p>
+        {% if error %}
+            <p style="color: red;">{{ error }}</p>
+        {% endif %}
         <p>
             <input type="checkbox" id="remember-me" name="remember-me">
             <label for="remember-me">{{ get_language('login.remember_me_for') }}</label>

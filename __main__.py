@@ -91,11 +91,14 @@ def post_login():
     during_day = int(data.get('during-day'))
 
     if user_id is None or password is None:
-        return message(get_string('client_error.register_malformed'), 400)
+        return redirect('/login?error=wrong')
 
     with get_connection() as database:
-        if login(user_id, password, database) is None:
-            return message(get_string('client_error.unauthorized'), 401)
+        try:
+            if login(user_id, password, database) is None:
+                return redirect('/login?error=wrong')
+        except ValueError:
+            return redirect('/login?error=wrong')
 
         users.update_last_interaction(user_id, database)
 
@@ -400,7 +403,11 @@ def get_login():
     if login_id is not None:
         return redirect('/')
 
-    return render_template('login.html', get_language=lambda x: get_language(x, language))
+    error = request.args.get('error', '')
+    if error:
+        error = get_language(f'login.error.{error}', language)
+
+    return render_template('login.html', get_language=lambda x: get_language(x, language), error=error)
 
 
 @app.route('/game', methods=['GET'])

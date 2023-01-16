@@ -51,6 +51,9 @@
       "64": "64 days",
       "128": "128 days",
       "256": "256 days"
+    },
+    "error": {
+      "wrong": "Wrong ID or password."
     }
   },
   "new_game": {

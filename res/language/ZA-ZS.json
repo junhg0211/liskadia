@@ -39,7 +39,7 @@
   "login": {
     "login": "Login",
     "id": "ID",
-    "password": "Ammiraopta",
+    "password": "Ammirapota",
     "remember_me_for": "Sosaque dé Nariprepos lo Login",
     "during": {
       "1": "1 lesíc",
@@ -51,6 +51,9 @@
       "64": "64 lesíc",
       "128": "128 lesíc",
       "256": "256 lesíc"
+    },
+    "error": {
+      "wrong": "ID laro Ammirapota d'atrüsnie."
     }
   },
   "new_game": {
