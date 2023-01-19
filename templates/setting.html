@@ -3,16 +3,26 @@
 {% block content %}
     <h1>{{ get_language('setting.setting') }}</h1>
     <form action="/users/edit" method="post">
-        <p>
-            <label for="language">{{ get_language('register.language') }}</label>
-            <select name="language" id="language">
-                {{ language_list|safe }}
-            </select>
-        </p>
-        <p>
-            <label for="color">{{ get_language('register.nema_color') }}</label>
-            <input type="color" id="color" name="color" value="{{ user.get_color_code() }}">
-        </p>
+        <table>
+            <tr>
+                <td>
+                    <label for="language">{{ get_language('register.language') }}</label>
+                </td>
+                <td>
+                    <select name="language" id="language">
+                        {{ language_list|safe }}
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <label for="color">{{ get_language('register.nema_color') }}</label>
+                </td>
+                <td>
+                    <input type="color" id="color" name="color" value="{{ user.get_color_code() }}">
+                </td>
+            </tr>
+        </table>
         <input type="submit" value="{{ get_language('setting.apply') }}">
     </form>
 {% endblock %}
