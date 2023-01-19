@@ -2,17 +2,27 @@
 
 {% block head %}
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <style>
+    .login-width-limiter {
+        min-width: 340px;
+        max-width: 540px;
+        margin: auto;
+    }
+
+    #id, #password {
+        width: 100%;
+    }
+    </style>
 {% endblock %}
 
 {% block content %}
+<div class="login-width-limiter">
     <h2>{{ get_language('login.login') }}</h2>
     <form action="/login" method="POST" onsubmit="encrypt()">
-        <p>
-            <label>{{ get_language('login.id') }} <input type="text" name="id"></label>
-        </p>
-        <p>
-            <label>{{ get_language('login.password') }} <input type="password" name="password" id="password"></label>
-        </p>
+        <p>{{ get_language('login.id') }} </p>
+        <p><label><input type="text" name="id" id="id"></label></p>
+        <p>{{ get_language('login.password') }}</p>
+        <p><label><input type="password" name="password" id="password"></label></p>
         {% if error %}
             <p style="color: red;">{{ error }}</p>
         {% endif %}
@@ -35,4 +45,5 @@
         </p>
         <input type="submit" value="{{ get_language('login.login') }}">
     </form>
+</div>
 {% endblock %}
