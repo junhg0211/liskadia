@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from hashlib import sha256
+from math import inf
 from random import randint
 from typing import Optional
 from urllib.parse import parse_qsl
@@ -489,7 +490,7 @@ def get_profile_id(user_id: str):
         except ValueError:
             return message(get_string('client_error.user_not_found'), 404)
 
-        played_games = list(participants.get_games(user_id, database))
+        played_games = list(participants.get_games(user_id, database, limit=None))
 
         ranking_place = users.get_ranking_place(user.id, database) + 1
 

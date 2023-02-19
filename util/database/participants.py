@@ -43,10 +43,10 @@ def get_game_ids(user_id: str, database: Connection) -> list[int]:
 
 def get_games(user_id: str, database: Connection, limit: int = 100) -> Iterator[Game]:
     with database.cursor(DictCursor) as cursor:
+        limit_query = '' if limit is None else f'LIMIT {limit}'
         cursor.execute('SELECT * FROM game '
                        'JOIN participant p ON game.id = p.game_id AND p.user_id = %s '
-                       'ORDER BY id DESC '
-                       'LIMIT %s', (user_id, limit))
+                       'ORDER BY id DESC ' + limit_query, (user_id,))
         while line := cursor.fetchone():
             yield Game.get(line)
 
