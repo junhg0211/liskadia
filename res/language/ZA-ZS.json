@@ -69,7 +69,11 @@
     "rating": "Îpain"
   },
   "ranking": {
-    "ranking": "Pailindy"
+    "ranking": "Pailindy",
+    "id": "ID",
+    "rating": "Îpain",
+    "games": "Semüsis",
+    "percentage": "Vanzitaupie [%]"
   },
   "register": {
     "register": "Novénuiz",

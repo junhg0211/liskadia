@@ -69,7 +69,11 @@
     "rating": "評点"
   },
   "ranking": {
-    "ranking": "ランキング"
+    "ranking": "ランキング",
+    "id": "ID",
+    "rating": "評点",
+    "games": "ゲーム数",
+    "percentage": "勝率 [%]"
   },
   "register": {
     "register": "加入",

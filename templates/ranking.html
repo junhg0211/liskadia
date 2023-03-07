@@ -8,11 +8,11 @@
     <h1>{{ get_language('ranking.ranking') }}</h1>
     <table class="ranking-table">
         <tr>
-            <th>순위</th>
-            <th>아이디</th>
-            <th>평점</th>
-            <th>플레이 횟수</th>
-            <th>승률 [%]</th>
+            <th>{{ get_language('ranking.ranking') }}</th>
+            <th>{{ get_language('ranking.id') }}</th>
+            <th>{{ get_language('ranking.rating') }}</th>
+            <th>{{ get_language('ranking.games') }}</th>
+            <th>{{ get_language('ranking.percentage') }}</th>
         </tr>
         {% for user in users %}
             <tr>

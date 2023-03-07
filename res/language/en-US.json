@@ -69,7 +69,11 @@
     "rating": "Rating"
   },
   "ranking": {
-    "ranking": "Ranking"
+    "ranking": "Ranking",
+    "id": "ID",
+    "rating": "Rating",
+    "games": "Games",
+    "percentage": "Winning Percentage [%]"
   },
   "register": {
     "register": "Register",

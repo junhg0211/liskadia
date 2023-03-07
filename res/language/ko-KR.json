@@ -69,7 +69,11 @@
     "rating": "평점"
   },
   "ranking": {
-    "ranking": "랭킹"
+    "ranking": "랭킹",
+    "id": "ID",
+    "rating": "평점",
+    "games": "플레이 수",
+    "percentage": "승률 [%]"
   },
   "register": {
     "register": "회원가입",
