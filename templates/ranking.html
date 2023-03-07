@@ -19,7 +19,7 @@
                 <td class="ranking-table--index">{{ loop.index + index * count_per_page }}</td>
                 <td>
                     <a href="/profile/{{ user.id }}">
-                        {{ user.id }} <span style="color: {{ user.get_color_code() }};">⬤</span>
+                        <span style="color: {{ user.get_color_code() }};">⬤</span> {{ user.id }}
                     </a>
                 </td>
                 <td class="ranking-table--rating">{{ user.get_formatted_rating() }}</td>
