@@ -1,14 +1,46 @@
 {% extends 'base.html' %}
 
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/ranking.css') }}">
+{% endblock %}
+
 {% block content %}
     <h1>{{ get_language('ranking.ranking') }}</h1>
-    <ol>
+    <table class="ranking-table">
+        <tr>
+            <th>순위</th>
+            <th>아이디</th>
+            <th>평점</th>
+            <th>플레이 횟수</th>
+            <th>승률 [%]</th>
+        </tr>
         {% for user in users %}
-            <li>
-                <strong>{{ user.get_formatted_rating() }}</strong> -
-                <a href="/profile/{{ user.id }}">{{ user.id }}</a>
-                <span style="color: {{ user.get_color_code() }};">⬤</span>
-            </li>
+            <tr>
+                <td class="ranking-table--index">{{ loop.index + index * count_per_page }}</td>
+                <td>
+                    <a href="/profile/{{ user.id }}">
+                        {{ user.id }} <span style="color: {{ user.get_color_code() }};">⬤</span>
+                    </a>
+                </td>
+                <td class="ranking-table--rating">{{ user.get_formatted_rating() }}</td>
+                <td class="ranking-table--number">{{ user.games }}</td>
+                {% if user.games != 0 %}
+                    <td class="ranking-table--number">{{ format_percentage(user.wins / user.games) }}</td>
+                {% else %}
+                    <td class="ranking-table--number">-</td>
+                {% endif %}
+            </tr>
         {% endfor %}
-    </ol>
+    </table>
+    <div class="page-navigation">
+        {% for i in range(-9, 10) %}
+            {% if 0 <= index+i <= total_users//count_per_page %}
+                {% if i == 0 %}
+                    <span class="page-navigation--button page-navigation--now">{{ index + 1 + i }}</span>
+                {% else %}
+                    <a href="/ranking/{{ index + 1 + i }}" class="page-navigation--button">{{ index + 1 + i }}</a>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+    </div>
 {% endblock %}

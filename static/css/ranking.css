@@ -1,0 +1,44 @@
+.ranking-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.ranking-table tr {
+    height: 30px;
+}
+
+.ranking-table tr:first-child {
+    border-bottom: 1px solid var(--text-color);
+}
+
+.ranking-table tr:not(:first-child) {
+    border-bottom: 1px solid var(--background-sub-color);
+}
+
+.ranking-table--index {
+    text-align: center;
+}
+
+.ranking-table--rating {
+    font-weight: bold;
+    text-align: right;
+}
+
+.ranking-table--number {
+    text-align: right;
+}
+
+.page-navigation {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.page-navigation--button {
+    width: 30px;
+    display: inline-block;
+    text-align: center;
+}
+
+.page-navigation--now {
+    font-weight: bold;
+}

@@ -1,6 +1,5 @@
 from datetime import datetime, timedelta
 from hashlib import sha256
-from math import inf
 from random import randint
 from typing import Optional
 from urllib.parse import parse_qsl
@@ -13,6 +12,7 @@ from lyskad.game import GameState, Game
 from lyskad.nema import is_valid_position
 from util import get_string, encrypt, get_language, DEFAULT_LANGUAGE, get_language_list_html
 from util.database import users, games, participants, nemas, get_connection, scores, histories
+from util.general import format_percentage
 
 app = Flask(__name__)
 app.secret_key = sha256('ydng0fug lrid2uf'.encode()).hexdigest()
@@ -507,8 +507,14 @@ def get_profile_id(user_id: str):
 
 @app.route('/ranking', methods=['GET'])
 def get_ranking():
+    return redirect('/ranking/1')
+
+
+@app.route('/ranking/<int:page>', methods=['GET'])
+def get_ranking_page(page: int):
+    page -= 1
     with get_connection() as database:
-        user_list = list(users.get_by_ranking(database))
+        user_list = list(users.get_by_ranking(database, page))
 
         login_user = None
         language = DEFAULT_LANGUAGE
@@ -516,9 +522,12 @@ def get_ranking():
             login_user = users.get(login_id, database)
             language = login_user.language
 
+        total_users = users.get_total(database)
+
     return render_template(
-        'ranking.html', users=user_list, get_language=lambda x: get_language(x, language),
-        login_id=login_id, login_user=login_user)
+        'ranking.html', users=user_list, index=page, total_users=total_users,
+        format_percentage=format_percentage, get_language=lambda x: get_language(x, language), login_id=login_id,
+        count_per_page=users.GET_ALL_DEFAULT_LIMIT, login_user=login_user)
 
 
 @app.route('/setting', methods=['GET'])

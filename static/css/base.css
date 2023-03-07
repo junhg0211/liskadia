@@ -1,6 +1,7 @@
 @media(prefers-color-scheme: light) {
     body {
-        --backgorund-color: #f7f7f9;
+        --background-color: #f7f7f9;
+        --background-sub-color: #d7d7d9;
         --text-color: #19191e;
         --em-color: #775201;
     }
@@ -8,7 +9,8 @@
 
 @media(prefers-color-scheme: dark) {
     body {
-        --backgorund-color: #2c2c2c;
+        --background-color: #2c2c2c;
+        --background-sub-color: #4c4c4c;
         --text-color: #f7f7f9;
         --em-color: #fdde59;
     }
@@ -21,7 +23,7 @@
 body {
     font-family: "Pretendard", "Noto Sans", "Noto Sans JP", sans-serif;
     color: var(--text-color);
-    background-color: var(--backgorund-color);
+    background-color: var(--background-color);
 }
 
 .width-limiter {

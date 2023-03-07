@@ -23,7 +23,7 @@ def get(user_id: str, database: Connection) -> User:
     return User.get(data)
 
 
-GET_ALL_DEFAULT_LIMIT = 50
+GET_ALL_DEFAULT_LIMIT = 30
 
 
 def get_all(database: Connection, limit: Optional[int] = None) -> list[User]:
@@ -38,12 +38,18 @@ def get_all(database: Connection, limit: Optional[int] = None) -> list[User]:
     return result
 
 
-def get_by_ranking(database, limit: Optional[int] = None) -> Iterable[User]:
+def get_by_ranking(database: Connection, page: int, limit: Optional[int] = None) -> Iterable[User]:
+    """
+    :param database:
+    :param page: 0부터 시작
+    :param limit:
+    :return:
+    """
     if limit is None:
         limit = GET_ALL_DEFAULT_LIMIT
 
     with database.cursor(DictCursor) as cursor:
-        cursor.execute('SELECT * FROM user ORDER BY rating DESC LIMIT %s', limit)
+        cursor.execute('SELECT * FROM user ORDER BY rating DESC LIMIT %s OFFSET %s', (limit, limit * page))
         while data := cursor.fetchone():
             yield User.get(data)
 
@@ -144,3 +150,15 @@ def set_color(user_id: str, color: int, database: Connection):
     with database.cursor() as cursor:
         cursor.execute('UPDATE user SET color = %s WHERE id = %s', (color, user_id))
         database.commit()
+
+
+def get_win_exp(user_id: str, database: Connection):
+    with database.cursor() as cursor:
+        cursor.execute('SELECT wins, games FROM user WHERE id = %s', (user_id,))
+        return cursor.fetchone()[0]
+
+
+def get_total(database: Connection):
+    with database.cursor() as cursor:
+        cursor.execute('SELECT COUNT(*) FROM user')
+        return cursor.fetchone()[0]

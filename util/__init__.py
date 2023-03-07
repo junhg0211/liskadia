@@ -1,4 +1,4 @@
-from .general import is_even, is_odd
+from .general import is_even, is_odd, format_percentage
 
 from .encrypt import encrypt
 from .const import get_string, get_secret, get_language, is_valid_language, DEFAULT_LANGUAGE, get_language_list_html
