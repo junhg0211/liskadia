@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import Iterable, Iterator
+from typing import Iterable, Iterator, Optional
 
 from pymysql import Connection
 from pymysql.cursors import DictCursor
@@ -41,7 +41,7 @@ def get_game_ids(user_id: str, database: Connection) -> list[int]:
     return ids
 
 
-def get_games(user_id: str, database: Connection, limit: int = 100) -> Iterator[Game]:
+def get_games(user_id: str, database: Connection, limit: Optional[int] = 100) -> Iterator[Game]:
     with database.cursor(DictCursor) as cursor:
         limit_query = '' if limit is None else f'LIMIT {limit}'
         cursor.execute('SELECT * FROM game '
