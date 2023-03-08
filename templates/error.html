@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/error.css') }}">
+{% endblock %}
+
+{% block content %}
+    <h1 class="error-code">404</h1>
+    {% if message %}
+        <p class="error-message">{{ get_language(message) }}</p>
+    {% endif %}
+    <p class="center">
+        <a onclick="history.back()" href="#">{{ get_language('error.back') }}</a>
+    </p>
+{% endblock %}

@@ -450,18 +450,20 @@ def get_game():
 @app.route('/game/<int:game_id>', methods=['GET'])
 def get_game_id(game_id: int):
     with get_connection() as database:
-        try:
-            game = games.get(game_id, database)
-        except ValueError as e:
-            return str(e), 404
-
-        user_ids = sorted(participants.get_ids(game.id, database))
-
         user = None
         language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             user = users.get(login_id, database)
             language = user.language
+
+        try:
+            game = games.get(game_id, database)
+        except ValueError:
+            return render_template(
+                'error.html', login_id=session.get('id'), login_user=user,
+                get_language=lambda x: get_language(x, language), message='error.game_not_found'), 404
+
+        user_ids = sorted(participants.get_ids(game.id, database))
 
     return render_template(
         'game.html', game=game, participants=user_ids, login_id=session.get('id'), login_user=user,
