@@ -487,20 +487,22 @@ def get_new_game():
 @app.route('/profile/<user_id>', methods=['GET'])
 def get_profile_id(user_id: str):
     with get_connection() as database:
-        try:
-            user = users.get(user_id, database)
-        except ValueError:
-            return message(get_string('client_error.user_not_found'), 404)
-
-        played_games = list(participants.get_games(user_id, database, limit=None))
-
-        ranking_place = users.get_ranking_place(user.id, database) + 1
-
         login_user = None
         language = DEFAULT_LANGUAGE
         if login_id := session.get('id'):
             login_user = users.get(login_id, database)
             language = login_user.language
+
+        try:
+            user = users.get(user_id, database)
+        except ValueError:
+            return render_template(
+                'error.html', login_id=session.get('id'), login_user=login_user,
+                get_language=lambda x: get_language(x, language), message='error.user_not_found')
+
+        played_games = list(participants.get_games(user_id, database, limit=None))
+
+        ranking_place = users.get_ranking_place(user.id, database) + 1
 
     return render_template(
         'profile.html', user=user, played_games=played_games, login_id=session.get('id'), ranking_place=ranking_place,
