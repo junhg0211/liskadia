@@ -498,7 +498,7 @@ def get_profile_id(user_id: str):
         except ValueError:
             return render_template(
                 'error.html', login_id=session.get('id'), login_user=login_user,
-                get_language=lambda x: get_language(x, language), message='error.user_not_found')
+                get_language=lambda x: get_language(x, language), message='error.user_not_found'), 404
 
         played_games = list(participants.get_games(user_id, database, limit=None))
 
