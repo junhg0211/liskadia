@@ -398,8 +398,14 @@ def get_games_id_nema_count(game_id: int):
         if not games.exists(game_id, database):
             return message(get_string('client_error.game_not_found'), 404)
 
+        game = games.get(game_id, database)
+
+        last_nema = nemas.get_last_nema(game_id, database)
+        if is_game_timeout(game, database, last_nema):
+            end_game(game, database, last_nema.user_id)
+
         nema_count = nemas.get_nema_count(game_id, database)
-        state = games.get_state(game_id, database)
+        state = game.state
         user_count = len(tuple(participants.get_ids(game_id, database)))
 
         scores_ = list(map(lambda x: x.jsonify(), scores.get_scoring_nemas(game_id, database)))
