@@ -27,7 +27,7 @@
     "leave": "Leave",
     "participants": "Participants",
     "end_condition": "End Condition",
-    "condition_template": "All players get at least {0} points or Otoque",
+    "condition_template": "All players get at least {0} points, timed out by {1} seconds, or Otoque",
     "scoreboard": "Scoreboard",
     "rankings": "Rankings",
     "nema_history": "Nema History",

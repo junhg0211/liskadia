@@ -27,7 +27,7 @@
     "leave": "퇴장하기",
     "participants": "참여자",
     "end_condition": "종료 조건",
-    "condition_template": "모두가 {0}점 이상 득점 또는 오토크",
+    "condition_template": "모두가 {0}점 이상 득점, {1}초 시간 체한 초과, 또는 오토크",
     "scoreboard": "점수판",
     "rankings": "랭킹",
     "nema_history": "네마 이력",

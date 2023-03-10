@@ -27,7 +27,7 @@
     "leave": "Temmoque",
     "participants": "Semüsîn",
     "end_condition": "Gäitelaz",
-    "condition_template": "Olésemüsîn da vistùqûm lo {0} lesépain laro ä Otoque",
+    "condition_template": "Olésemüsîn da vistùqûm lo {0} Lesépain, {1} Lesélekésosaliviat, laro ä Otoque",
     "scoreboard": "Paisiulü",
     "rankings": "Pailindy",
     "nema_history": "Nemavistupota",

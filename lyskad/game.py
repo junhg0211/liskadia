@@ -23,7 +23,7 @@ class Game:
         max_score = data['max_score']
         timeout = data['timeout']
 
-        result = Game(game_id, created_by, max_score, timeout, direction)
+        result = Game(game_id, created_by, max_score, direction, timeout)
         result.state = data['state']
         result.created_at = data['created_at']
         return result

@@ -31,7 +31,7 @@
             <h3>{{ get_language('game.participants') }}</h3>
             <ul id="participants"></ul>
             <h3>{{ get_language('game.end_condition') }}</h3>
-            <p>{{ get_language('game.condition_template').format(game.max_score) }}</p>
+            <p>{{ get_language('game.condition_template').format(game.max_score, game.timeout) }}</p>
             <h3>{{ get_language('game.scoreboard') }}</h3>
             <div id="scoreboard"></div>
             <h3>{{ get_language('game.rankings') }}</h3>
