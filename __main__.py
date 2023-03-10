@@ -291,7 +291,18 @@ def get_users_id_games(user_id: str):
     return message('OK', 200, games=ids)
 
 
-def end_game(game: Game, database: Connection, loser: Optional[User] = None):
+def is_game_timeout(game: Game, database: Connection, last_nema: Optional[Nema] = None) -> bool:
+    if game.state != GameState.PLAYING:
+        return False
+
+    if last_nema is None:
+        last_nema = nemas.get_last_nema(game.id, database)
+
+    now = datetime.now()
+    return last_nema is not None and last_nema.created_at + timedelta(seconds=game.timeout) < now
+
+
+def end_game(game: Game, database: Connection, loser_id: Optional[str] = None):
     """
     게임 종료를 진행합니다.
 
@@ -301,10 +312,10 @@ def end_game(game: Game, database: Connection, loser: Optional[User] = None):
     games.set_state(game.id, GameState.END, database)
 
     places = participants.get_places(scores.get_scoring_nemas(game.id, database))
-    if loser is not None:
+    if loser_id is not None:
         places = list(places)
-        places.remove(loser.id)
-        places.append(loser.id)
+        places.remove(loser_id)
+        places.append(loser_id)
     participants.record_places(places, game.id, database)
 
     users.add_exp_for_game(game.id, database)
@@ -340,11 +351,8 @@ def post_games_id_put(game_id: int, nema_position: int):
         if nemas.get(game.id, nema_position, database) is not None:
             return message(get_string('client_error.duplicated'), 403)
 
-        now = datetime.now()
-        last_nema = nemas.get_last_nema(game.id, database)
-        if last_nema is not None \
-                and last_nema.created_at + timedelta(seconds=game.timeout) < now:
-            end_game(game, database, user)
+        if is_game_timeout(game, database):
+            end_game(game, database, user.id)
             return message(get_string('client_error.timeout'), 403)
 
         nema_count = nemas.get_nema_count(game.id, database)
@@ -489,6 +497,10 @@ def get_game_id(game_id: int):
             return render_template(
                 'error.html', login_id=session.get('id'), login_user=user,
                 get_language=lambda x: get_language(x, language), message='error.game_not_found'), 404
+
+        last_nema = nemas.get_last_nema(game.id, database)
+        if is_game_timeout(game, database, last_nema):
+            end_game(game, database, last_nema.user_id)
 
         user_ids = sorted(participants.get_ids(game.id, database))
 
