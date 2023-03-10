@@ -312,14 +312,15 @@ def end_game(game: Game, database: Connection, loser_id: Optional[str] = None):
     games.set_state(game.id, GameState.END, database)
 
     places = participants.get_places(scores.get_scoring_nemas(game.id, database))
-    if loser_id is not None:
+    if loser_id is not None and loser_id in places:
         places = list(places)
         places.remove(loser_id)
         places.append(loser_id)
     participants.record_places(places, game.id, database)
 
     users.add_exp_for_game(game.id, database)
-    users.add_wins(places[0], game.id, database)
+    if places:
+        users.add_wins(places[0], game.id, database)
     now = datetime.utcnow()
     users.apply_ratings(map(lambda id_: users.get(id_, database), places), database, now)
 
