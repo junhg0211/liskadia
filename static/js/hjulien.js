@@ -114,6 +114,7 @@ let audioes = [
   new Audio('/static/wav/nema5.wav')
 ];
 
+let notification;
 function updateNemas() {
   nemaHistoryTable.children[0].innerHTML = nemaHistoryTable.rows[0].innerHTML;
   nemas.length = 0;
@@ -160,6 +161,10 @@ function updateNemas() {
 
   // noinspection JSIgnoredPromiseFromCall
   audioes[Math.floor(Math.random() * 5)].play();
+
+  if (!document.hasFocus()) {
+    notification = show_notification(`Liskadia #${GAME_ID}`, NEW_NEMA_MESSAGE);
+  }
 }
 
 let meInGame = false;
@@ -291,6 +296,11 @@ function sendNema() {
 function tick() {
   floatX = Math.round((mouseX / unit - 3.5) / 2);
   floatY = Math.round((mouseY / unit - 3.5) / 2);
+
+  if (document.hasFocus() && notification !== undefined) {
+    notification.close();
+    notification = undefined;
+  }
 
   checkMeta();
 }

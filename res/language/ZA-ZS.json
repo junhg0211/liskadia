@@ -33,7 +33,10 @@
     "nema_history": "Nemavistupota",
     "place": "Faxas",
     "player": "Semüsîn",
-    "placed_at": "Zozaque"
+    "placed_at": "Zozaque",
+    "notification": {
+      "new_nema": "Novénema da preposùquê."
+    }
   },
   "games": {
     "idle_games": "Ätìçésemüsis",

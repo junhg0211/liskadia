@@ -33,7 +33,10 @@
     "nema_history": "ネマ履歴",
     "place": "位置",
     "player": "プレイヤー",
-    "placed_at": "打った時間"
+    "placed_at": "打った時間",
+    "notification": {
+      "new_nema": "新しいネマが打たれました。"
+    }
   },
   "games": {
     "idle_games": "某集中のゲーム",

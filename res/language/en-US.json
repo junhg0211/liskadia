@@ -33,7 +33,10 @@
     "nema_history": "Nema History",
     "place": "Place",
     "player": "Player",
-    "placed_at": "Placed At"
+    "placed_at": "Placed At",
+    "notification": {
+      "new_nema": "New nema placed."
+    }
   },
   "games": {
     "idle_games": "Idle Games",
