@@ -64,7 +64,8 @@
   "new_game": {
     "open_new_game": "새 게임 만들기",
     "least_scores_for_end": "종료 조건 점수",
-    "open": "만들기"
+    "open": "만들기",
+    "nema_timeout": "네마 설치 제한시간 [초]"
   },
   "profile": {
     "does_not_played_yet": "아직 플레이한 게임이 없습니다.",

@@ -64,7 +64,8 @@
   "new_game": {
     "open_new_game": "新しいゲームを作成する",
     "least_scores_for_end": "終了条件点数",
-    "open": "作る"
+    "open": "作る",
+    "nema_timeout": "ネマ打ち制限時間 [秒]"
   },
   "profile": {
     "does_not_played_yet": "まだゲームをプレイしていません。",
