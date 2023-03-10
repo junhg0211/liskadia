@@ -58,6 +58,11 @@ def is_in(user_id: str, game_id: int, database: Connection):
 
 
 def get_places(scores: list[Score]) -> tuple[str]:
+    """
+    점수 득점 기록에 따라서 순위를 계산한다.
+
+    출력되는 순서쌍에서 처음에 있는 사람일수록 순위가 높은 것으로 한다.
+    """
     user_scores = dict()
     scored_user_counts = list()
     user_information: dict[str, tuple[int, int]] = dict()

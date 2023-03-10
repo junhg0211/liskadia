@@ -291,18 +291,42 @@ def get_users_id_games(user_id: str):
     return message('OK', 200, games=ids)
 
 
+def end_game(game: Game, database: Connection, loser: Optional[User] = None):
+    """
+    게임 종료를 진행합니다.
+
+    `loser` 값이 설정되면 `loser`에 해당하는 사람의 순위를 가장 낮은 것으로 설정합니다.
+    이 기능은 시간 제한으로 인한 게임 종료가 발생했을 때에 사용합니다.
+    """
+    games.set_state(game.id, GameState.END, database)
+
+    places = participants.get_places(scores.get_scoring_nemas(game.id, database))
+    if loser is not None:
+        places = list(places)
+        places.remove(loser.id)
+        places.append(loser.id)
+    participants.record_places(places, game.id, database)
+
+    users.add_exp_for_game(game.id, database)
+    users.add_wins(places[0], game.id, database)
+    now = datetime.utcnow()
+    users.apply_ratings(map(lambda id_: users.get(id_, database), places), database, now)
+
+
 @app.route('/games/<int:game_id>/nemas/<int:nema_position>', methods=['POST'])
 def post_games_id_put(game_id: int, nema_position: int):
     if (login_id := session.get('id')) is None:
         return message(get_string('client_error.unauthorized'), 401)
 
     with get_connection() as database:
+        user = users.get(login_id, database)
+        users.update_last_interaction(user.id, database)
+
         try:
             game = games.get(game_id, database)
         except ValueError:
             return message(get_string('client_error.game_not_found'), 404)
 
-        user = users.get(login_id, database)
         ids = tuple(participants.get_ids(game.id, database))
         if user.id not in ids:
             return message(get_string('client_error.not_joined'), 403)
@@ -315,6 +339,13 @@ def post_games_id_put(game_id: int, nema_position: int):
 
         if nemas.get(game.id, nema_position, database) is not None:
             return message(get_string('client_error.duplicated'), 403)
+
+        now = datetime.now()
+        last_nema = nemas.get_last_nema(game.id, database)
+        if last_nema is not None \
+                and last_nema.created_at + timedelta(seconds=game.timeout) < now:
+            end_game(game, database, user)
+            return message(get_string('client_error.timeout'), 403)
 
         nema_count = nemas.get_nema_count(game.id, database)
         if ids[nema_count % len(ids)] != login_id:
@@ -337,17 +368,7 @@ def post_games_id_put(game_id: int, nema_position: int):
         scores_ = tuple(scores.get_scores(game.id, database).values())
         if len(scores_) == len(player_ids) and min(scores_) >= game.max_score \
                 or nemas.get_nema_count(game.id, database) == 100:
-            games.set_state(game.id, GameState.END, database)
-
-            places = participants.get_places(scores.get_scoring_nemas(game.id, database))
-            participants.record_places(places, game.id, database)
-
-            users.add_exp_for_game(game.id, database)
-            users.add_wins(places[0], game.id, database)
-            now = datetime.utcnow()
-            users.apply_ratings(map(lambda id_: users.get(id_, database), places), database, now)
-
-        users.update_last_interaction(user.id, database)
+            end_game(game, database)
 
     return message('OK', 200, nema=nema.jsonify())
 
