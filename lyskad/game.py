@@ -21,17 +21,21 @@ class Game:
         created_by = data['created_by']
         direction = data['direction']
         max_score = data['max_score']
+        timeout = data['timeout']
 
-        result = Game(game_id, created_by, max_score, direction)
+        result = Game(game_id, created_by, max_score, timeout, direction)
         result.state = data['state']
         result.created_at = data['created_at']
         return result
 
-    def __init__(self, id_: int, created_by: str, max_score: int = 3, direction: bool = HjulienDirection.DEFAULT):
+    def __init__(
+            self, id_: int, created_by: str, max_score: int = 3, direction: bool = HjulienDirection.DEFAULT,
+            timeout: int = 2592000):
         self.id = id_
         self.created_by = created_by
         self.max_score = max_score
         self.direction = direction
+        self.timeout = timeout
 
         self.state = GameState.IDLE
         self.created_at = datetime.now()
@@ -43,5 +47,6 @@ class Game:
             'created_by': self.created_by,
             'state': self.state,
             'created_at': self.created_at,
-            'max_score': self.max_score
+            'max_score': self.max_score,
+            'timeout': self.timeout
         }

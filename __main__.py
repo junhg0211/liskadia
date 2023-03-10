@@ -174,13 +174,19 @@ def post_games_new():
         target_score = int(data.get('score'))
     except ValueError:
         return message(get_string('client_error.invalid_max_score'), 403)
-
     if not (1 <= target_score <= 100):
         return message(get_string('client_error.invalid_max_score'), 403)
 
+    try:
+        timeout = int(data.get('timeout'))
+    except ValueError:
+        return message(get_string('client_error.invalid_timeout'), 403)
+    if not (10 <= timeout):
+        return message(get_string('client_error.invalid_timeout'), 403)
+
     with get_connection() as database:
         user = users.get(login_id, database)
-        game_id = games.new(user.id, direction, target_score, database)
+        game_id = games.new(user.id, direction, target_score, timeout, database)
         game = games.get(game_id, database)
         participants.new(user.id, game.id, database)
 
