@@ -35,7 +35,7 @@ def get_all(database: Connection, limit: Optional[int] = None, state: Optional[i
     return result
 
 
-def new(created_by: str, direction: Optional[bool], max_score: int, database: Connection) -> int:
+def new(created_by: str, direction: Optional[bool], max_score: int, timeout: int, database: Connection) -> int:
     if direction is None:
         direction = HjulienDirection.DEFAULT
 
@@ -43,8 +43,8 @@ def new(created_by: str, direction: Optional[bool], max_score: int, database: Co
         cursor.execute("SELECT AUTO_INCREMENT FROM information_schema.TABLES WHERE TABLE_NAME = 'game'")
         game_id = cursor.fetchone()[0]
         cursor.execute(
-            'INSERT INTO game (direction, max_score, created_at, created_by) VALUES (%s, %s, %s, %s)',
-            (direction, max_score, datetime.utcnow(), created_by)
+            'INSERT INTO game (direction, max_score, created_at, created_by, timeout) VALUES (%s, %s, %s, %s, %s)',
+            (direction, max_score, datetime.utcnow(), created_by, timeout)
         )
         database.commit()
     return game_id

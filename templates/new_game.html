@@ -3,10 +3,16 @@
 {% block content %}
     <h2>{{ get_language('new_game.open_new_game') }}</h2>
     <form action="/games/new" method="POST">
-        <p>
-            <label for="score">{{ get_language('new_game.least_scores_for_end') }}</label>
-            <input type="number" name="score" id="score" value="3" min="1">
-        </p>
+        <table>
+            <tr>
+                <td><label for="score">{{ get_language('new_game.least_scores_for_end') }}</label></td>
+                <td><input type="number" name="score" id="score" value="3" min="1"></td>
+            </tr>
+            <tr>
+                <td><label for="timeout">{{ get_language('new_game.nema_timeout') }}</label></td>
+                <td><input type="number" name="timeout" id="timeout" value="2592000" min="10"></td>
+            </tr>
+        </table>
         <input type="submit" value="{{ get_language('new_game.open') }}">
     </form>
 {% endblock %}

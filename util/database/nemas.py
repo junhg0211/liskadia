@@ -40,3 +40,12 @@ def get_nema_count(game_id: int, database: Connection) -> int:
     with database.cursor() as cursor:
         cursor.execute('SELECT COUNT(*) FROM nema WHERE game_id = %s', game_id)
         return cursor.fetchone()[0]
+
+
+def get_last_nema(game_id: int, database: Connection) -> Optional[Nema]:
+    with database.cursor(DictCursor) as cursor:
+        cursor.execute('SELECT * FROM nema WHERE game_id = %s ORDER BY created_at DESC LIMIT 1', (game_id,))
+        data = cursor.fetchone()
+    if data is None:
+        return
+    return Nema.get(data)

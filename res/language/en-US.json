@@ -27,7 +27,7 @@
     "leave": "Leave",
     "participants": "Participants",
     "end_condition": "End Condition",
-    "condition_template": "All players get at least {0} points or Otoque",
+    "condition_template": "All players get at least {0} points, timed out by {1} seconds, or Otoque",
     "scoreboard": "Scoreboard",
     "rankings": "Rankings",
     "nema_history": "Nema History",
@@ -67,7 +67,8 @@
   "new_game": {
     "open_new_game": "Open new game",
     "least_scores_for_end": "Least scores for end",
-    "open": "Open"
+    "open": "Open",
+    "nema_timeout": "Nema Timeout [seconds]"
   },
   "profile": {
     "does_not_played_yet": "This player have not played a game yet.",

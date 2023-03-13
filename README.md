@@ -84,6 +84,7 @@
 | max_score  | unsigned int | 게임 종료에 필요한 점수 수 |
 | created_at | datetime     | 게임 생성 시각        |
 | created_by | user.id      | 게임을 생성한 유저      |
+| timeout    | int          | 네마 당 제한시간       |
 
 #### GET `/games`
 게임 목록 불러오기

@@ -27,7 +27,7 @@
     "leave": "퇴장하기",
     "participants": "참여자",
     "end_condition": "종료 조건",
-    "condition_template": "모두가 {0}점 이상 득점 또는 오토크",
+    "condition_template": "모두가 {0}점 이상 득점, {1}초 시간 체한 초과, 또는 오토크",
     "scoreboard": "점수판",
     "rankings": "랭킹",
     "nema_history": "네마 이력",
@@ -67,7 +67,8 @@
   "new_game": {
     "open_new_game": "새 게임 만들기",
     "least_scores_for_end": "종료 조건 점수",
-    "open": "만들기"
+    "open": "만들기",
+    "nema_timeout": "네마 설치 제한시간 [초]"
   },
   "profile": {
     "does_not_played_yet": "아직 플레이한 게임이 없습니다.",

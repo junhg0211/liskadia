@@ -27,7 +27,7 @@
     "leave": "Temmoque",
     "participants": "Semüsîn",
     "end_condition": "Gäitelaz",
-    "condition_template": "Olésemüsîn da vistùqûm lo {0} lesépain laro ä Otoque",
+    "condition_template": "Olésemüsîn da vistùqûm lo {0} Lesépain, {1} Lesélekésosaliviat, laro ä Otoque",
     "scoreboard": "Paisiulü",
     "rankings": "Pailindy",
     "nema_history": "Nemavistupota",
@@ -67,7 +67,8 @@
   "new_game": {
     "open_new_game": "Dev lo Novéülien",
     "least_scores_for_end": "Gäipain",
-    "open": "Dev"
+    "open": "Dev",
+    "nema_timeout": "Sosaquekut dé Nemapreposìe [Leka]"
   },
   "profile": {
     "does_not_played_yet": "Erç hòsesinàhe.",
