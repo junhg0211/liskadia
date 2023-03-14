@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 from datetime import datetime, timedelta
 from hashlib import sha256
 from random import randint
@@ -596,8 +597,21 @@ def get_setting():
 
 
 if __name__ == '__main__':
-    app.run(
-        debug=True, host='0.0.0.0', port=443,
-        ssl_context=(
-            '/etc/letsencrypt/live/liskadia.shtelo.org/fullchain.pem',
-            '/etc/letsencrypt/live/liskadia.shtelo.org/privkey.pem'))
+    parser = ArgumentParser(
+        prog='Liskadia',
+        description='리스카드 게임 서버 엔진'
+    )
+    parser.add_argument(
+        '-t', '--http', action='store_true',
+        help='설정된 경우 http 프로토콜로 서버를 실행합니다.')
+
+    args = parser.parse_args()
+
+    if args.http:
+        app.run(debug=True, host='0.0.0.0', port=80)
+    else:
+        app.run(
+            debug=True, host='0.0.0.0', port=443,
+            ssl_context=(
+                '/etc/letsencrypt/live/liskadia.shtelo.org/fullchain.pem',
+                '/etc/letsencrypt/live/liskadia.shtelo.org/privkey.pem'))
