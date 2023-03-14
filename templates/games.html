@@ -1,5 +1,18 @@
 {% extends 'base.html' %}
 
+{% block head %}
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/games.css') }}">
+{% endblock %}
+
+{% block content_title %}
+  <div class="content-title">
+    <div class="width-limiter">
+      <h1>리스카디아</h1>
+      <p>자소크의 보드게임</p>
+    </div>
+  </div>
+{% endblock %}
+
 {% block content %}
     {% if idle_games %}
         <h2>{{ get_language('games.idle_games') }}</h2>

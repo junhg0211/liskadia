@@ -1,0 +1,7 @@
+.content-title {
+    background-image: url('/static/image/liskadia_background.svg');
+    background-position: center;
+    color: #fff;
+    margin: 0;
+    padding: 100px 0;
+}
