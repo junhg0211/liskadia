@@ -601,7 +601,9 @@ if __name__ == '__main__':
         prog='Liskadia',
         description='리스카드 게임 서버 엔진'
     )
-    parser.add_argument('-t', '--http', action='store_true')
+    parser.add_argument(
+        '-t', '--http', action='store_true',
+        help='설정된 경우 http 프로토콜로 서버를 실행합니다.')
 
     args = parser.parse_args()
 
