@@ -42,7 +42,11 @@
     "idle_games": "Ätìçésemüsis",
     "ongoing_games": "Sesinìçésemüsis",
     "ended_games": "Gäitêsemüsis",
-    "joined_games": "Modilêsemüsis"
+    "joined_games": "Modilêsemüsis",
+    "title": {
+      "title": "J Liskadia",
+      "description": "Siulüsemüsie dé Zasoque"
+    }
   },
   "login": {
     "login": "Login",

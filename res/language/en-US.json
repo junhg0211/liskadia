@@ -42,7 +42,11 @@
     "idle_games": "Idle Games",
     "ongoing_games": "Ongoing Games",
     "ended_games": "Ended Games",
-    "joined_games": "Joined Games"
+    "joined_games": "Joined Games",
+    "title": {
+      "title": "Liskadia",
+      "description": "Zasokese boardgame"
+    }
   },
   "login": {
     "login": "Login",

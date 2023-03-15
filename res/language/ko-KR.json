@@ -42,7 +42,11 @@
     "idle_games": "모집중인 게임 목록",
     "ongoing_games": "진행중인 게임 목록",
     "ended_games": "종료된 게임 목록",
-    "joined_games": "내가 참여한 게임 목록"
+    "joined_games": "내가 참여한 게임 목록",
+    "title": {
+      "title": "리스카디아",
+      "description": "자소크식 보드게임"
+    }
   },
   "login": {
     "login": "로그인",

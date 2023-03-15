@@ -42,7 +42,11 @@
     "idle_games": "某集中のゲーム",
     "ongoing_games": "進行中のゲーム",
     "ended_games": "終了したゲーム",
-    "joined_games": "参加したゲーム"
+    "joined_games": "参加したゲーム",
+    "title": {
+      "title": "リスカディーア",
+      "description": "ザソク式ボードゲーム"
+    }
   },
   "login": {
     "login": "ログイン",
