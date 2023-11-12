@@ -608,10 +608,10 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     if args.http:
-        app.run(debug=True, host='0.0.0.0', port=80)
+        app.run(host='0.0.0.0', port=80)
     else:
         app.run(
-            debug=True, host='0.0.0.0', port=443,
+            host='0.0.0.0', port=443,
             ssl_context=(
                 '/etc/letsencrypt/live/liskadia.shtelo.org/fullchain.pem',
                 '/etc/letsencrypt/live/liskadia.shtelo.org/privkey.pem'))
