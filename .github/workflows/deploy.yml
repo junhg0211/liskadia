@@ -17,4 +17,4 @@ jobs:
           host: ${{ secrets.HOST }}
           user: ${{ secrets.USER }}
           private_ssh_key: ${{ secrets.SSH_KEY }}
-          command: tmux send-keys -t deploy ^C "git pull ; sudo /usr/local/bin/python3.10 __main__.py" Enter
+          command: tmux send-keys -t deploy ^C Enter "git pull ; gunicorn app:app" Enter
