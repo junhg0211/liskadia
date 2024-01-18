@@ -1,0 +1,102 @@
+{
+  "base": {
+    "logo": "laik",
+    "logined_as": "<a href=\"/profile/{0}\">{0}</a>gou ropanshiguzina",
+    "profile": "kotimak",
+    "logout": "topan",
+    "new_game": "topuq gaimu",
+    "login": "ropan",
+    "register": "kotisan",
+    "ranking": "himoko",
+    "setting": "hitojo",
+    "footer": {
+      "github_repository": "GitHub aero",
+      "issue_tracker": "didako shinae",
+      "contact": "vikojo",
+      "cc": "<a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-nd/4.0/\"><img alt=\"falrayran comus loison\" style=\"border-width:0\" src=\"https://i.creativecommons.org/l/by-nc-nd/4.0/88x31.png\" /></a><br />tagi loisenmi <a rel=\"license\" href=\"http://creativecommons.org/licenses/by-nc-nd/4.0/\">falrayran comus loishumae baind-bua paeni-redi waniko 4.0 fakosin loison</a>toi bituin jum kainto ralmai."
+    }
+  },
+  "error": {
+    "back": "bakiko",
+    "game_not_found": "reqhobi ID ki gaimushu bua girokmi miyoka.",
+    "user_not_found": "reqhobi ID ki vihumaeshu bua girokmi miyoka."
+  },
+  "game": {
+    "start": "gaimu kekomibin",
+    "join": "nekibin",
+    "leave": "nokebin",
+    "participants": "nekoimae",
+    "end_condition": "inrako condo",
+    "condition_template": "naveialo {0}ikora korai adokio, {1}more fais pro naesbi, inr otok",
+    "scoreboard": "kolin",
+    "rankings": "himoko",
+    "nema_history": "nema raichi",
+    "place": "kosoio",
+    "player": "joihumaeni",
+    "placed_at": "diraka faio",
+    "notification": {
+      "new_nema": "topuq nemalo diraguzina."
+    }
+  },
+  "games": {
+    "idle_games": "fainio gaimu in",
+    "ongoing_games": "tokavio gaimu in",
+    "ended_games": "inrakoji gaimu in",
+    "joined_games": "yialo nekiki gaimu in",
+    "title": {
+      "title": "lasukadiko",
+      "description": "Jasukvo hugaini"
+    }
+  },
+  "login": {
+    "login": "ropan",
+    "id": "ID",
+    "password": "anatiko",
+    "remember_me_for": "ropan ain saei naesam",
+    "during": {
+      "1": "1vams",
+      "2": "2vams",
+      "4": "4vams",
+      "8": "8vams",
+      "16": "16vams",
+      "32": "32vams",
+      "64": "64vams",
+      "128": "128vams",
+      "256": "256vams"
+    },
+    "error": {
+      "wrong": "wanatiko inr anatikolo difanzuki."
+    }
+  },
+  "new_game": {
+    "open_new_game": "topuq gaimu hazbin",
+    "least_scores_for_end": "inrako condo koinae",
+    "open": "hazbin",
+    "nema_timeout": "nema anins pro fais [more]"
+  },
+  "profile": {
+    "does_not_played_yet": "dama joiki gaimulo miyoka.",
+    "joined_at": "kotisan faifoi",
+    "last_interaction": "lohikon into",
+    "winning_percentage": "vidival",
+    "rating": "raitoin"
+  },
+  "ranking": {
+    "ranking": "himoko",
+    "id": "ID",
+    "rating": "raitoin",
+    "games": "joi nam",
+    "percentage": "vidival [%]"
+  },
+  "register": {
+    "register": "kotisan",
+    "password_confirm": "anatiko choko",
+    "nema_color": "nema yakomi",
+    "language": "Lan"
+  },
+  "setting": {
+    "setting": "hitojo",
+    "select_language": "Lan selstorigi (selstiko)",
+    "apply": "apolra"
+  }
+}
